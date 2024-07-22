@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include portal_beneficiario *.css
+recursive-include portal_beneficiario *.csv
+recursive-include portal_beneficiario *.html
+recursive-include portal_beneficiario *.ico
+recursive-include portal_beneficiario *.js
+recursive-include portal_beneficiario *.json
+recursive-include portal_beneficiario *.md
+recursive-include portal_beneficiario *.png
+recursive-include portal_beneficiario *.py
+recursive-include portal_beneficiario *.svg
+recursive-include portal_beneficiario *.txt
+recursive-exclude portal_beneficiario *.pyc
