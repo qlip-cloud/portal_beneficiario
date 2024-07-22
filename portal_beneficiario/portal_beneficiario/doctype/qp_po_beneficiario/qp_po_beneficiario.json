@@ -1,0 +1,230 @@
+{
+ "actions": [],
+ "creation": "2024-07-22 14:48:42.724242",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "id_dynamics",
+  "id_jumio",
+  "be_name",
+  "surname",
+  "document_type",
+  "document_number",
+  "gender",
+  "email",
+  "birthday",
+  "document_expedition_date",
+  "document_expedition_city",
+  "phone",
+  "nationality",
+  "address",
+  "city",
+  "peps",
+  "position",
+  "link_date",
+  "peps_parent",
+  "parent_name",
+  "parent_type",
+  "economic_activity",
+  "business_activity",
+  "income",
+  "egress",
+  "assets",
+  "passive",
+  "patrimony",
+  "data_declaration",
+  "authorization_declaration",
+  "jumio_points"
+ ],
+ "fields": [
+  {
+   "fieldname": "id_dynamics",
+   "fieldtype": "Data",
+   "label": "Id Dynamics"
+  },
+  {
+   "fieldname": "id_jumio",
+   "fieldtype": "Data",
+   "label": "Id Jumio"
+  },
+  {
+   "fieldname": "surname",
+   "fieldtype": "Data",
+   "label": "Apellido"
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Link",
+   "label": "Tipo Documento",
+   "options": "qp_PO_DocumentType"
+  },
+  {
+   "fieldname": "document_number",
+   "fieldtype": "Data",
+   "label": "Numero Documento"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Data",
+   "label": "Genero"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Correo"
+  },
+  {
+   "fieldname": "birthday",
+   "fieldtype": "Date",
+   "label": "Fecha Nacimiento"
+  },
+  {
+   "fieldname": "document_expedition_date",
+   "fieldtype": "Date",
+   "label": "Fecha Expedicion Documento"
+  },
+  {
+   "fieldname": "document_expedition_city",
+   "fieldtype": "Data",
+   "label": "Ciudad Expedicion Documento"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Telefono"
+  },
+  {
+   "fieldname": "nationality",
+   "fieldtype": "Link",
+   "label": "Nacionalidad",
+   "options": "qp_PO_Nationality"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Direccion"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Link",
+   "label": "Ciudad",
+   "options": "qp_PO_City"
+  },
+  {
+   "default": "0",
+   "fieldname": "peps",
+   "fieldtype": "Check",
+   "label": "PEPS"
+  },
+  {
+   "fieldname": "position",
+   "fieldtype": "Data",
+   "label": "Cargo"
+  },
+  {
+   "fieldname": "link_date",
+   "fieldtype": "Date",
+   "label": "Fecha Vinculacion"
+  },
+  {
+   "default": "0",
+   "fieldname": "peps_parent",
+   "fieldtype": "Check",
+   "label": "PEPS Parentesco"
+  },
+  {
+   "fieldname": "parent_name",
+   "fieldtype": "Data",
+   "label": "Nombre Parentesco"
+  },
+  {
+   "fieldname": "parent_type",
+   "fieldtype": "Data",
+   "label": "Tipo Parentesco"
+  },
+  {
+   "fieldname": "economic_activity",
+   "fieldtype": "Link",
+   "label": "Actividad Economica",
+   "options": "qp_PO_EconomicActivity"
+  },
+  {
+   "fieldname": "business_activity",
+   "fieldtype": "Link",
+   "label": "Actividad Laboral",
+   "options": "qp_PO_BusinessActivity"
+  },
+  {
+   "fieldname": "income",
+   "fieldtype": "Int",
+   "label": "Ingresos"
+  },
+  {
+   "fieldname": "egress",
+   "fieldtype": "Int",
+   "label": "Egresos"
+  },
+  {
+   "fieldname": "assets",
+   "fieldtype": "Int",
+   "label": "Activos"
+  },
+  {
+   "fieldname": "passive",
+   "fieldtype": "Int",
+   "label": "Pasivos"
+  },
+  {
+   "fieldname": "patrimony",
+   "fieldtype": "Int",
+   "label": "Patrimonio"
+  },
+  {
+   "default": "0",
+   "fieldname": "data_declaration",
+   "fieldtype": "Check",
+   "label": "Declaracion Datos"
+  },
+  {
+   "default": "0",
+   "fieldname": "authorization_declaration",
+   "fieldtype": "Check",
+   "label": "Declaracion Autorizacion"
+  },
+  {
+   "fieldname": "jumio_points",
+   "fieldtype": "Data",
+   "label": "Puntaje Jumio"
+  },
+  {
+   "fieldname": "be_name",
+   "fieldtype": "Data",
+   "label": "Nombre"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-07-22 15:07:49.837289",
+ "modified_by": "Administrator",
+ "module": "Portal Beneficiario",
+ "name": "qp_PO_Beneficiario",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
