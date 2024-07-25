@@ -1,0 +1,249 @@
+.register-account{
+    background: url(http://cdn.paper4pc.com/images/grunge-texture-wallpaper-5.jpg) no-repeat center top;
+    background-color: black;
+    background-image: url(http://cdn.paper4pc.com/images/grunge-texture-wallpaper-5.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto auto;
+    background-size: cover;
+    padding: 100px 0 50px;
+    padding-top: 100px;
+    padding-right: 0px;
+    padding-bottom: 150px;
+    padding-left: 0px;
+    width: auto;
+
+}
+
+/*Login Form CSS*/
+.login-form input{
+width: 100%;
+border: 1px solid #dddddd;
+padding: 1em;
+margin: 0.6em 0;
+border-radius: 10px;
+margin-bottom: 15px;
+}
+
+.login-pre-form{
+    padding: 2em 2em 0 2em;
+}
+
+.login-form{
+margin-bottom: 10px;
+} 
+.signform {
+background-color: #FFF;
+padding-bottom: 40px;
+padding-top: 35px;
+margin: 0 auto;
+margin-top: auto;
+}
+.bts {
+padding: 2em;
+}
+
+.bts-a:hover{
+border-bottom: 2px solid #296ec6d6;
+text-decoration: none;
+background: white;   
+color:#474646;
+}
+.bts span {
+text-align: center; 
+font-size: .9em;
+font-family: 'Arimo', sans-serif;
+font-weight: 700;
+font-style: normal;
+}
+.social{
+transition: background 200ms ease-in-out 0s;
+-webkit-transition: background 200ms ease-in-out 0s;
+-moz-transition: background 200ms ease-in-out 0s;
+-o-transition: background 200ms ease-in-out 0s;
+-ms-transition: background 200ms ease-in-out 0s;
+
+margin-top: 12px;
+-webkit-border-top-left-radius:1px;
+-moz-border-radius-topleft:1px;
+border-top-left-radius:1px;
+-webkit-border-top-right-radius:1px;
+-moz-border-radius-topright:1px;
+border-top-right-radius:1px;
+-webkit-border-bottom-right-radius:1px;
+-moz-border-radius-bottomright:1px;
+border-bottom-right-radius:1px;
+-webkit-border-bottom-left-radius:1px;
+-moz-border-radius-bottomleft:1px;
+border-bottom-left-radius:1px;
+text-indent:0;
+display:block;
+color:#4f4f4f;
+height:50px;
+line-height:50px;
+width: 100%;
+text-decoration:none;
+text-align:center;
+}
+
+.lilogin {   
+background-color:#ffffff;
+}
+.lilogin:hover {
+background-color:#ffffff;
+}
+.lilogin:active {
+position:relative;
+top:1px;
+}
+.gplogin {  
+background-color:#ffffff; 
+}
+.gplogin:hover {
+background-color:#ffffff;
+}
+.gplogin:active {
+position:relative;
+top:1px;
+}
+.milogin { 
+background-color:#ffffff;  
+}
+.milogin:hover {
+background-color:#ffffff;
+}
+.milogin:active {
+position:relative;
+top:1px;
+}
+.login-form input:focus, .login-form input:active {
+border-bottom: 2px solid #296ec6d6;
+outline: none;
+}
+.subbt:hover {
+background-color: #296ec6d6;
+}
+.subbt {
+
+text-shadow: 0 1px 0 rgba(122, 122, 122, 0.85);
+transition: background 500ms ease-in-out 0s;
+-webkit-transition: background 500ms ease-in-out 0s;
+-moz-transition: background 500ms ease-in-out 0s;
+-o-transition: background 500ms ease-in-out 0s;
+-ms-transition: background 500ms ease-in-out 0s;
+background-color: #296ec6;
+border: none !important;
+color: #FFF;
+padding: 10px 15px 10px 15px;
+margin-top: 10px;
+cursor: pointer;
+font-size: .9em;
+border-radius: 3px;
+width: 50% !important;
+font-family: 'Arimo', sans-serif;
+font-weight: 700;
+font-style: normal;
+
+}
+.right_a {
+color: fieltext;
+border-radius: 10px;
+text-decoration: none;
+font-family: 'Arimo', sans-serif;
+font-weight: 400;
+font-style: normal;
+font-size: .9em;
+margin-top:5px;
+border: 1px solid #dddddd;
+}
+
+.headit h1{
+color: #474646;
+text-align: center;
+}
+.bts a:hover{
+text-decoration: none;
+color: white;
+border-bottom: 2px solid #296ec6d6;
+color:#474646;
+}
+.bts a:active{
+color: white;
+text-decoration: none;
+border-bottom: 2px solid #296ec6d6;
+color:#474646;
+}
+.bts a:focus{
+text-decoration: none;
+border-bottom: 2px solid #296ec6d6;
+color:#474646;
+}
+
+.fa.fa-check-square {
+padding-right: 19px;
+}
+
+/*Media Query */
+@media screen  and (min-width: 1400px) {
+.signform { width: 680px; left: 25%; }
+}
+
+
+@media screen  and (max-width: 1400px) and (min-width: 1230px) {
+.signform { width: 50%; left: 25%; }
+}
+
+@media screen  and (max-width: 1230px) and (min-width: 1000px) {
+.signform { width: 60%; left: 15%; }
+}
+
+@media screen  and (max-width: 1000px) and (min-width: 900px) {
+.signform { width: 70%; left: 10%; }
+}
+
+@media screen  and (max-width: 900px) and (min-width: 750px) {
+.signform { width: 80%; left: 8%; }
+}
+
+@media screen  and (max-width: 750px) and (min-width: 640px) {
+.signform { width: 90%; 
+left: 1%; 
+}
+}
+
+@media screen  and (max-width: 640px) {
+.signform { 
+width: 50%;
+min-width:255px;
+}
+}
+@media screen  and (max-width: 640px) and (min-width: 460px) {
+.signform { 
+left: 25%;
+}
+}
+@media screen  and (max-width: 460px) and (min-width: 400px) {
+.signform {
+left: 20%; 
+}
+}
+@media screen  and (max-width: 400px) and (min-width: 320px) {
+.signform {
+left: 10%; 
+}
+}
+@media screen  and (max-width: 320px) {
+.signform {
+left: 1%;
+}
+}
+.bts i{ 
+margin: 15px 15px 15px 20px;
+float: left;
+width: 5%;
+font-size: 20px;
+margin-left: 20px;
+}
