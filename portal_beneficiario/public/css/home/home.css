@@ -1,0 +1,44 @@
+nav{
+    height: 100px;
+    padding:0;
+    margin:0;
+    border: 1px solid #707070;
+}
+
+.left{
+    height: 980px;
+    padding:0;
+    margin:0;
+    border: 1px solid #707070;
+}
+
+.right{
+    height: 980px;
+    padding:0;
+    margin:0;
+    border: 1px solid #707070;
+}
+
+.right_menu > ul > li{
+    display:inline-block;
+    text-decoration: none;
+    font-weight: bold;
+    /*border: 1px solid #113c1e;*/
+}
+
+.right_menu > ul{
+    margin-top: 30px;
+}
+
+.right_menu{
+    margin-left: 0 !important;
+}
+
+.right_menu > ul > li:hover, .right_menu > ul > li:active{
+    border-bottom: 3px solid #113c1e;
+}
+
+.logo{
+    text-align: center;
+    align-content: center;
+}

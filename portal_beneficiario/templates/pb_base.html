@@ -1,0 +1,48 @@
+{% extends "frappe/templates/base.html" %}
+
+{% block style %}
+    <link type="text/css" rel="stylesheet" href="/assets/portal_beneficiario/css/home/home.css">
+{% endblock %}
+
+{% block content %}
+<body id="basic_data_body"> 
+    <nav class="row base">
+        <div class="col-2 logo"><h1>StoneX</h1></div>
+        <div class="col-8"></div>
+        <div class="col-2"></div>
+    </nav>
+    <div class="row">
+        <aside class="col-2 base left">
+            <div class="row right_menu">
+                <div class="col mt-5 ml-5">Inscripción</div>
+            </div>
+        </aside>
+        <section class="col-10 right">
+            <div class="row right_menu">
+                <ul class="col-11">
+                    <li id="basic_data_btn" class="ml-3"><a href='/basic_data'>Datos Basicos</a> </li>
+                    <li id="basic_data_btn" class="ml-3"><a href='/documents'>Documentos</a> </li>
+                    <li id="comprobation_btn" class="ml-3"><a href='/comprobation'>Comprobacion</a></li>
+                </ul>
+            </div>
+            {% block form %}
+            {% endblock %}
+
+
+        </section>
+    </div>
+{% endblock %}
+
+{% block footer %}
+<footer class="row right_menu">
+    <div class="col-4">
+        <img src="/assets/portal_beneficiario/img/LOGO-FOGAFIN 1.png" class="img-fluid" alt="First Footer">
+    </div>
+    <div class="col-4">
+        <img src="/assets/portal_beneficiario/img/logo-vigilado_sfc 1.png" class="img-fluid" alt="Second Footer">
+    </div>
+    <div class="col-4">
+        <img src="/assets/portal_beneficiario/img/footer.jpg" class="img-fluid" alt="Third Footer">
+    </div>
+</footer>
+{% endblock %}

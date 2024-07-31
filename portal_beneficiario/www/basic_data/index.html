@@ -1,0 +1,41 @@
+{% extends base_template_path %}
+
+{% block form%}
+    <div id='basic_data_sect' class="right_menu">
+        <div class="row right_menu mt-3">
+            <div class="col-4">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre">
+            </div>
+            <div class="col-4">
+                <label for="apellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="apellido">
+            </div>
+        </div>
+        <div class="row right_menu mt-3">
+            <div class="col-4">
+                <label for="cuenta_bancaria" class="form-label">Cuenta Bancaria</label>
+                <input type="text" class="form-control" id="cuenta_bancaria">
+            </div>
+            <div class="col-4">
+                <label for="tipo_de_cuenta" class="form-label">State</label>
+                <select id="tipo_de_cuenta" class="form-control">
+                    <option selected></option>
+                    <option>Ahorro</option>
+                    <option>Corriente</option>
+                </select>
+            </div>
+        </div>
+        <div class="row right_menu mt-3">
+            <div class="col-4">
+                <label for="banco" class="form-label">Banco</label>
+                <input type="text" class="form-control" id="banco">
+            </div>
+        </div>
+        <div class="row right_menu mt-3">
+            <div class="col-4">
+                <a href="#" class="btn btn-dark btn-lg mt-5" role="button" aria-pressed="true">Siguiente</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
