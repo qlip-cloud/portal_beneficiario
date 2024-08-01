@@ -4,38 +4,113 @@
     <div id='basic_data_sect' class="right_menu">
         <div class="row right_menu mt-3">
             <div class="col-4">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre">
+                <label for="phone" class="form-label">Telefono</label>
+                <input type="text" class="form-control" id="phone">
             </div>
             <div class="col-4">
-                <label for="apellido" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="apellido">
-            </div>
-        </div>
-        <div class="row right_menu mt-3">
-            <div class="col-4">
-                <label for="cuenta_bancaria" class="form-label">Cuenta Bancaria</label>
-                <input type="text" class="form-control" id="cuenta_bancaria">
-            </div>
-            <div class="col-4">
-                <label for="tipo_de_cuenta" class="form-label">State</label>
-                <select id="tipo_de_cuenta" class="form-control">
+                <label for="nationality" class="form-label">Nacionalidad</label>
+                <select id="nationality" class="form-control">
                     <option selected></option>
-                    <option>Ahorro</option>
-                    <option>Corriente</option>
                 </select>
             </div>
         </div>
         <div class="row right_menu mt-3">
             <div class="col-4">
-                <label for="banco" class="form-label">Banco</label>
-                <input type="text" class="form-control" id="banco">
+                <label for="address" class="form-label">Dirección</label>
+                <input type="text_area" class="form-control" id="address">
+            </div>
+            <div class="col-4">
+                <label for="city" class="form-label">Ciudad</label>
+                <select id="city" class="form-control">
+                    <option selected></option>
+                </select>
             </div>
         </div>
         <div class="row right_menu mt-3">
             <div class="col-4">
-                <a href="#" class="btn btn-dark btn-lg mt-5" role="button" aria-pressed="true">Siguiente</a>
+                <label for="business" class="form-label">Actividad Economica</label>
+                <select id="business" class="form-control">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="business_type" class="form-label">Actividad Laboral</label>
+                <select id="business_type" class="form-control">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="row right_menu mt-5">
+            <div class="col-8">
+                <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="pep">
+                <label class="form-check-label" for="pep">Persona Públicamente Expuesta</label>
+                </div>
+            </div>
+        </div>
+        <div class="row right_menu mt-3 pep_fields" hidden>
+            <div class="col-2">
+                <label for="job" class="form-label">Cargo</label>
+                <select id="job" class="form-control">
+                    <option selected></option>
+                </select>
+            </div>
+            <div class="col-2">
+                <label for="link_date" class="form-label">Fecha de Vinculación</label>
+                <input type="text" class="form-control" id="link_date">
+            </div>
+            <div class="col-2">
+                <label for="business_type" class="form-label">Actividad Laboral</label>
+                <select id="business_type" class="form-control">
+                    <option selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="row right_menu mt-5">
+            <div class="col-8">
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="fpep">
+                    <label class="form-check-label" for="fpep">Familiar Politicamente Expuesto</label>
+                </div>
+            </div>
+        </div>
+        <div class="row right_menu mt-3 fpep_fields" hidden>
+            <div class="col-2">
+                <label for="fpep_name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="fpep_name">
+            </div>
+            <div class="col-2">
+                <label for="parent_type" class="form-label">Tipo de Parentesco</label>
+                <input type="text" class="form-control" id="parent_type">
+            </div>
+            <div class="col-2">
+                <label for="in" class="form-label">Ingresos</label>
+                <input type="text" class="form-control" id="in">
+            </div>
+        </div>
+        <div class="row right_menu mt-3 fpep_fields" hidden>
+            <div class="col-2">
+                <label for="out" class="form-label">Egresos</label>
+                <input type="text" class="form-control" id="out">
+            </div>
+            <div class="col-2">
+                <label for="assets" class="form-label">Activos</label>
+                <input type="text" class="form-control" id="assets">
+            </div>
+            <div class="col-2">
+                <label for="passive" class="form-label">Pasivos</label>
+                <input type="text" class="form-control" id="passive">
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <script src="/assets/portal_beneficiario/js/basic_data/index.js"></script>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 {% endblock %}
