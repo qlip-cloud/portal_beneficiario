@@ -1,0 +1,24 @@
+[
+ {
+  "ba_code": "RI",
+  "ba_name": "RIEGO",
+  "docstatus": 0,
+  "doctype": "qp_PO_BusinessActivity",
+  "modified": "2024-08-01 10:05:03.500035",
+  "name": "RI",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "ba_code": "SI",
+  "ba_name": "SISTEMAS",
+  "docstatus": 0,
+  "doctype": "qp_PO_BusinessActivity",
+  "modified": "2024-08-01 10:05:30.212731",
+  "name": "SI",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]
