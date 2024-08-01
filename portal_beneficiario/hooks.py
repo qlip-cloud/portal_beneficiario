@@ -40,9 +40,9 @@ app_license = "MIT"
 # ----------
 
 # application home page (will override Website Settings)
-home_page = "home/index"
+#home_page = "home/index"
 
-base_template = "portal_beneficiario/templates/pb_base.html"
+#base_template = "portal_beneficiario/templates/pb_base.html"
 
 # website user home page (by Role)
 # role_home_page = {

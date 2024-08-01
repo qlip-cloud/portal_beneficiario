@@ -11,6 +11,10 @@
                 <label for="nationality" class="form-label">Nacionalidad</label>
                 <select id="nationality" class="form-control">
                     <option selected></option>
+                    {% set na = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_code asc') %}
+                    {% for n in na %}
+                        <option value="{{ n.na_code }}">{{ n.na_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -23,6 +27,10 @@
                 <label for="city" class="form-label">Ciudad</label>
                 <select id="city" class="form-control">
                     <option selected></option>
+                    {% set ci = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
+                    {% for c in ci %}
+                        <option value="{{ c.ci_code }}">{{ c.ci_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -31,12 +39,20 @@
                 <label for="business" class="form-label">Actividad Economica</label>
                 <select id="business" class="form-control">
                     <option selected></option>
+                    {% set ea = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc') %}
+                    {% for e in ea %}
+                        <option value="{{ e.ea_code }}">{{ e.ea_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="col-4">
                 <label for="business_type" class="form-label">Actividad Laboral</label>
                 <select id="business_type" class="form-control">
                     <option selected></option>
+                    {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
+                    {% for b in ba %}
+                        <option value="{{ b.ba_code }}">{{ b.ba_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -51,9 +67,7 @@
         <div class="row right_menu mt-3 pep_fields" hidden>
             <div class="col-2">
                 <label for="job" class="form-label">Cargo</label>
-                <select id="job" class="form-control">
-                    <option selected></option>
-                </select>
+                <input type="text" class="form-control" id="job">
             </div>
             <div class="col-2">
                 <label for="link_date" class="form-label">Fecha de Vinculación</label>
@@ -63,6 +77,10 @@
                 <label for="business_type" class="form-label">Actividad Laboral</label>
                 <select id="business_type" class="form-control">
                     <option selected></option>
+                    {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
+                    {% for b in ba %}
+                        <option value="{{ b.ba_code }}">{{ b.ba_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -103,14 +121,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block script %}
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-    <script src="/assets/portal_beneficiario/js/basic_data/index.js"></script>
-{% endblock %}
-
-{% block style %}
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 {% endblock %}
