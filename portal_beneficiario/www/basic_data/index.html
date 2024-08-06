@@ -5,11 +5,11 @@
         <div class="row right_menu mt-3">
             <div class="col-4">
                 <label for="phone" class="form-label">Telefono</label>
-                <input type="text" class="form-control" id="phone">
+                <input type="text" class="form-control" id="phone" required>
             </div>
             <div class="col-4">
                 <label for="nationality" class="form-label">Nacionalidad</label>
-                <select id="nationality" class="form-control">
+                <select id="nationality" class="form-control" required>
                     <option selected></option>
                     {% set na = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_code asc') %}
                     {% for n in na %}
@@ -21,11 +21,11 @@
         <div class="row right_menu mt-3">
             <div class="col-4">
                 <label for="address" class="form-label">Dirección</label>
-                <input type="text_area" class="form-control" id="address">
+                <input type="text_area" class="form-control" id="address" required>
             </div>
             <div class="col-4">
                 <label for="city" class="form-label">Ciudad</label>
-                <select id="city" class="form-control">
+                <select id="city" class="form-control" required>
                     <option selected></option>
                     {% set ci = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
                     {% for c in ci %}
@@ -37,7 +37,7 @@
         <div class="row right_menu mt-3">
             <div class="col-4">
                 <label for="business" class="form-label">Actividad Economica</label>
-                <select id="business" class="form-control">
+                <select id="business" class="form-control" required>
                     <option selected></option>
                     {% set ea = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc') %}
                     {% for e in ea %}
@@ -47,7 +47,7 @@
             </div>
             <div class="col-4">
                 <label for="business_type" class="form-label">Actividad Laboral</label>
-                <select id="business_type" class="form-control">
+                <select id="business_type" class="form-control" required>
                     <option selected></option>
                     {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
                     {% for b in ba %}
@@ -59,21 +59,27 @@
         <div class="row right_menu mt-5">
             <div class="col-8">
                 <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="pep">
+                <input type="checkbox" class="form-check-input" id="pep" required>
                 <label class="form-check-label" for="pep">Persona Públicamente Expuesta</label>
                 </div>
             </div>
         </div>
         <div class="row right_menu mt-3 pep_fields" hidden>
-            <div class="col-2">
-                <label for="job" class="form-label">Cargo</label>
-                <input type="text" class="form-control" id="job">
+            <div class="col-3">
+                <label for="position" class="form-label">Cargo</label>
+                <select id="position" class="form-control">
+                    <option selected></option>
+                    {% set po = frappe.get_all('qp_PO_Positions', fields=['po_name', 'po_code'], order_by='po_code asc') %}
+                    {% for p in po %}
+                        <option value="{{ p.po_code }}">{{ p.po_name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-2">
                 <label for="link_date" class="form-label">Fecha de Vinculación</label>
                 <input type="text" class="form-control" id="link_date">
             </div>
-            <div class="col-2">
+            <div class="col-3">
                 <label for="business_type" class="form-label">Actividad Laboral</label>
                 <select id="business_type" class="form-control">
                     <option selected></option>
@@ -87,37 +93,56 @@
         <div class="row right_menu mt-5">
             <div class="col-8">
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="fpep">
+                    <input type="checkbox" class="form-check-input" id="fpep" required>
                     <label class="form-check-label" for="fpep">Familiar Politicamente Expuesto</label>
                 </div>
             </div>
         </div>
         <div class="row right_menu mt-3 fpep_fields" hidden>
-            <div class="col-2">
+            <div class="col-4">
                 <label for="fpep_name" class="form-label">Nombre</label>
                 <input type="text" class="form-control" id="fpep_name">
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 <label for="parent_type" class="form-label">Tipo de Parentesco</label>
-                <input type="text" class="form-control" id="parent_type">
+                <select id="parent_type" class="form-control">
+                    <option selected></option>
+                    {% set pt = frappe.get_all('qp_PO_ParentType', fields=['pt_name', 'pt_code'], order_by='pt_code asc') %}
+                    {% for p in pt %}
+                        <option value="{{ p.pt_code }}">{{ p.pt_name }}</option>
+                    {% endfor %}
+                </select>
             </div>
+           
+        </div>
+        <div class="row right_menu mt-3">
             <div class="col-2">
                 <label for="in" class="form-label">Ingresos</label>
-                <input type="text" class="form-control" id="in">
+                <input type="text" class="form-control" id="in" required>
             </div>
-        </div>
-        <div class="row right_menu mt-3 fpep_fields" hidden>
             <div class="col-2">
                 <label for="out" class="form-label">Egresos</label>
-                <input type="text" class="form-control" id="out">
+                <input type="text" class="form-control" id="out" required>
             </div>
             <div class="col-2">
                 <label for="assets" class="form-label">Activos</label>
-                <input type="text" class="form-control" id="assets">
+                <input type="text" class="form-control" id="assets" required>
             </div>
             <div class="col-2">
                 <label for="passive" class="form-label">Pasivos</label>
-                <input type="text" class="form-control" id="passive">
+                <input type="text" class="form-control" id="passive" required>
+            </div>
+        </div>
+        <div class="row right_menu mt-3">
+            <div class="col-4">
+                <label for="source_fund" class="form-label">Origen de los dinero a recibir</label>
+                <select id="parent_type" class="form-control" required>
+                    <option selected></option>
+                    {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
+                    {% for s in sf %}
+                        <option value="{{ s.sf_code }}">{{ s.sf_name }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <button type="button" class="btn btn-dark btn-lg mt-5 ml-3">Siguiente</button>

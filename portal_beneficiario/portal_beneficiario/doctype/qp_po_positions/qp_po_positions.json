@@ -1,0 +1,49 @@
+{
+ "actions": [],
+ "autoname": "field:po_code",
+ "creation": "2024-08-06 10:51:17.993194",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "po_name",
+  "po_code"
+ ],
+ "fields": [
+  {
+   "fieldname": "po_name",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "po_code",
+   "fieldtype": "Data",
+   "label": "Code",
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-06 10:58:52.127096",
+ "modified_by": "Administrator",
+ "module": "Portal Beneficiario",
+ "name": "qp_PO_Positions",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

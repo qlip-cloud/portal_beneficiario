@@ -181,5 +181,8 @@ fixtures = [
 	"qp_PO_City",
 	"qp_PO_DocumentType",
 	"qp_PO_EconomicActivity",
-	"qp_PO_Nationality"
+	"qp_PO_Nationality",
+    "qp_PO_Positions",
+    "qp_PO_SourceFund",
+    "qp_PO_ParentType" 
 ]
