@@ -26,19 +26,8 @@
 
             </div>
         </aside>
-        <section class="col-10 right">
-            <div class="row right_menu">
-                <ul class="col-11">
-                    <li id="basic_data_btn" class="ml-3"><a href='/basic_data'>Datos Basicos</a> </li>
-                    <!-- <li id="basic_data_btn" class="ml-3"><a href='/documents'>Documentos</a> </li> -->
-                    <li id="comprobation_btn" class="ml-3"><a href='/comprobation'>Comprobacion</a></li>
-                </ul>
-            </div>
-            {% block form %}
-            {% endblock %}
-
-
-        </section>
+        {% block wizard %}
+        {% endblock %}
     </div>
 {% endblock %}
 

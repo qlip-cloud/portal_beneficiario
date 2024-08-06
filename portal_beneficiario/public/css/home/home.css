@@ -19,14 +19,13 @@ nav{
     border: 1px solid #707070;
 }
 
-.right_menu > ul > li{
-    display:inline-block;
+.nav-tabs ul li a{
     text-decoration: none;
     font-weight: bold;
     /*border: 1px solid #113c1e;*/
 }
 
-.right_menu > ul{
+.right_menu ul{
     margin-top: 30px;
 }
 
@@ -34,7 +33,7 @@ nav{
     margin-left: 0 !important;
 }
 
-.right_menu > ul > li:hover, .right_menu > ul > li:active{
+.nav-tabs ul li a:hover, .nav-tabs ul li a:active{
     border-bottom: 3px solid #113c1e;
 }
 
@@ -56,13 +55,17 @@ footer img{
 }
 
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.list-inline li{
+    display: inline-block;
 }
