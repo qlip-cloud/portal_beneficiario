@@ -69,3 +69,19 @@ input[type="number"] {
 .list-inline li{
     display: inline-block;
 }
+
+.input-error{
+    border: 0.5px solid red ;
+}
+
+.input-success{
+    border: 0.5px solid green ;
+}
+
+#messageBox{
+    border: 0.5px solid rgb(240, 240, 9) ;
+    background-color: rgb(249, 249, 240) ;
+    padding: 5px;
+    display: inline-block;
+    margin-left: 5px;
+}

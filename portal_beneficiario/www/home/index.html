@@ -3,14 +3,14 @@
 
 {% block basic_data%}
         <div id='basic_data_sect' class="right_menu">
-            <div class="row right_menu mt-3">
+            <div class="form-row right_menu mt-3">
                 <div class="col-4">
                     <label for="phone" class="form-label">Telefono</label>
-                    <input type="text" class="form-control" id="phone" required>
+                    <input type="text" class="form-control" id="phone" name="phone" />
                 </div>
                 <div class="col-4">
                     <label for="nationality" class="form-label">Nacionalidad</label>
-                    <select id="nationality" class="form-control" required>
+                    <select id="nationality" name="nationality" class="form-control">
                         <option selected></option>
                         {% set na = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_code asc') %}
                         {% for n in na %}
@@ -19,14 +19,14 @@
                     </select>
                 </div>
             </div>
-            <div class="row right_menu mt-3">
+            <div class="form-row right_menu mt-3">
                 <div class="col-4">
                     <label for="address" class="form-label">Dirección</label>
-                    <input type="text_area" class="form-control" id="address" required>
+                    <input type="input" class="form-control" id="address" name="address"/>
                 </div>
                 <div class="col-4">
                     <label for="city" class="form-label">Ciudad</label>
-                    <select id="city" class="form-control" required>
+                    <select id="city" class="form-control" name="city">
                         <option selected></option>
                         {% set ci = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
                         {% for c in ci %}
@@ -35,10 +35,10 @@
                     </select>
                 </div>
             </div>
-            <div class="row right_menu mt-3">
+            <div class="form-row right_menu mt-3">
                 <div class="col-4">
                     <label for="business" class="form-label">Actividad Economica</label>
-                    <select id="business" class="form-control" required>
+                    <select id="business" name="business" class="form-control">
                         <option selected></option>
                         {% set ea = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc') %}
                         {% for e in ea %}
@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-4">
                     <label for="business_type" class="form-label">Actividad Laboral</label>
-                    <select id="business_type" class="form-control" required>
+                    <select id="business_type"  name="business_type"  class="form-control">
                         <option selected></option>
                         {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
                         {% for b in ba %}
@@ -57,15 +57,15 @@
                     </select>
                 </div>
             </div>
-            <div class="row right_menu mt-5">
+            <div class="form-row right_menu mt-5">
                 <div class="col-8">
                     <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="pep" required>
+                    <input type="checkbox" class="form-check-input" id="pep" >
                     <label class="form-check-label" for="pep">Persona Públicamente Expuesta</label>
                     </div>
                 </div>
             </div>
-            <div class="row right_menu mt-3 pep_fields" hidden>
+            <div class="form-row right_menu mt-3 pep_fields" hidden>
                 <div class="col-3">
                     <label for="position" class="form-label">Cargo</label>
                     <select id="position" class="form-control rq_cond">
@@ -81,8 +81,8 @@
                     <input type="text" class="form-control rq_cond" id="link_date">
                 </div>
                 <div class="col-3">
-                    <label for="business_type" class="form-label">Actividad Laboral</label>
-                    <select id="business_type" class="form-control">
+                    <label for="business_type_pep" class="form-label">Actividad Laboral</label>
+                    <select id="business_type_pep" class="form-control">
                         <option selected></option>
                         {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
                         {% for b in ba %}
@@ -91,15 +91,15 @@
                     </select>
                 </div>
             </div>
-            <div class="row right_menu mt-5">
+            <div class="form-row right_menu mt-5">
                 <div class="col-8">
                     <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="fpep" required>
+                        <input type="checkbox" class="form-check-input" id="fpep" >
                         <label class="form-check-label" for="fpep">Familiar Politicamente Expuesto</label>
                     </div>
                 </div>
             </div>
-            <div class="row right_menu mt-3 fpep_fields" hidden>
+            <div class="form-row right_menu mt-3 fpep_fields" hidden>
                 <div class="col-4">
                     <label for="fpep_name" class="form-label">Nombre</label>
                     <input type="text" class="form-control rq_cond" id="fpep_name">
@@ -116,28 +116,28 @@
                 </div>
                
             </div>
-            <div class="row right_menu mt-3">
+            <div class="form-row right_menu mt-3">
                 <div class="col-2">
                     <label for="in" class="form-label">Ingresos</label>
-                    <input type="number" class="form-control" id="in" required>
+                    <input type="number" class="form-control" id="in" name="in" >
                 </div>
                 <div class="col-2">
                     <label for="out" class="form-label">Egresos</label>
-                    <input type="number" class="form-control" id="out" required>
+                    <input type="number" class="form-control" id="out" name="out">
                 </div>
                 <div class="col-2">
                     <label for="assets" class="form-label">Activos</label>
-                    <input type="number" class="form-control" id="assets" required>
+                    <input type="number" class="form-control" id="assets" name="assets">
                 </div>
                 <div class="col-2">
                     <label for="passive" class="form-label">Pasivos</label>
-                    <input type="number" class="form-control" id="passive" required>
+                    <input type="number" class="form-control" id="passive" name="passive">
                 </div>
             </div>
-            <div class="row right_menu mt-3">
+            <div class="form-row right_menu mt-3">
                 <div class="col-4">
                     <label for="source_fund" class="form-label">Origen de los dinero a recibir</label>
-                    <select id="parent_type" class="form-control" required>
+                    <select id="source_fund" name="source_fund" class="form-control">
                         <option selected></option>
                         {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
                         {% for s in sf %}
@@ -152,7 +152,7 @@
 
 {% block verificacion%}
     <div id='basic_data_sect' class="right_menu">
-        <div class="row right_menu mt-3">
+        <div class="form-row right_menu mt-3">
             <div class="col-8">
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>

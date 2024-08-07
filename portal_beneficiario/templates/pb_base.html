@@ -2,13 +2,7 @@
 
 {% block style %}
     <link type="text/css" rel="stylesheet" href="/assets/portal_beneficiario/css/home/home.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-{% endblock %}
-
-{% block script %}
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-    <script src="/assets/portal_beneficiario/js/basic_data/index.js"></script>
+    <link rel="stylesheet" href="/assets/portal_beneficiario/css/home/jquery-ui.css">
 {% endblock %}
 
 {% block content %}
@@ -43,4 +37,12 @@
             <img src="/assets/portal_beneficiario/img/footer.jpg" class="img-fluid" alt="Third Footer">
         </div>
     </footer>
+{% endblock %}
+
+{% block script %}
+    <script src="/assets/portal_beneficiario/js/home/jquery-3.3.1.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/jquery-ui.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/jquery.validate.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/additional-methods.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/index.js"></script>
 {% endblock %}

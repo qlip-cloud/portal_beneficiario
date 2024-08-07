@@ -9,29 +9,29 @@
                         <div class="connecting-line"></div>
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active">
-                                <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">Datos Basicos</span></a>
+                                <a id="basic_btn" href="#step1" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">Datos Basicos</span></a>
                             </li>
                             <li role="presentation" class="disabled ml-5">
-                                <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">Verificación</span></a>
+                                <a id="verify_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false" hidden><span class="round-tab">Verificación</span></a>
                             </li>
                         </ul>
                     </div>
-    
-                    <form role="form" action="index.html" class="login-box mt-5">
+                    <div id="messageBox" hidden></div>
+                    <form id="pb_form" role="form" class="login-box mt-5">
                         <div class="tab-content" id="main_form">
                             <div class="tab-pane active" role="tabpanel" id="step1">
                                 {% block basic_data %}
                                 {% endblock %}
                                 <ul class="list-inline">
-                                    <li><button type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step">Siguiente</button></li>
+                                    <li><button id="next" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step">Siguiente</button></li>
                                 </ul>
                             </div>
                             <div class="tab-pane" role="tabpanel" id="step2">
                                 {% block verificacion %}
                                 {% endblock %}
                                 <ul class="list-inline">
-                                    <li><button type="button" class="btn btn-dark btn-lg mt-5 ml-3 prev-step">Atras</button></li>
-                                    <li><button type="submit" class="btn btn-dark btn-lg mt-5 ml-3 next-step">Finalizar</button></li>
+                                    <li><button id="back" type="button" class="btn btn-dark btn-lg mt-5 ml-3 prev-step" disabled>Atras</button></li>
+                                    <li><button id="finish" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step" disabled>Finalizar</button></li>
                                 </ul>
                             </div>
                             
