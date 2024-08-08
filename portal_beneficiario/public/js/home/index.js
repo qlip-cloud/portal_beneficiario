@@ -12,7 +12,8 @@ $( document ).ready(function() {
             out:{required: true,digits: true},
             assets:{required: true,digits: true},
             passive:{required: true,digits: true},
-            source_fund:'required'
+            source_fund:'required',
+            pep:'required'
         },
         errorClass: "input-error",
         validClass: "input-success",
@@ -106,7 +107,7 @@ $( document ).ready(function() {
             data:indexed_array,
             dataType: 'json',
             contentType: 'application/json;charset=UTF-8',
-          }).done(function() {
+          }).done(function(r) {
             console.log(r.message)
           });
         

@@ -157,27 +157,27 @@
   },
   {
    "fieldname": "income",
-   "fieldtype": "Int",
+   "fieldtype": "Currency",
    "label": "Ingresos"
   },
   {
    "fieldname": "egress",
-   "fieldtype": "Int",
+   "fieldtype": "Currency",
    "label": "Egresos"
   },
   {
    "fieldname": "assets",
-   "fieldtype": "Int",
+   "fieldtype": "Currency",
    "label": "Activos"
   },
   {
    "fieldname": "passive",
-   "fieldtype": "Int",
+   "fieldtype": "Currency",
    "label": "Pasivos"
   },
   {
    "fieldname": "patrimony",
-   "fieldtype": "Int",
+   "fieldtype": "Currency",
    "label": "Patrimonio"
   },
   {
@@ -205,7 +205,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-22 15:07:49.837289",
+ "modified": "2024-08-07 19:36:28.177550",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
