@@ -189,3 +189,7 @@ fixtures = [
 
 # get_website_user_home_page = "app.website.get_home_page"
 get_website_user_home_page = "portal_beneficiario.portal_beneficiario.uses_cases.login.redirects.get_home_page"
+
+website_redirects = [
+    {"source": "/login", "target": "/login_pb"},
+]
