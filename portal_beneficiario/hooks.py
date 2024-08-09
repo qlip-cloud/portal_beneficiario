@@ -186,3 +186,5 @@ fixtures = [
     "qp_PO_SourceFund",
     "qp_PO_ParentType" 
 ]
+
+get_website_user_home_page = "portal_beneficiario.portal_beneficiario.uses_cases.login.redirects.get_home_page"
