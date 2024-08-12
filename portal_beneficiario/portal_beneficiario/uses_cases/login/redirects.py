@@ -3,8 +3,14 @@ import frappe
 def get_home_page(user):
 
     cache = frappe.cache()
+    
+    redirect_to = "/"
 
-    redirect_to = "/home"
+    if user == "Administrator":
+        redirect_to = "/app"
+    
+    if user != "Guest" and user != "Administrator":
+        redirect_to = "/home"
 
     if cache.get_value('b2c_login') == frappe.session.user:
 
