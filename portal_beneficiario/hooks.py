@@ -46,7 +46,7 @@ app_license = "MIT"
 
 # website user home page (by Role)
 role_home_page = {
-	"Customer": "/home",
+	"Customer": "/home_pb",
     "Administrator":"/app"
 }
 
