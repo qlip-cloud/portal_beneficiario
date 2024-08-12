@@ -60,8 +60,14 @@
             <div class="form-row right_menu mt-5">
                 <div class="col-8">
                     <div class="form-group form-check">
-                    <label class="form-check-label" for="pep">¿Persona Públicamente Expuesta? Si</label>
-                    <input type="checkbox" class="ml-3 form-check-input" id="pep" >
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="pepSi">¿Persona Públicamente Expuesta?   Si</label>
+                        <input class="form-check-input ml-2" type="radio" name="pep" id="pepSi" value="1">
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="pepNo">No</label>
+                        <input class="form-check-input ml-2" type="radio" name="pep" id="pepNo" value="0" checked>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -94,8 +100,14 @@
             <div class="form-row right_menu mt-5">
                 <div class="col-8">
                     <div class="form-group form-check">
-                        <label class="form-check-label" for="fpep">¿Familiar Políticamente Expuesto? Si</label>
-                        <input type="checkbox" class="ml-3 form-check-input" id="fpep" >
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="fpepSi">¿Familiar Políticamente Expuesto?   Si</label>
+                            <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepSi" value="1">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="fpepNo">No</label>
+                            <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepNo" value="0" checked>
+                        </div>
                     </div>
                 </div>
             </div>
