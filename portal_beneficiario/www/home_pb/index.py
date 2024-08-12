@@ -8,16 +8,14 @@ def get_context(context):
 @frappe.whitelist()
 def save_beneficiary(**args):
 
-    print(**args)
-    
     doc_tp = frappe.get_doc({
         'doctype': 'qp_PO_Beneficiario',
         'phone':args.get('phone'),
         'nationality':args.get('nationality'),
         'address':args.get('address'),
         'city':args.get('city'),
-        'peps':True if args.get('pepSi') == 1 else False,
-        'peps_parent':True if args.get('fpepSi') == 1 else False,
+        'peps':args.get('pep'),
+        'peps_parent':args.get('fpep'),
         'income': args.get('in'),
         'egress': args.get('out'),
         'assets':args.get('assets'),
