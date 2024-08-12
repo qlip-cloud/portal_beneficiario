@@ -16,7 +16,7 @@ def save_beneficiary(**args):
         'city':args.get('city'),
         'peps':args.get('pep'),
         'peps_parent':args.get('fpep'),
-        'income': args.get('on'),
+        'income': args.get('in'),
         'egress': args.get('out'),
         'assets':args.get('assets'),
         'passive':args.get('passive')
