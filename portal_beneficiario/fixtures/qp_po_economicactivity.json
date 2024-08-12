@@ -1,0 +1,24 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_EconomicActivity",
+  "ea_code": "PA",
+  "ea_name": "Producci\u00f3n Agr\u00edcola.",
+  "modified": "2024-08-01 10:06:05.086629",
+  "name": "PA",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_EconomicActivity",
+  "ea_code": "CS",
+  "ea_name": "Comercio y Servicios.",
+  "modified": "2024-08-01 10:06:26.516685",
+  "name": "CS",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]

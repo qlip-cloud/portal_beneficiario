@@ -1,0 +1,48 @@
+{% extends "frappe/templates/base.html" %}
+
+{% block style %}
+    <link type="text/css" rel="stylesheet" href="/assets/portal_beneficiario/css/home/home.css">
+    <link rel="stylesheet" href="/assets/portal_beneficiario/css/home/jquery-ui.css">
+{% endblock %}
+
+{% block content %}
+<body id="basic_data_body"> 
+    <nav class="row base">
+        <div class="col-2 logo"><h1>StoneX</h1></div>
+        <div class="col-8"></div>
+        <div class="col-2"></div>
+    </nav>
+    <div class="row">
+        <aside class="col-2 base left">
+            <div class="row right_menu">
+                <div class="col mt-5 ml-5">Inscripción</div>
+
+
+            </div>
+        </aside>
+        {% block wizard %}
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <footer class="row right_menu">
+        <div class="col-4 ajust">
+            <img src="/assets/portal_beneficiario/img/LOGO-FOGAFIN 1.png" class="img-fluid" alt="First Footer">
+        </div>
+        <div class="col-4">
+            <img src="/assets/portal_beneficiario/img/logo-vigilado_sfc 1.png" class="img-fluid" alt="Second Footer">
+        </div>
+        <div class="col-4 ajust">
+            <img src="/assets/portal_beneficiario/img/footer.jpg" class="img-fluid" alt="Third Footer">
+        </div>
+    </footer>
+{% endblock %}
+
+{% block script %}
+    <script src="/assets/portal_beneficiario/js/home/jquery-3.3.1.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/jquery-ui.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/jquery.validate.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/additional-methods.js"></script>
+    <script src="/assets/portal_beneficiario/js/home/index.js"></script>
+{% endblock %}

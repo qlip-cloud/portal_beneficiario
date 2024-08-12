@@ -1,0 +1,24 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_Nationality",
+  "modified": "2024-08-01 09:55:03.624505",
+  "na_code": "ES",
+  "na_name": "ESPA\u00d1OLA",
+  "name": "ES",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_Nationality",
+  "modified": "2024-08-01 09:55:26.319946",
+  "na_code": "VE",
+  "na_name": "VENEZOLANA",
+  "name": "VE",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]

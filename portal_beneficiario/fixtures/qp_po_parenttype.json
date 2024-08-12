@@ -1,0 +1,35 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_ParentType",
+  "modified": "2024-08-06 11:01:10.366605",
+  "name": "TI",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "pt_code": "TI",
+  "pt_name": "Tio"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_ParentType",
+  "modified": "2024-08-06 11:11:18.669836",
+  "name": "MA",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "pt_code": "MA",
+  "pt_name": "Mam\u00e1"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_ParentType",
+  "modified": "2024-08-06 11:11:58.687656",
+  "name": "PA",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "pt_code": "PA",
+  "pt_name": "Pap\u00e1"
+ }
+]
