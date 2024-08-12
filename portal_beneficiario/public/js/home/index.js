@@ -103,7 +103,7 @@ $( document ).ready(function() {
         });
 
         $.ajax({
-            url: "/api/method/portal_beneficiario.www.home.index.save_beneficiary",
+            url: "/api/method/portal_beneficiario.www.home_pb.index.save_beneficiary",
             data:indexed_array,
             dataType: 'json',
             contentType: 'application/json;charset=UTF-8',
