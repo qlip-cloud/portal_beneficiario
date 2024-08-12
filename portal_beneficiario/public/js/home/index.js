@@ -13,7 +13,8 @@ $( document ).ready(function() {
             assets:{required: true,digits: true},
             passive:{required: true,digits: true},
             source_fund:'required',
-            pep:'required'
+            pep:'required',
+            fpep:'required'
         },
         errorClass: "input-error",
         validClass: "input-success",
@@ -51,16 +52,17 @@ $( document ).ready(function() {
         $('#link_date').datepicker();
     }
 
-    $('#pep').change(function() {
-        if(this.checked) {
+    $('input[type=radio][name=pep]').change(function() {
+        if(this.value == '1') {
             $('.pep_fields').removeAttr('hidden');
         }else{
             $('.pep_fields').attr('hidden', true);
         }
     });
 
-    $('#fpep').change(function() {
-        if(this.checked) {
+
+    $('input[type=radio][name=fpep]').change(function() {
+        if(this.value == '1') {
             $('.fpep_fields').removeAttr('hidden');
         }else{
             $('.fpep_fields').attr('hidden', true);
