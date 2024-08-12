@@ -69,25 +69,32 @@ $( document ).ready(function() {
         }
     });
 
+    $("#term_conditions").change(function (e) {
+        if(this.checked) {
+            $('#acept_term').removeAttr('disabled');
+        }else{
+            $('#acept_term').attr('disabled', true);
+        }
+    });
+
+    $("#acept_term").click(function (e) {
+        $('#term_and_codition_btn').attr('hidden', true);
+    });
+
+    $("form #step2").change(function (e) {
+        if($('#pb_form').valid()){
+            $("form #step2").find('button').removeAttr('disabled');
+            $('#messageBox').addClass('hidden')
+        }else{
+            $('#messageBox').removeClass('hidden')
+        }
+    });
+
     $(".next-step").click(function (e) {
         if($('#pb_form').valid()){
-    
-            $('#back').prop('disabled', false);
-            $('#finish').prop('disabled', false);
-            $('#verify_btn').prop('hidden', false);
-            $('#messageBox').prop('hidden', true);
-
             var active = $('.wizard .nav-tabs li.active');
             nextTab(active);
-
-        }else{
-
-            $('#back').prop('disabled', true);
-            $('#finish').prop('disabled', true);
-            $('#verify_btn').prop('hidden', true);
-            $('#messageBox').prop('hidden', false);
-        }
-        
+        }      
     });
 
     $(".prev-step").click(function (e) {
@@ -125,11 +132,16 @@ function prevTab(elem) {
 
 
 $('.nav-tabs').on('click', 'li', function() {
+
     var li_active = $('.nav-tabs li.active');
     var div_active = li_active.find('a[data-toggle="tab"]').attr('aria-controls');
     $(`#${div_active}`).removeClass('active');
-    li_active.removeClass('active');
+
     $(this).addClass('active');
+    $(this).removeClass('disabled');
+    $(this).find('a[data-toggle="tab"]').attr('hidden', false);
     var this_div = $(this).find('a[data-toggle="tab"]').attr('aria-controls')
     $(`#${this_div}`).addClass('active');
+
+    li_active.removeClass('active');
 });

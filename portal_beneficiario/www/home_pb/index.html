@@ -1,6 +1,27 @@
 
 {% extends "portal_beneficiario/templates/pages/home/wizard.html" %}
 
+{% block term_and_conditions%}
+    <div id='term_and_conditions_sect' class="right_menu">
+        <div class="form-row right_menu mt-3">
+            <div class="row">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Terminos y Condiciones</h5>
+                      <p class="card-text">Al acceder y utilizar nuestros servicios, acepta que está sujeto a las políticas, autorizaciones, términos y condiciones de StoneX, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano</p>
+                      <div class="form-check">
+                            <label class="form-check-label" for="term_conditions">Acepto</label>
+                            <input type="checkbox" class="form-check-input ml-3" id="term_conditions"/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block basic_data%}
         <div id='basic_data_sect' class="right_menu">
             <div class="form-row right_menu mt-3">
