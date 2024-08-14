@@ -8,12 +8,18 @@
                     <div class="wizard-inner mb-5">
                         <div class="connecting-line"></div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a id="term_and_codition_btn" href="#step1" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">Autorización</span></a>
+                            {% if beneficiary_data.data_declaration == false and  beneficiary_data.data_declaration == false%}
+                            <li role="presentation" class="active ml-5">
+                                <a id="term_and_codition_btn" href="#step1" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">Terminos y Condiciones</span></a>
                             </li>
                             <li role="presentation" class="disabled ml-5">
                                 <a id="basic_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false" hidden><span class="round-tab">Datos Basicos</span></a>
                             </li>
+                            {% else %}
+                            <li role="presentation" class="active ml-5">
+                                <a id="basic_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">Datos Basicos</span></a>
+                            </li>
+                            {% endif %}
                             <li role="presentation" class="disabled ml-5">
                                 <a id="verify_btn" href="#step3" data-toggle="tab" aria-controls="step3" role="tab" aria-expanded="false" hidden><span class="round-tab">Verificación</span></a>
                             </li>
@@ -21,7 +27,10 @@
                     </div>
                     <div id="messageBox" class="hidden"></div>
                     <form id="pb_form" role="form" class="login-box mt-5">
+                        <input id="name" name="name" type="hidden" value="{{beneficiary_data.name}}">
+                        <input id="email" name="email" type="hidden" value="{{beneficiary_data.email}}">
                         <div class="tab-content" id="main_form">
+                            {% if beneficiary_data.data_declaration == false and  beneficiary_data.data_declaration == false%}
                             <div class="tab-pane active" role="tabpanel" id="step1">
                                 {% block term_and_conditions %}
                                 {% endblock %}
@@ -30,10 +39,13 @@
                                 </ul>
                             </div>
                             <div class="tab-pane" role="tabpanel" id="step2">
+                            {% else %}
+                            <div class="tab-pane active" role="tabpanel" id="step2">
+                            {% endif %}
                                 {% block basic_data %}
                                 {% endblock %}
                                 <ul class="list-inline">
-                                    <li><button id="next" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step" disabled>Siguiente</button></li>
+                                    <li><button id="save_beneficiary" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step" disabled>Siguiente</button></li>
                                 </ul>
                             </div>
                             <div class="tab-pane" role="tabpanel" id="step3">
