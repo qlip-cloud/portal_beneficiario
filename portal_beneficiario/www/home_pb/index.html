@@ -155,19 +155,19 @@
             <div class="form-row right_menu mt-3">
                 <div class="col-2">
                     <label for="in" class="form-label">Ingresos</label>
-                    <input type="number" class="form-control" id="in" name="in" value="{% if beneficiary_data.income %}{{beneficiary_data.income}}{%endif%}">
+                    <input type="text" class="form-control number" id="in" name="in" value="{% if beneficiary_data.income %}{{beneficiary_data.income}}{%endif%}">
                 </div>
                 <div class="col-2">
                     <label for="out" class="form-label">Egresos</label>
-                    <input type="number"  class="form-control" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
+                    <input type="text"  class="form-control number" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
                 </div>
                 <div class="col-2">
                     <label for="assets" class="form-label">Activos</label>
-                    <input type="number" class="form-control" id="assets" name="assets" value="{% if beneficiary_data.assets %}{{beneficiary_data.assets}}{%endif%}">
+                    <input type="text" class="form-control number" id="assets" name="assets" value="{% if beneficiary_data.assets %}{{beneficiary_data.assets}}{%endif%}">
                 </div>
                 <div class="col-2">
                     <label for="passive" class="form-label">Pasivos</label>
-                    <input type="number" class="form-control" id="passive" name="passive" value="{% if beneficiary_data.passive %}{{beneficiary_data.passive}}{%endif%}">
+                    <input type="text" class="form-control number" id="passive" name="passive" value="{% if beneficiary_data.passive %}{{beneficiary_data.passive}}{%endif%}">
                 </div>
             </div>
             <div class="form-row right_menu mt-3">
