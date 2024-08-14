@@ -1,41 +1,44 @@
 
 {% extends "portal_beneficiario/templates/pages/home/wizard.html" %}
 
-{% block term_and_conditions%}
-    <div id='term_and_conditions_sect' class="right_menu">
-        <div class="form-row right_menu mt-3">
-            <div class="row">
-                <div class="col-sm-6">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Terminos y Condiciones</h5>
-                      <p class="card-text">Al acceder y utilizar nuestros servicios, acepta que está sujeto a las políticas, autorizaciones, términos y condiciones de StoneX, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano</p>
-                      <div class="form-check">
-                            <label class="form-check-label" for="term_conditions">Acepto</label>
-                            <input type="checkbox" class="form-check-input ml-3" id="term_conditions"/>
-                      </div>
+{% if beneficiary_data.data_declaration == false and  beneficiary_data.data_declaration == false%}
+    {% block term_and_conditions%}
+        <div id='term_and_conditions_sect' class="right_menu">
+            <div class="form-row right_menu mt-3">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Terminos y Condiciones</h5>
+                                <p class="card-text">Al acceder y utilizar nuestros servicios, acepta que está sujeto a las políticas, autorizaciones, términos y condiciones de StoneX, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano</p>
+                                <div class="form-check">
+                                        <label class="form-check-label" for="term_conditions">Acepto</label>
+                                        <input type="checkbox" class="form-check-input ml-3" id="term_conditions" name="term_conditions" value="1" {% if beneficiary_data.data_declaration == true and  beneficiary_data.data_declaration == true %} checked {% endif %}/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}
+{% endif %}
 
 {% block basic_data%}
         <div id='basic_data_sect' class="right_menu">
             <div class="form-row right_menu mt-3">
                 <div class="col-4">
                     <label for="phone" class="form-label">Teléfono</label>
-                    <input type="text" class="form-control" id="phone" name="phone" />
+                    <input type="text" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
                 </div>
                 <div class="col-4">
                     <label for="nationality" class="form-label">Nacionalidad</label>
                     <select id="nationality" name="nationality" class="form-control">
-                        <option selected></option>
+                        
                         {% set na = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_code asc') %}
+                        <option></option>
                         {% for n in na %}
-                            <option value="{{ n.na_code }}">{{ n.na_name }}</option>
+                            <option value="{{ n.na_code }}" {% if n.na_code == beneficiary_data.nationality %} selected {% endif %} >{{ n.na_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -43,15 +46,15 @@
             <div class="form-row right_menu mt-3">
                 <div class="col-4">
                     <label for="address" class="form-label">Dirección</label>
-                    <input type="input" class="form-control" id="address" name="address"/>
+                    <input type="input" class="form-control" id="address" name="address" value="{% if beneficiary_data.address %}{{ beneficiary_data.address }}{%endif%}"/>
                 </div>
                 <div class="col-4">
                     <label for="city" class="form-label">Ciudad</label>
                     <select id="city" class="form-control" name="city">
-                        <option selected></option>
+                        <option></option>
                         {% set ci = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
                         {% for c in ci %}
-                            <option value="{{ c.ci_code }}">{{ c.ci_name }}</option>
+                            <option value="{{ c.ci_code }}" {% if c.ci_code == beneficiary_data.city %} selected {% endif %}>{{ c.ci_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -60,20 +63,20 @@
                 <div class="col-4">
                     <label for="business" class="form-label">Actividad Económica</label>
                     <select id="business" name="business" class="form-control">
-                        <option selected></option>
+                        <option></option>
                         {% set ea = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc') %}
                         {% for e in ea %}
-                            <option value="{{ e.ea_code }}">{{ e.ea_name }}</option>
+                            <option value="{{ e.ea_code }}" {% if e.ea_code == beneficiary_data.economic_activity %} selected {% endif %}>{{ e.ea_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-4">
                     <label for="business_type" class="form-label">Actividad Laboral</label>
                     <select id="business_type"  name="business_type"  class="form-control">
-                        <option selected></option>
+                        <option></option>
                         {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
                         {% for b in ba %}
-                            <option value="{{ b.ba_code }}">{{ b.ba_name }}</option>
+                            <option value="{{ b.ba_code }}" {% if b.ba_code == beneficiary_data.business_activity %} selected {% endif %}>{{ b.ba_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -83,11 +86,11 @@
                     <div class="form-group form-check">
                     <div class="form-check form-check-inline">
                         <label class="form-check-label" for="pepSi">¿Persona Públicamente Expuesta?   Si</label>
-                        <input class="form-check-input ml-2" type="radio" name="pep" id="pepSi" value="1">
+                        <input class="form-check-input ml-2" type="radio" name="pep" id="pepSi" value="1" {% if beneficiary_data.pep %} checked {% endif%}>
                     </div>
                     <div class="form-check form-check-inline">
                         <label class="form-check-label" for="pepNo">No</label>
-                        <input class="form-check-input ml-2" type="radio" name="pep" id="pepNo" value="0" checked>
+                        <input class="form-check-input ml-2" type="radio" name="pep" id="pepNo" value="0" {% if not beneficiary_data.pep %} checked {% endif%}>
                     </div>
                     </div>
                 </div>
@@ -96,16 +99,16 @@
                 <div class="col-3">
                     <label for="position" class="form-label">Cargo</label>
                     <select id="position" class="form-control rq_cond">
-                        <option selected></option>
+                        <option></option>
                         {% set po = frappe.get_all('qp_PO_Positions', fields=['po_name', 'po_code'], order_by='po_code asc') %}
                         {% for p in po %}
-                            <option value="{{ p.po_code }}">{{ p.po_name }}</option>
+                            <option value="{{ p.po_code }}" {% if p.po_code == beneficiary_data.position %} selected {% endif %}>{{ p.po_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-2">
                     <label for="link_date" class="form-label">Fecha de Vinculación</label>
-                    <input type="text" class="form-control rq_cond" id="link_date">
+                    <input type="text" class="form-control rq_cond" id="link_date" name="link_date" value="{% if beneficiary_data.link_date %}{{ frappe.format( beneficiary_data.link_date , {'fieldtype': 'Date'}) }}{% endif %}">
                 </div>
                 <div class="col-3">
                     <label for="business_type_pep" class="form-label">Actividad Laboral</label>
@@ -113,7 +116,7 @@
                         <option selected></option>
                         {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
                         {% for b in ba %}
-                            <option value="{{ b.ba_code }}">{{ b.ba_name }}</option>
+                            <option value="{{ b.ba_code }}" {% if b.po_code == beneficiary_data.economic_activity %} selected {% endif %}>{{ b.ba_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -123,11 +126,11 @@
                     <div class="form-group form-check">
                         <div class="form-check form-check-inline">
                             <label class="form-check-label" for="fpepSi">¿Familiar Políticamente Expuesto?   Si</label>
-                            <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepSi" value="1">
+                            <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepSi" value="1" {% if beneficiary_data.peps_parent %} checked {% endif%}>
                         </div>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label" for="fpepNo">No</label>
-                            <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepNo" value="0" checked>
+                            <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepNo" value="0" {% if not beneficiary_data.peps_parent %} checked {% endif%}>
                         </div>
                     </div>
                 </div>
@@ -135,7 +138,7 @@
             <div class="form-row right_menu mt-3 fpep_fields" hidden>
                 <div class="col-4">
                     <label for="fpep_name" class="form-label">Nombre</label>
-                    <input type="text" class="form-control rq_cond" id="fpep_name">
+                    <input type="text" class="form-control rq_cond" id="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
                 </div>
                 <div class="col-4">
                     <label for="parent_type" class="form-label">Tipo de Parentesco</label>
@@ -143,7 +146,7 @@
                         <option selected></option>
                         {% set pt = frappe.get_all('qp_PO_ParentType', fields=['pt_name', 'pt_code'], order_by='pt_code asc') %}
                         {% for p in pt %}
-                            <option value="{{ p.pt_code }}">{{ p.pt_name }}</option>
+                            <option value="{{ p.pt_code }}" {% if p.pt_code == beneficiary_data.parent_type %} selected {% endif %}>{{ p.pt_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -152,19 +155,19 @@
             <div class="form-row right_menu mt-3">
                 <div class="col-2">
                     <label for="in" class="form-label">Ingresos</label>
-                    <input type="number" class="form-control" id="in" name="in" >
+                    <input type="number" class="form-control" id="in" name="in" value="{% if beneficiary_data.income %}{{beneficiary_data.income}}{%endif%}">
                 </div>
                 <div class="col-2">
                     <label for="out" class="form-label">Egresos</label>
-                    <input type="number" class="form-control" id="out" name="out">
+                    <input type="number"  class="form-control" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
                 </div>
                 <div class="col-2">
                     <label for="assets" class="form-label">Activos</label>
-                    <input type="number" class="form-control" id="assets" name="assets">
+                    <input type="number" class="form-control" id="assets" name="assets" value="{% if beneficiary_data.assets %}{{beneficiary_data.assets}}{%endif%}">
                 </div>
                 <div class="col-2">
                     <label for="passive" class="form-label">Pasivos</label>
-                    <input type="number" class="form-control" id="passive" name="passive">
+                    <input type="number" class="form-control" id="passive" name="passive" value="{% if beneficiary_data.passive %}{{beneficiary_data.passive}}{%endif%}">
                 </div>
             </div>
             <div class="form-row right_menu mt-3">
@@ -174,7 +177,7 @@
                         <option selected></option>
                         {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
                         {% for s in sf %}
-                            <option value="{{ s.sf_code }}">{{ s.sf_name }}</option>
+                            <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.parent_type %} selected {% endif %}>{{ s.sf_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -184,11 +187,11 @@
 
 
 {% block verificacion%}
-    <div id='basic_data_sect' class="right_menu">
+    <div id='verificacion_sect' class="right_menu">
         <div class="form-row right_menu mt-3">
             <div class="col-8">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+                    <iframe id="jumio_iframe" class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
