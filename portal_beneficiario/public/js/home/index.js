@@ -136,13 +136,19 @@ $( document ).ready(function() {
           });  
     });
 
-    $("input[type='number']").on('blur', function() {
+    $("input.number").on('blur', function() {
         const value = this.value.replace(/,/g, '');
-        this.value = parseFloat(value).toLocaleString('en-US', {
-          style: 'decimal',
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2
-        });
+
+        if(!isNaN(parseFloat(this.value))){
+            this.value = parseFloat(value).toLocaleString('en-US', {
+                style: 'decimal',
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2
+            });
+        }else{
+            this.value = 0;
+        }
+        
       });
 });
 
