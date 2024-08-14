@@ -35,7 +35,8 @@
   "patrimony",
   "data_declaration",
   "authorization_declaration",
-  "jumio_points"
+  "jumio_points",
+  "source_fund"
  ],
  "fields": [
   {
@@ -72,7 +73,10 @@
   {
    "fieldname": "email",
    "fieldtype": "Data",
-   "label": "Correo"
+   "in_list_view": 1,
+   "label": "Correo",
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "birthday",
@@ -201,11 +205,17 @@
    "fieldname": "be_name",
    "fieldtype": "Data",
    "label": "Nombre"
+  },
+  {
+   "fieldname": "source_fund",
+   "fieldtype": "Link",
+   "label": "Source Fund",
+   "options": "qp_PO_SourceFund"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-07 19:36:28.177550",
+ "modified": "2024-08-14 09:17:13.203299",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

@@ -2,16 +2,17 @@ $( document ).ready(function() {
    
     $("form#pb_form").validate({
         rules:{
+            name:'required',
             phone:'required',
             nationality:'required',
             address:'required',
             city:'required',
             business:'required',
             business_type:'required',
-            in:{required: true,digits: true},
-            out:{required: true,digits: true},
-            assets:{required: true,digits: true},
-            passive:{required: true,digits: true},
+            in:{required: true,number: true},
+            out:{required: true,number: true},
+            assets:{required: true,number: true},
+            passive:{required: true,number: true},
             source_fund:'required',
             pep:'required',
             fpep:'required'
@@ -49,7 +50,7 @@ $( document ).ready(function() {
     });
     
     if($('#link_date')){
-        $('#link_date').datepicker();
+        $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });
     }
 
     $('input[type=radio][name=pep]').change(function() {
@@ -69,25 +70,42 @@ $( document ).ready(function() {
         }
     });
 
+    $("#term_conditions").change(function (e) {
+        if(this.checked) {
+            $('#acept_term').removeAttr('disabled');
+        }else{
+            $('#acept_term').attr('disabled', true);
+        }
+    });
+
+    $("#acept_term").click(function (e) {
+        $('#term_and_codition_btn').attr('hidden', true);
+    });
+
+    $("form #step2").change(function (e) {
+        if($('#pb_form').valid()){
+            $("form #step2").find('button').removeAttr('disabled');
+            $('#messageBox').addClass('hidden')
+        }else{
+            $('#messageBox').removeClass('hidden')
+        }
+    });
+
+    $("form #step1").ready(function (e) {
+        $("#term_conditions").change();
+    });
+
+    $("form #step2").ready(function (e) {
+        if($("#pb_form").valid()){
+            $("form #step2").find('button').removeAttr('disabled');
+        }
+    });
+
     $(".next-step").click(function (e) {
         if($('#pb_form').valid()){
-    
-            $('#back').prop('disabled', false);
-            $('#finish').prop('disabled', false);
-            $('#verify_btn').prop('hidden', false);
-            $('#messageBox').prop('hidden', true);
-
             var active = $('.wizard .nav-tabs li.active');
             nextTab(active);
-
-        }else{
-
-            $('#back').prop('disabled', true);
-            $('#finish').prop('disabled', true);
-            $('#verify_btn').prop('hidden', true);
-            $('#messageBox').prop('hidden', false);
-        }
-        
+        }      
     });
 
     $(".prev-step").click(function (e) {
@@ -96,6 +114,10 @@ $( document ).ready(function() {
     });
 
     $("#finish").click(function (e) {
+        alert("Finalizado");   
+    });
+
+    $("#save_beneficiary").click(function (e) {
 
         var unindexed_array = $('#pb_form').serializeArray()
         var indexed_array = {};
@@ -110,10 +132,24 @@ $( document ).ready(function() {
             dataType: 'json',
             contentType: 'application/json;charset=UTF-8',
           }).done(function(r) {
-            console.log(r.message)
-          });
-        
+                callJumio(r.message)
+          });  
     });
+
+    $("input.number").on('blur', function() {
+        const value = this.value.replace(/,/g, '');
+
+        if(!isNaN(parseFloat(this.value))){
+            this.value = parseFloat(value).toLocaleString('en-US', {
+                style: 'decimal',
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2
+            });
+        }else{
+            this.value = 0;
+        }
+        
+      });
 });
 
 function nextTab(elem) {
@@ -123,13 +159,34 @@ function prevTab(elem) {
     $(elem).prev().find('a[data-toggle="tab"]').click();
 }
 
+function callJumio(data) {
+    $.ajax({
+        url: "https://account.amer-1.jumio.ai/api/v1/accounts/",
+        method:'POST',
+        data:{
+            "customerInternalReference":data.id_dynamics,
+            "workflowDefinition":{
+               "key": data.id_jumio
+            }
+         },
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8',
+      }).done(function(r) {
+            $('#jumio_iframe').attr('src', r.message.web.href);
+      });  
+}
 
 $('.nav-tabs').on('click', 'li', function() {
+
     var li_active = $('.nav-tabs li.active');
     var div_active = li_active.find('a[data-toggle="tab"]').attr('aria-controls');
     $(`#${div_active}`).removeClass('active');
-    li_active.removeClass('active');
+
     $(this).addClass('active');
+    $(this).removeClass('disabled');
+    $(this).find('a[data-toggle="tab"]').attr('hidden', false);
     var this_div = $(this).find('a[data-toggle="tab"]').attr('aria-controls')
     $(`#${this_div}`).addClass('active');
+
+    li_active.removeClass('active');
 });
