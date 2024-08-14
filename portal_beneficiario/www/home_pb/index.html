@@ -177,7 +177,7 @@
                         <option selected></option>
                         {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
                         {% for s in sf %}
-                            <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.parent_type %} selected {% endif %}>{{ s.sf_name }}</option>
+                            <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.source_fund %} selected {% endif %}>{{ s.sf_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
