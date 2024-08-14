@@ -1,7 +1,7 @@
 
 {% extends "portal_beneficiario/templates/pages/home/wizard.html" %}
 
-{% if beneficiary_data.data_declaration == false and  beneficiary_data.data_declaration == false%}
+{% if beneficiary_data.data_declaration == false and  beneficiary_data.authorization_declaration == false%}
     {% block term_and_conditions%}
         <div id='term_and_conditions_sect' class="right_menu">
             <div class="form-row right_menu mt-3">
@@ -9,7 +9,7 @@
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Terminos y Condiciones</h5>
+                                <h5 class="card-title">Autorización</h5>
                                 <p class="card-text">Al acceder y utilizar nuestros servicios, acepta que está sujeto <a href="files/2024.08. AUTORIZACIONES Y DECLARACIONES ESPECIALES.pdf" target="_blank" style="text-decoration: underline;">a las políticas, autorizaciones, términos y condiciones de StoneX</a>, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano.</p>
                                 <div class="form-check">
                                         <label class="form-check-label" for="term_conditions">Acepto</label>
@@ -177,7 +177,7 @@
                         <option selected></option>
                         {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
                         {% for s in sf %}
-                            <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.parent_type %} selected {% endif %}>{{ s.sf_name }}</option>
+                            <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.source_fund %} selected {% endif %}>{{ s.sf_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
