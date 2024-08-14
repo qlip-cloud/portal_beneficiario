@@ -96,7 +96,9 @@ $( document ).ready(function() {
     });
 
     $("form #step2").ready(function (e) {
-        $("#pb_form").valid();
+        if($("#pb_form").valid()){
+            $("form #step2").find('button').removeAttr('disabled');
+        }
     });
 
     $(".next-step").click(function (e) {
@@ -133,7 +135,15 @@ $( document ).ready(function() {
                 callJumio(r.message)
           });  
     });
-    
+
+    $("input[type='number']").on('blur', function() {
+        const value = this.value.replace(/,/g, '');
+        this.value = parseFloat(value).toLocaleString('en-US', {
+          style: 'decimal',
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2
+        });
+      });
 });
 
 function nextTab(elem) {
