@@ -161,7 +161,7 @@ function prevTab(elem) {
 
 function callJumio(data) {
     $.ajax({
-        url: "https://account.amer-1.jumio.ai/api/v1/accounts/",
+        url: "http://demo2333830.mockable.io/api/v1/accounts/",
         method:'POST',
         data:{
             "customerInternalReference":data.id_dynamics,
@@ -172,7 +172,8 @@ function callJumio(data) {
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
       }).done(function(r) {
-            $('#jumio_iframe').attr('src', r.message.web.href);
+            console.log(r)
+            $('#jumio_iframe').attr('src', r.web.href);
       });  
 }
 

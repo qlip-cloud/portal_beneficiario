@@ -42,7 +42,8 @@ def get_context(context):
     context.update({
         "is_navbar_custom": True,
         "csrf_token": csrf_token,
-        "beneficiary_data":beneficiary_data
+        "beneficiary_data":beneficiary_data,
+        "no_cache":1
     })
         
     return context

@@ -45,10 +45,10 @@ app_license = "MIT"
 #base_template = "portal_beneficiario/templates/pb_base.html"
 
 # website user home page (by Role)
-# role_home_page = {
-# 	"Customer": "/home_pb",
-#     "Administrator":"/app"
-# }
+role_home_page = {
+	"Customer": "/home_pb",
+    "Administrator":"/app"
+}
 
 # Generators
 # ----------
@@ -189,4 +189,4 @@ fixtures = [
 ]
 
 # get_website_user_home_page = "app.website.get_home_page"
-# get_website_user_home_page = "portal_beneficiario.portal_beneficiario.uses_cases.login.redirects.get_home_page"
+get_website_user_home_page = "portal_beneficiario.portal_beneficiario.uses_cases.login.redirects.get_home_page"
