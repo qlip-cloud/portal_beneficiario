@@ -49,8 +49,18 @@ footer{
     margin:0;
 }
 
-footer img{
-    object-fit: cover;
+#img_1 {
+    background: left / contain no-repeat url("/assets/portal_beneficiario/img/LOGO-FOGAFIN 1.png");
+    height: 90px;
+}
+
+#img_2 {
+    background: center / contain no-repeat url("/assets/portal_beneficiario/img/logo-vigilado_sfc 1.png");
+}
+
+#img_3 {
+    background: right / contain no-repeat url("/assets/portal_beneficiario/img/footer.jpg");
+    height: 90px;
 }
 
 /* Chrome, Safari, Edge, Opera */
