@@ -50,8 +50,7 @@ footer{
 }
 
 footer img{
-    height: 100px !important;
-    align-content: center;
+    object-fit: cover;
 }
 
 /* Chrome, Safari, Edge, Opera */
