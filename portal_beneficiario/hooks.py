@@ -40,12 +40,15 @@ app_license = "MIT"
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+#home_page = "home/index"
+
+#base_template = "portal_beneficiario/templates/pb_base.html"
 
 # website user home page (by Role)
-# role_home_page = {
-#	"Role": "home_page"
-# }
+role_home_page = {
+	"Customer": "/home_pb",
+    "Administrator":"/app"
+}
 
 # Generators
 # ----------
@@ -173,3 +176,17 @@ user_data_fields = [
 # 	"portal_beneficiario.auth.validate"
 # ]
 
+fixtures = [
+    # export all records from the Category table
+	"qp_PO_BusinessActivity",
+	"qp_PO_City",
+	"qp_PO_DocumentType",
+	"qp_PO_EconomicActivity",
+	"qp_PO_Nationality",
+    "qp_PO_Positions",
+    "qp_PO_SourceFund",
+    "qp_PO_ParentType" 
+]
+
+# get_website_user_home_page = "app.website.get_home_page"
+get_website_user_home_page = "portal_beneficiario.portal_beneficiario.uses_cases.login.redirects.get_home_page"

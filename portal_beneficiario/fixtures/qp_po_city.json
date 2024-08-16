@@ -1,0 +1,24 @@
+[
+ {
+  "ci_code": "CA",
+  "ci_name": "CARACAS",
+  "docstatus": 0,
+  "doctype": "qp_PO_City",
+  "modified": "2024-08-01 10:03:22.754261",
+  "name": "CA",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ },
+ {
+  "ci_code": "VA",
+  "ci_name": "VALENCIA",
+  "docstatus": 0,
+  "doctype": "qp_PO_City",
+  "modified": "2024-08-01 10:03:35.395012",
+  "name": "VA",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null
+ }
+]

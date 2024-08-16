@@ -1,37 +1,37 @@
 {
  "actions": [],
- "autoname": "field:dt_code",
- "creation": "2024-07-22 14:19:46.014980",
+ "autoname": "field:pt_code",
+ "creation": "2024-08-06 10:52:18.198910",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "dt_code",
-  "dt_name"
+  "pt_name",
+  "pt_code"
  ],
  "fields": [
   {
-   "fieldname": "dt_code",
-   "fieldtype": "Data",
-   "label": "Code",
-   "unique": 1
-  },
-  {
-   "fieldname": "dt_name",
+   "fieldname": "pt_name",
    "fieldtype": "Data",
    "in_global_search": 1,
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Name"
+  },
+  {
+   "fieldname": "pt_code",
+   "fieldtype": "Data",
+   "label": "Code",
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-13 09:28:06.276003",
+ "modified": "2024-08-13 09:29:26.746442",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
- "name": "qp_PO_DocumentType",
+ "name": "qp_PO_ParentType",
  "owner": "Administrator",
  "permissions": [
   {
@@ -49,6 +49,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "title_field": "dt_name",
+ "title_field": "pt_name",
  "track_changes": 1
 }

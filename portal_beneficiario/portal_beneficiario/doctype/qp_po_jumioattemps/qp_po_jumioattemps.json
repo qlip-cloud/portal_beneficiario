@@ -1,37 +1,37 @@
 {
  "actions": [],
- "autoname": "field:dt_code",
- "creation": "2024-07-22 14:19:46.014980",
+ "creation": "2024-07-22 19:55:51.902190",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "dt_code",
-  "dt_name"
+  "attemps_num",
+  "query",
+  "response"
  ],
  "fields": [
   {
-   "fieldname": "dt_code",
-   "fieldtype": "Data",
-   "label": "Code",
-   "unique": 1
+   "fieldname": "attemps_num",
+   "fieldtype": "Int",
+   "label": "Numero Intentos"
   },
   {
-   "fieldname": "dt_name",
+   "fieldname": "query",
    "fieldtype": "Data",
-   "in_global_search": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Name"
+   "label": "Consulta"
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Data",
+   "label": "Respuesta"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-13 09:28:06.276003",
+ "modified": "2024-07-22 19:55:51.902190",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
- "name": "qp_PO_DocumentType",
+ "name": "qp_PO_JumioAttemps",
  "owner": "Administrator",
  "permissions": [
   {
@@ -49,6 +49,5 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "title_field": "dt_name",
  "track_changes": 1
 }
