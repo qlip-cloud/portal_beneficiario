@@ -131,8 +131,9 @@ $( document ).ready(function() {
             data:indexed_array,
             dataType: 'json',
             contentType: 'application/json;charset=UTF-8',
+            async: false
           }).done(function(r) {
-                callJumio(r.message)
+                call_get_service_data(r.message)
           });  
     });
 
@@ -159,22 +160,58 @@ function prevTab(elem) {
     $(elem).prev().find('a[data-toggle="tab"]').click();
 }
 
-function callJumio(data) {
+function call_get_service_data(data){
+    frappe.db.get_list(
+        "qp_PO_JumioConfig", 
+        {
+            fields:["access_token_url", "jumio_service_url", "client_id", "client_secret"]
+        }).then((v) => {
+            callJumio(v, data,  callAccessToken(v));
+        })
+}
+function callJumio(data, user, token) {
+
     $.ajax({
-        url: "http://demo2333830.mockable.io/api/v1/accounts/",
+        url: data.jumio_service_url,
         method:'POST',
         data:{
-            "customerInternalReference":data.id_dynamics,
+            "customerInternalReference":user.id_dynamics,
             "workflowDefinition":{
-               "key": data.id_jumio
+                "key": user.id_jumio
             }
-         },
+        },
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
-      }).done(function(r) {
-            console.log(r)
-            $('#jumio_iframe').attr('src', r.web.href);
-      });  
+        async: false,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+    }).done(function(r) {
+        console.log(r)
+        $('#jumio_iframe').attr('src', r.web.href);
+    });
+}
+
+function callAccessToken(data){
+
+    var token = "";
+
+    $.ajax({
+        url: data.access_token_url,
+        method:'GET',
+        data: {
+            "grant_type": "client_credentials"
+        },
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        async: false,
+        username:data.client_id,
+        password:data.client_secret
+    }).done(function(r) {
+        return token = r.access_token
+    }).fail(function(r) {
+        alert(r);
+    });
 }
 
 $('.nav-tabs').on('click', 'li', function() {
