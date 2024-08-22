@@ -11,8 +11,6 @@ def get_context(context):
 
     if frappe.session.user == "Guest":
         frappe.throw(_("Log in to access this page."), frappe.PermissionError)
-    elif frappe.db.get_value("User", frappe.session.user, "user_type") == "Website User":
-        frappe.throw(_("You are not permitted to access this page."), frappe.PermissionError)
 
     try:
         boot = frappe.sessions.get()
@@ -47,34 +45,3 @@ def get_context(context):
     })
         
     return context
-
-@frappe.whitelist()
-def save_beneficiary(**args):
-
-    b = frappe.get_doc('qp_PO_Beneficiario', args.get('name'))
-    b.phone = args.get('phone')
-    b.nationality = args.get('nationality')
-    b.address = args.get('address')
-    b.city = args.get('city')
-    b.economic_activity = args.get('business')
-    b.peps = args.get('pep')
-    b.position = args.get('position')
-    b.link_date = getdate(args.get('link_date'))
-    b.business_activity = args.get('business_type')
-    b.peps_parent = args.get('fpep')
-    b.parent_name = args.get('fpep_name')
-    b.parent_type = args.get('parent_type')
-    b.income =  args.get('in')
-    b.egress =  args.get('out')
-    b.assets = args.get('assets')
-    b.passive = args.get('passive')
-    b.data_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
-    b.authorization_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
-    b.email = args.get('email')
-    b.source_fund = args.get('source_fund')
-
-    b.save()
-
-    frappe.db.commit()
-
-    return b

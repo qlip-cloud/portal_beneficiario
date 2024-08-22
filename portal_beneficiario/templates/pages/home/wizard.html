@@ -20,9 +20,11 @@
                                 <a id="basic_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">Datos Basicos</span></a>
                             </li>
                             {% endif %}
-                            <li role="presentation" class="disabled ml-5">
-                                <a id="verify_btn" href="#step3" data-toggle="tab" aria-controls="step3" role="tab" aria-expanded="false" hidden><span class="round-tab">Verificación</span></a>
-                            </li>
+                            {% if beneficiary_data.jumio_status != "PROCESSED"%}
+                                <li role="presentation" class="disabled ml-5">
+                                    <a id="verify_btn" href="#step3" data-toggle="tab" aria-controls="step3" role="tab" aria-expanded="false" hidden><span class="round-tab">Verificación</span></a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                     <div id="messageBox" class="hidden"></div>
@@ -45,17 +47,24 @@
                                 {% block basic_data %}
                                 {% endblock %}
                                 <ul class="list-inline">
-                                    <li><button id="save_beneficiary" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step" disabled>Siguiente</button></li>
-                                </ul>
+                                    {% if beneficiary_data.jumio_status != "PROCESSED"%}
+                                        <li><button id="save_beneficiary" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step" disabled>Siguiente</button></li>
+                                    {% else %}
+                                        <li><button id="save_beneficiary" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step" disabled>Actualizar</button></li>
+                                    {% endif %}
+                                
+                                    </ul>
                             </div>
-                            <div class="tab-pane" role="tabpanel" id="step3">
-                                {% block verificacion %}
-                                {% endblock %}
-                                <ul class="list-inline">
-                                    <li><button id="back" type="button" class="btn btn-dark btn-lg mt-5 ml-3 prev-step">Atras</button></li>
-                                    <li><button id="finish" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step">Finalizar</button></li>
-                                </ul>
-                            </div>
+                            {% if beneficiary_data.jumio_status != "PROCESSED"%}
+                                <div class="tab-pane" role="tabpanel" id="step3">
+                                    {% block verificacion %}
+                                    {% endblock %}
+                                    <ul class="list-inline">
+                                        <li><button id="back" type="button" class="btn btn-dark btn-lg mt-5 ml-3 prev-step" disabled>Atras</button></li>
+                                        <li><button id="finish" type="button" class="btn btn-dark btn-lg mt-5 ml-3 next-step" disabled>Finalizar</button></li>
+                                    </ul>
+                                </div>
+                            {% endif %}
                             <div class="clearfix"></div>
                         </div>
                         
