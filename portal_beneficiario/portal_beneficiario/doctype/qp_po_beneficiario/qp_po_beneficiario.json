@@ -39,7 +39,9 @@
   "source_fund",
   "jumio_status",
   "jumio_workflowexecution",
-  "jumio_account"
+  "jumio_account",
+  "enable",
+  "jumio_iframe"
  ],
  "fields": [
   {
@@ -216,10 +218,11 @@
    "options": "qp_PO_SourceFund"
   },
   {
+   "default": "PENDING",
    "fieldname": "jumio_status",
    "fieldtype": "Select",
    "label": "Jumio Status",
-   "options": "PROCESSED\nSESSION_EXPIRED\nTOKEN_EXPIRED"
+   "options": "PENDING\nPROCESSED\nSESSION_EXPIRED\nTOKEN_EXPIRED"
   },
   {
    "fieldname": "jumio_workflowexecution",
@@ -230,11 +233,22 @@
    "fieldname": "jumio_account",
    "fieldtype": "Data",
    "label": "Jumio account"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable",
+   "fieldtype": "Check",
+   "label": "Enable"
+  },
+  {
+   "fieldname": "jumio_iframe",
+   "fieldtype": "Long Text",
+   "label": "jumio_iframe"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-21 18:30:21.786227",
+ "modified": "2024-08-22 19:19:40.250530",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

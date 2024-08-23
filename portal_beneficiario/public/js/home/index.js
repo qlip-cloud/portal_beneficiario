@@ -30,7 +30,8 @@ $( document ).ready(function() {
             $(element).addClass(validClass);
         },
         showErrors: function(errorMap, errorList) {
-            $("#messageBox").html("Contiene un total de " + this.numberOfInvalids() + " campos requeridos y obligatorios sin completar");
+            if(errorList.lenght > 0)
+                $("#messageBox").html("Contiene un total de " + this.numberOfInvalids() + " campos requeridos y obligatorios sin completar");
 
             var i, elements, error;
 
@@ -101,6 +102,12 @@ $( document ).ready(function() {
         }
     });
 
+    $("form #step3").ready(function (e) {
+        if($("#jumio_iframe").attr("src") != ""){
+            checkStatus()
+        }
+    });
+
     $(".next-step").click(function (e) {
         if($('#pb_form').valid()){
             var active = $('.wizard .nav-tabs li.active');
@@ -165,8 +172,6 @@ function prevTab(elem) {
 
 function callJumio(beneficiary) {
 
-    $('#basic_btn').attr('disabled', true)
-
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.jumio.get_jumio_iframe",
         dataType: 'json',
@@ -176,28 +181,36 @@ function callJumio(beneficiary) {
             if(r.message){
                 console.log(r)
                 $('#jumio_iframe').attr('src', r.message.web.href);
-    
-                var refreshIntervalId = setInterval(()=>{
-                    $.ajax({
-                        url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_status",
-                        dataType: 'json',
-                        contentType: 'application/json;charset=UTF-8',
-                      }).done(function(r) {
-                            console.log(r.message);
-                            if(r.message == "PROCESSED")
-                            {
-                                clearInterval(refreshIntervalId);
-                                $("#finish").removeAttr('disabled');
-                                $('#basic_btn').removeAttr('disabled');
-                                $('#back').removeAttr('disabled');
-                            } 
-                      })
-                }, 10000);
+                $('#basic_btn').addClass('hidden');
+                $("#messageBox").html("Su solicitud se encuentra en estado " + beneficiary.jumio_status + ". Debe esperar que sea procesada.");
+                $('#messageBox').removeClass('hidden')
+                checkStatus()
             }else{
                 alert("Error de comunicación con Jumio");
             }
            
       });
+}
+
+function checkStatus(){
+    var refreshIntervalId = setInterval(()=>{
+        $.ajax({
+            url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_status",
+            dataType: 'json',
+            contentType: 'application/json;charset=UTF-8',
+          }).done(function(r) {
+                console.log(r.message);
+                if(r.message == "PROCESSED")
+                {
+                    clearInterval(refreshIntervalId);
+                    $("#finish").removeAttr('disabled');
+                    $('#basic_btn').removeClass('hidden');
+                    $('#back').removeAttr('disabled');
+                    $('#messageBox').addClass('hidden')
+
+                } 
+          })
+    }, 10000);
 }
 
 $('.nav-tabs').on('click', 'li', function() {

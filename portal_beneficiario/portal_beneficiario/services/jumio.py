@@ -57,6 +57,9 @@ def get_jumio_iframe():
             if response:
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", frappe._dict(response.workflowExecution).id)
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_account", frappe._dict(response.account).id)
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_iframe", frappe._dict(response.web).href)
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 0)
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
                 frappe.db.commit()
         except Exception as e:
             print(e) 
@@ -73,6 +76,7 @@ def callback(**args):
     
     if beneficiary_data:
         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", frappe._dict(args.workflowExecution).status)
+        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 1)
         frappe.db.commit()
         return 0
     else:
