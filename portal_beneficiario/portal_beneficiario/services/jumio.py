@@ -16,11 +16,11 @@ def get_jumio_accesstoken(jumio_cnf):
         headers = {
             "Authorization": f"Basic {credentials}",
             "Content-Type":"application/x-www-form-urlencoded"}
-        data = 'grant_type=client_credentials'
+        data = {"grant_type": "client_credentials"}
 
         response=None
         try:
-            response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
+            response = frappe._dict(make_get_request(endpoint, data=data, headers=headers))
         except Exception as e:
              raise e 
         else:
