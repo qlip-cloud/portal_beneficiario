@@ -20,7 +20,7 @@ def get_jumio_accesstoken(jumio_cnf):
 
         response=None
         try:
-            response = frappe._dict(make_get_request(endpoint, data=data, headers=headers))
+            response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
         except Exception as e:
              raise e 
         else:
