@@ -13,10 +13,13 @@ def get_jumio_accesstoken(jumio_cnf):
 
     if jumio_cnf:
         endpoint = jumio_cnf.access_token_url
-        credentials = base64.b64decode(f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}")
+        credentials = f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}"
+        
         headers = {
-            "Authorization": f"Basic {credentials}",
+            "Authorization": f"Basic {base64.b64decode(credentials)}",
             "Content-Type":"application/x-www-form-urlencoded"}
+        
+        print(headers)
         data = 'grant_type=client_credentials'
 
         response=None
