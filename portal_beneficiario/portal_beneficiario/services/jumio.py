@@ -6,6 +6,7 @@ import frappe.sessions
 from six import string_types
 from frappe.utils import getdate
 from frappe.integrations.utils import make_get_request, make_post_request
+import base64
 
 
 def get_jumio_accesstoken(jumio_cnf):
@@ -14,13 +15,13 @@ def get_jumio_accesstoken(jumio_cnf):
         endpoint = jumio_cnf.access_token_url
         credentials = f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}".encode()
         headers = {
-            "Authorization": f"Basic {credentials}",
+            "Authorization": "Basic {credentialfs}",
             "Content-Type":"application/x-www-form-urlencoded"}
-        data = {"grant_type": "client_credentials"}
+        data = 'grant_type:client_credentials'
 
         response=None
         try:
-            response = frappe._dict(make_get_request(endpoint, data=data, headers=headers))
+            response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
         except Exception as e:
              raise e 
         else:
