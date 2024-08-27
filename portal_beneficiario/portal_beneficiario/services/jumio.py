@@ -12,15 +12,17 @@ def get_jumio_accesstoken(jumio_cnf):
 
     if jumio_cnf:
         endpoint = jumio_cnf.access_token_url
-        headers = {"Authorization": f"token {jumio_cnf.client_id}:{jumio_cnf.client_secret}"}
-        data = {"grant_type": "client_credentials"}
+        credentials = f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}".encode()
+        headers = {
+            "Authorization": f"Basic {credentials}",
+            "Content-Type":"application/x-www-form-urlencoded"}
+        data = 'grant_type=client_credentials'
 
         response=None
         try:
-            response = frappe._dict(make_get_request(endpoint, data=data, headers=headers))
+            response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
         except Exception as e:
-             print(e)
-             return
+             raise e 
         else:
             return response.access_token
 
@@ -63,8 +65,7 @@ def get_jumio_iframe():
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
                     frappe.db.commit()
             except Exception as e:
-                print(e) 
-                return
+                raise e 
             else:
                 return response
         else:
@@ -116,8 +117,7 @@ def get_jumio_retrieval():
 
                 frappe.db.commit()
         except Exception as e:
-            print(e) 
-            return
+            raise e 
         else:
             return response
 
