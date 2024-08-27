@@ -12,8 +12,11 @@ def get_jumio_accesstoken(jumio_cnf):
 
     if jumio_cnf:
         endpoint = jumio_cnf.access_token_url
-        headers = {"Authorization": f"token {jumio_cnf.client_id}:{jumio_cnf.client_secret}"}
-        data = {"grant_type": "client_credentials"}
+        credentials = f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}".encode()
+        headers = {
+            "Authorization": f"Basic {credentials}",
+            "Content-Type":"application/x-www-form-urlencoded"}
+        data = 'grant_type=client_credentials'
 
         response=None
         try:
