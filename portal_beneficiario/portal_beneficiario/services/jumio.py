@@ -87,17 +87,18 @@ def get_jumio_retrieval():
         headers = {"Authorization": f"Bearer {api_token}"}
         data = {}
 
+        
         response=None
 
         try:
-            response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
+            response = make_get_request(endpoint, data=data, headers=headers)
 
             if response:
                 if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
                     jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "query", data)
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "response", response)
+                    #frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "response", response)
                 else:
                     ja = frappe.get_doc({
                         "doctype":"qp_PO_JumioAttemps", 
@@ -106,8 +107,10 @@ def get_jumio_retrieval():
                         "parenttype":"qp_PO_Beneficiario", 
                         "attemps_num":0,
                         "query":data,
-                        "response":response
+                        #"response":response
                     })
+
+                    ja.response = json.dumps(response)
                     
                     ja.insert()
 
