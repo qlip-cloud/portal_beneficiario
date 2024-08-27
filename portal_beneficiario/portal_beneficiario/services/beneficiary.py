@@ -32,6 +32,7 @@ def save_beneficiary(**args):
         b.authorization_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
         b.email = args.get('email')
         b.source_fund = args.get('source_fund')
+        
     except Exception as e:
         return 
     else:

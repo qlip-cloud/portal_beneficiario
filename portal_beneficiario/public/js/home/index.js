@@ -193,7 +193,13 @@ function callJumio(beneficiary) {
 }
 
 function checkStatus(){
+
+    var min = 0;
+
     var refreshIntervalId = setInterval(()=>{
+        
+        min+=1;
+
         $.ajax({
             url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_status",
             dataType: 'json',
@@ -207,10 +213,28 @@ function checkStatus(){
                     $('#basic_btn').removeClass('hidden');
                     $('#back').removeAttr('disabled');
                     $('#messageBox').addClass('hidden')
+                    getRetrieval()
 
-                } 
+                } else if(min >= 30){
+                    clearInterval(refreshIntervalId);
+                    $('#basic_btn').removeClass('hidden');
+                    $('#back').removeAttr('disabled');
+                    $('#messageBox').addClass('hidden')
+                }
           })
-    }, 10000);
+
+    }, 100000);
+}
+
+function getRetrieval(){
+    
+    $.ajax({
+        url: "/api/method/portal_beneficiario.portal_beneficiario.services.jumio.get_jumio_retrieval",
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8',
+    }).done(function(r) {
+        console.log(r.message);
+    });
 }
 
 $('.nav-tabs').on('click', 'li', function() {
