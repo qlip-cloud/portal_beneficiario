@@ -13,8 +13,11 @@ def get_jumio_accesstoken(jumio_cnf):
 
     if jumio_cnf:
         endpoint = jumio_cnf.access_token_url
-        credentials = str(f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}".encode())
-        headers = {
+        credentials = f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}".encode()
+
+        print(credentials)
+
+        headers = { 
             "Authorization": f"Basic {credentials}",
             "Content-Type":"application/x-www-form-urlencoded"}
         data = 'grant_type=client_credentials'
@@ -41,14 +44,17 @@ def get_jumio_iframe():
         if beneficiary_data.jumio_status != "PROCESSED":
             api_token = get_jumio_accesstoken(jumio_cnf)
             endpoint = jumio_cnf.account_url
-            headers = {"Authorization": f"Bearer {api_token}"}
+            headers = {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json"
+                }
 
-            data = {
+            data = json.dumps({
                 "customerInternalReference":beneficiary_data.id_dynamics,
                 "workflowDefinition":{
                     "key": beneficiary_data.id_jumio
                 }
-            }
+            })
 
             response=None
 
