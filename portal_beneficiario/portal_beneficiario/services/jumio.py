@@ -19,8 +19,7 @@ def get_jumio_accesstoken(jumio_cnf):
         try:
             response = frappe._dict(make_get_request(endpoint, data=data, headers=headers))
         except Exception as e:
-             print(e)
-             return
+             raise e 
         else:
             return response.access_token
 
@@ -63,8 +62,7 @@ def get_jumio_iframe():
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
                     frappe.db.commit()
             except Exception as e:
-                print(e) 
-                return
+                raise e 
             else:
                 return response
         else:
@@ -116,8 +114,7 @@ def get_jumio_retrieval():
 
                 frappe.db.commit()
         except Exception as e:
-            print(e) 
-            return
+            raise e 
         else:
             return response
 
