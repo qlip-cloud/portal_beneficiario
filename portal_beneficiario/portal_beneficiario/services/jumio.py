@@ -6,18 +6,25 @@ import frappe.sessions
 from six import string_types
 from frappe.utils import getdate
 from frappe.integrations.utils import make_get_request, make_post_request
+import base64
 
 
 def get_jumio_accesstoken(jumio_cnf):
 
     if jumio_cnf:
         endpoint = jumio_cnf.access_token_url
-        headers = {"Authorization": f"token {jumio_cnf.client_id}:{jumio_cnf.client_secret}"}
-        data = {"grant_type": "client_credentials"}
+        credentials = base64.b64encode(f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}".encode()).decode("utf-8")
+
+        print(credentials)
+
+        headers = { 
+            "Authorization": f"Basic {credentials}",
+            "Content-Type":"application/x-www-form-urlencoded"}
+        data = 'grant_type=client_credentials'
 
         response=None
         try:
-            response = frappe._dict(make_get_request(endpoint, data=data, headers=headers))
+            response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
         except Exception as e:
              raise e 
         else:
@@ -37,14 +44,17 @@ def get_jumio_iframe():
         if beneficiary_data.jumio_status != "PROCESSED":
             api_token = get_jumio_accesstoken(jumio_cnf)
             endpoint = jumio_cnf.account_url
-            headers = {"Authorization": f"Bearer {api_token}"}
+            headers = {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json"
+                }
 
-            data = {
+            data = json.dumps({
                 "customerInternalReference":beneficiary_data.id_dynamics,
                 "workflowDefinition":{
                     "key": beneficiary_data.id_jumio
                 }
-            }
+            })
 
             response=None
 
