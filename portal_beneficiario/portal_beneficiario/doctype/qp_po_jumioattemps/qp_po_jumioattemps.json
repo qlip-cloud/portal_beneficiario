@@ -11,42 +11,42 @@
  ],
  "fields": [
   {
+   "default": "0",
    "fieldname": "attemps_num",
    "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Numero Intentos"
   },
   {
    "fieldname": "query",
-   "fieldtype": "Data",
+   "fieldtype": "Long Text",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Consulta"
   },
   {
    "fieldname": "response",
-   "fieldtype": "Data",
+   "fieldtype": "Long Text",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Respuesta"
   }
  ],
  "index_web_pages_for_search": 1,
+ "istable": 1,
  "links": [],
- "modified": "2024-07-22 19:55:51.902190",
+ "modified": "2024-08-27 09:44:45.448809",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_JumioAttemps",
  "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
+ "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

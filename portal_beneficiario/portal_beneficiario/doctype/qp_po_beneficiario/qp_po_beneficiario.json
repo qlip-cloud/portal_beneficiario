@@ -5,8 +5,6 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "id_dynamics",
-  "id_jumio",
   "be_name",
   "surname",
   "document_type",
@@ -36,7 +34,17 @@
   "data_declaration",
   "authorization_declaration",
   "jumio_points",
-  "source_fund"
+  "source_fund",
+  "jumio_section",
+  "id_dynamics",
+  "id_jumio",
+  "jumio_status",
+  "jumio_workflowexecution",
+  "jumio_account",
+  "enable",
+  "jumio_iframe",
+  "jumio_attemps",
+  "form_section"
  ],
  "fields": [
   {
@@ -211,11 +219,55 @@
    "fieldtype": "Link",
    "label": "Source Fund",
    "options": "qp_PO_SourceFund"
+  },
+  {
+   "default": "PENDING",
+   "fieldname": "jumio_status",
+   "fieldtype": "Select",
+   "label": "Jumio Status",
+   "options": "PENDING\nPROCESSED\nSESSION_EXPIRED\nTOKEN_EXPIRED"
+  },
+  {
+   "fieldname": "jumio_workflowexecution",
+   "fieldtype": "Data",
+   "label": "Jumio workflowExecution"
+  },
+  {
+   "fieldname": "jumio_account",
+   "fieldtype": "Data",
+   "label": "Jumio account"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable",
+   "fieldtype": "Check",
+   "label": "Enable"
+  },
+  {
+   "fieldname": "jumio_iframe",
+   "fieldtype": "Long Text",
+   "label": "Jumio Iframe"
+  },
+  {
+   "fieldname": "jumio_attemps",
+   "fieldtype": "Table",
+   "label": "Jumio Attemps",
+   "options": "qp_PO_JumioAttemps"
+  },
+  {
+   "fieldname": "jumio_section",
+   "fieldtype": "Section Break",
+   "label": "Jumio Section"
+  },
+  {
+   "fieldname": "form_section",
+   "fieldtype": "Section Break",
+   "label": "Form"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-14 09:17:13.203299",
+ "modified": "2024-08-26 20:18:33.061205",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

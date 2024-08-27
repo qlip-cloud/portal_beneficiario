@@ -6,20 +6,16 @@
  "engine": "InnoDB",
  "field_order": [
   "access_token_url",
-  "jumio_service_url",
+  "account_url",
   "client_id",
-  "client_secret"
+  "client_secret",
+  "retrieval_url"
  ],
  "fields": [
   {
    "fieldname": "access_token_url",
    "fieldtype": "Data",
    "label": "Access Token URL"
-  },
-  {
-   "fieldname": "jumio_service_url",
-   "fieldtype": "Data",
-   "label": "Jumio Service URL"
   },
   {
    "fieldname": "client_id",
@@ -30,11 +26,21 @@
    "fieldname": "client_secret",
    "fieldtype": "Data",
    "label": "Client Secret"
+  },
+  {
+   "fieldname": "account_url",
+   "fieldtype": "Data",
+   "label": "Account URL"
+  },
+  {
+   "fieldname": "retrieval_url",
+   "fieldtype": "Data",
+   "label": "Retrieval URL"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-16 11:48:38.429152",
+ "modified": "2024-08-26 21:56:49.675024",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_JumioConfig",
