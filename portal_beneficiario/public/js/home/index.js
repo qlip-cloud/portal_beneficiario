@@ -179,7 +179,7 @@ function callJumio(beneficiary) {
       }).done(function(r) {
 
             if(r.message){
-                console.log(r)
+                //console.log(r)
                 $('#jumio_iframe').attr('src', r.message.web.href);
                 $('#basic_btn').addClass('hidden');
                 $("#messageBox").html("Su solicitud se encuentra en estado " + beneficiary.jumio_status + ". Debe esperar que sea procesada.");
@@ -205,7 +205,7 @@ function checkStatus(){
             dataType: 'json',
             contentType: 'application/json;charset=UTF-8',
           }).done(function(r) {
-                console.log(r.message);
+                //console.log(r.message);
                 if(r.message == "PROCESSED")
                 {
                     clearInterval(refreshIntervalId);
