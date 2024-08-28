@@ -25,11 +25,11 @@ def get_jumio_accesstoken(jumio_cnf):
 
         response=None
         try:
-            response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
+            response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
              raise e 
         else:
-            return response.access_token
+            return response.get("access_token")
 
 @frappe.whitelist()
 def get_jumio_iframe():
@@ -53,22 +53,22 @@ def get_jumio_iframe():
             data = json.dumps({
                 "customerInternalReference":beneficiary_data.id_dynamics,
                 "workflowDefinition":{
-                    "key": beneficiary_data.id_jumio
+                    "key": jumio_cnf.id_jumio
                 }
             })
 
             response=None
 
             try:
-                response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
+                response = make_post_request(endpoint, data=data, headers=headers)
 
                 #print(frappe._dict(response.workflowExecution).id)
                 #print(frappe._dict(response.account).id)
 
                 if response:
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", frappe._dict(response.workflowExecution).id)
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_account", frappe._dict(response.account).id)
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_iframe", frappe._dict(response.web).href)
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", response.get("workflowExecution").get("id"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_account", response.get("account").get("id"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_iframe", response.get("web").get("href"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 0)
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
                     frappe.db.commit()
@@ -103,6 +103,9 @@ def get_jumio_retrieval():
             response = make_get_request(endpoint, data=data, headers=headers)
 
             if response:
+
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_points", response.get("decision").get("risk").get("score"))
+
                 if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
                     jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
@@ -131,11 +134,11 @@ def get_jumio_retrieval():
 @frappe.whitelist(allow_guest=True)
 def callback(**args):
 	#pack your parameters back into a dictionary
-    args=frappe._dict(args)
-    beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'jumio_workflowExecution': frappe._dict(args.workflowExecution).id, "jumio_account":frappe._dict(args.account).id}, '*', as_dict=1)
+
+    beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'jumio_workflowExecution': args.get("workflowExecution").get("id"), "jumio_account":args.get("account").get("id")}, '*', as_dict=1)
     
     if beneficiary_data:
-        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", frappe._dict(args.workflowExecution).status)
+        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", args.get("workflowExecution").get("status"))
         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 1)
         frappe.db.commit()
         return 0
