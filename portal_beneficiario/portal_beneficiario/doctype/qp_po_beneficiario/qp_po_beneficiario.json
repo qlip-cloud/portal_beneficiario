@@ -33,29 +33,23 @@
   "patrimony",
   "data_declaration",
   "authorization_declaration",
-  "jumio_points",
   "source_fund",
   "jumio_section",
   "id_dynamics",
-  "id_jumio",
   "jumio_status",
   "jumio_workflowexecution",
   "jumio_account",
-  "enable",
+  "jumio_points",
   "jumio_iframe",
   "jumio_attemps",
-  "form_section"
+  "form_section",
+  "enable"
  ],
  "fields": [
   {
    "fieldname": "id_dynamics",
    "fieldtype": "Data",
    "label": "Id Dynamics"
-  },
-  {
-   "fieldname": "id_jumio",
-   "fieldtype": "Data",
-   "label": "Id Jumio"
   },
   {
    "fieldname": "surname",
@@ -241,7 +235,7 @@
    "default": "1",
    "fieldname": "enable",
    "fieldtype": "Check",
-   "label": "Enable"
+   "label": "Enable Data Form"
   },
   {
    "fieldname": "jumio_iframe",
@@ -267,7 +261,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-26 20:18:33.061205",
+ "modified": "2024-08-28 17:36:44.036118",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
