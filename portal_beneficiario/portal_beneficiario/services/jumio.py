@@ -16,7 +16,7 @@ def get_jumio_accesstoken(jumio_cnf):
         endpoint = jumio_cnf.access_token_url
         credentials = base64.b64encode(f"{jumio_cnf.client_id}:{jumio_cnf.client_secret}".encode()).decode("utf-8")
 
-        print(credentials)
+        #print(credentials)
 
         headers = { 
             "Authorization": f"Basic {credentials}",
@@ -62,8 +62,8 @@ def get_jumio_iframe():
             try:
                 response = frappe._dict(make_post_request(endpoint, data=data, headers=headers))
 
-                print(frappe._dict(response.workflowExecution).id)
-                print(frappe._dict(response.account).id)
+                #print(frappe._dict(response.workflowExecution).id)
+                #print(frappe._dict(response.account).id)
 
                 if response:
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", frappe._dict(response.workflowExecution).id)
