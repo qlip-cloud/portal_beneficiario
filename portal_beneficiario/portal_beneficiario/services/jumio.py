@@ -109,7 +109,7 @@ def get_jumio_retrieval():
                 if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
                     jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "query", json.dumps(data, default=json_handler))
+                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "query", endpoint if endpoint else json.dumps(data, default=json_handler))
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "response", json.dumps(response, default=json_handler))
                 else:
                     ja = frappe.get_doc({
@@ -118,7 +118,7 @@ def get_jumio_retrieval():
                         "parentfield":"jumio_attemps",
                         "parenttype":"qp_PO_Beneficiario", 
                         "attemps_num":0,
-                        "query":json.dumps(data, default=json_handler),
+                        "query":endpoint if endpoint else json.dumps(data, default=json_handler),
                         "response":json.dumps(response, default=json_handler)
                     })
 
