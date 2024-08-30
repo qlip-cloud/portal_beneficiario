@@ -121,6 +121,13 @@ $( document ).ready(function() {
     });
 
     $("#finish").click(function (e) {
+        $.ajax({
+            url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
+            async: false
+          }).done(function(r) {
+                console.log("success");
+          }); 
+
         location.reload();
     });
 
