@@ -105,7 +105,14 @@ def get_jumio_retrieval():
             if response:
 
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_points", response.get("decision").get("risk").get("score"))
-
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "be_name", response.get("capabilities").get("extraction")[0].get("data").get("firstName"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "surname", response.get("capabilities").get("extraction")[0].get("data").get("lastName"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_type", response.get("capabilities").get("extraction")[0].get("data").get("type"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_number", response.get("capabilities").get("extraction")[0].get("data").get("documentNumber"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "gender", response.get("capabilities").get("extraction")[0].get("data").get("gender"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "birthday", response.get("capabilities").get("extraction")[0].get("data").get("dateOfBirth"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
+                
                 if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
                     jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
