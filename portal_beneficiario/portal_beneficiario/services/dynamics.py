@@ -29,7 +29,7 @@ def get_dynamic_accesstoken(dynamic_cnf):
 @frappe.whitelist()
 def call_dynamic():
     
-    dynamic_cnf = frappe.db.get_list("qp_PO_DynamicConfig", fields=["*"])[0]
+    dynamic_cnf = frappe.db.get_list("qp_PO_DynamicConfigs", fields=["*"])[0]
 
     user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
 
