@@ -112,6 +112,7 @@ def get_jumio_retrieval():
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "gender", response.get("capabilities").get("extraction")[0].get("data").get("gender"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "birthday", response.get("capabilities").get("extraction")[0].get("data").get("dateOfBirth"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_city", response.get("capabilities").get("extraction")[0].get("data").get("placeOfBirth"))
                 
                 if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
                     jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
