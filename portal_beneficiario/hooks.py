@@ -1,6 +1,5 @@
 from . import __version__ as app_version
 import frappe
-from frappe.utils.oauth import get_oauth2_authorize_url
 
 app_name = "portal_beneficiario"
 app_title = "Portal Beneficiario"
