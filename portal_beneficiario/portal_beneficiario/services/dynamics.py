@@ -45,7 +45,6 @@ def call_dynamic():
         api_token = get_dynamic_accesstoken(dynamic_cnf)
         endpoint = dynamic_cnf.dynamic_url
         endpoint = endpoint.format(beneficiary_data.jumio_account)
-        #headers = {"Authorization": f"Bearer {api_token}"}
 
         headers = {
                     "Authorization": f"Bearer {api_token}",
@@ -76,9 +75,8 @@ def call_dynamic():
         response=None
 
         try:
-            #response = make_post_request(endpoint, data=data, headers=headers)
             response = requests.put(endpoint, data=data, headers=headers)
-
+            print(response)
             if response:
                 return 1
         except Exception as e:

@@ -44,7 +44,10 @@
   "jumio_iframe",
   "jumio_attemps",
   "form_section",
-  "enable"
+  "enable",
+  "account_number",
+  "bank",
+  "account_type"
  ],
  "fields": [
   {
@@ -262,11 +265,27 @@
    "fieldname": "link_undate",
    "fieldtype": "Date",
    "label": "Fecha Desvinculacion"
+  },
+  {
+   "fieldname": "account_number",
+   "fieldtype": "Data",
+   "label": "Numero de Cuenta"
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Banco"
+  },
+  {
+   "fieldname": "account_type",
+   "fieldtype": "Link",
+   "label": "Tipo de Cuenta",
+   "options": "qp_PO_AccountType"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-02 18:56:30.208780",
+ "modified": "2024-09-03 10:48:17.496946",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
