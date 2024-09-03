@@ -1,5 +1,4 @@
 from . import __version__ as app_version
-import frappe
 
 app_name = "portal_beneficiario"
 app_title = "Portal Beneficiario"
