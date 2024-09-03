@@ -181,7 +181,6 @@ fixtures = [
     # export all records from the Category table
 	"qp_PO_BusinessActivity",
 	"qp_PO_City",
-	"qp_PO_DocumentType",
 	"qp_PO_EconomicActivity",
 	"qp_PO_Nationality",
     "qp_PO_Positions",

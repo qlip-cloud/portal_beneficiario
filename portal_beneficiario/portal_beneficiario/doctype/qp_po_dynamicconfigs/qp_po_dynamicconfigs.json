@@ -8,7 +8,8 @@
   "dynamic_url",
   "access_token_url",
   "client_id",
-  "client_secret"
+  "client_secret",
+  "dynamic_resource_url"
  ],
  "fields": [
   {
@@ -30,11 +31,16 @@
    "fieldname": "client_secret",
    "fieldtype": "Data",
    "label": "Client Secret"
+  },
+  {
+   "fieldname": "dynamic_resource_url",
+   "fieldtype": "Data",
+   "label": "Dynamic Resource URL"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-29 19:37:07.497515",
+ "modified": "2024-09-02 20:25:21.321524",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicConfigs",

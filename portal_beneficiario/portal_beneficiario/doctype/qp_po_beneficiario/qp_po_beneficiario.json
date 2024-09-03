@@ -21,6 +21,7 @@
   "peps",
   "position",
   "link_date",
+  "link_undate",
   "peps_parent",
   "parent_name",
   "parent_type",
@@ -256,11 +257,16 @@
    "fieldname": "form_section",
    "fieldtype": "Section Break",
    "label": "Form"
+  },
+  {
+   "fieldname": "link_undate",
+   "fieldtype": "Date",
+   "label": "Fecha Desvinculacion"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-02 09:28:39.760281",
+ "modified": "2024-09-02 18:56:30.208780",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

@@ -1,26 +1,31 @@
 import frappe
 import os, re
 import json,datetime
-from frappe import _
 import frappe.sessions
+import requests
+import base64
+from frappe import _
 from six import string_types
 from frappe.utils import getdate
 from frappe.integrations.utils import make_get_request, make_post_request
-import base64
 from six import string_types, text_type
+from urllib.parse import quote_plus
+
 
 def get_dynamic_accesstoken(dynamic_cnf):
 
     if dynamic_cnf:
-        endpoint = dynamic_cnf.access_token_url
-        #print(credentials)
-
-        headers = {"Content-Type":"application/x-www-form-urlencoded"}
-        data = f'grant_type=client_credentials&client_id={dynamic_cnf.client_id}&client_secret={dynamic_cnf.client_secret}&resource=https://stonexpruebas.crm.dynamics.com/'
+        endpoint = str(dynamic_cnf.access_token_url)
+   
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        data = f'grant_type=client_credentials&client_id={dynamic_cnf.client_id}&client_secret={dynamic_cnf.client_secret}&resource={quote_plus(dynamic_cnf.dynamic_resource_url)}'
 
         response=None
         try:
-            response = make_get_request(endpoint, data=data, headers=headers)
+            response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
              raise e 
         else:
@@ -40,28 +45,39 @@ def call_dynamic():
         api_token = get_dynamic_accesstoken(dynamic_cnf)
         endpoint = dynamic_cnf.dynamic_url
         endpoint = endpoint.format(beneficiary_data.jumio_account)
-        headers = {"Authorization": f"Bearer {api_token}"}
+        #headers = {"Authorization": f"Bearer {api_token}"}
+
+        headers = {
+                    "Authorization": f"Bearer {api_token}",
+                    "Content-Type": "application/json"
+                }
+        
+        data_parent_name = beneficiary_data.parent_name[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
+        data_position = beneficiary_data.position[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
+        data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
+        data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_undate is not None else ''
+
         data = {
-            "bit_persona_politicamente_expuesta": False,
-            "bit_parentescoconpep": True,
-            "bit_nombredelpeprelacionado":"Jhonnie Walker", 
-            "bit_cargo":"Chairman", 
-            "bit_fechavinculacionalargo": "2024-12-31 00:00:00",
-            "bit_fechadesvinculacionalcargo":"2025-12-31 00:00:00",
-            "address1_line1": "Cl 1",
-            "bit_salario": 3500,
-            "bit_otros_rendimientos":100,
-            "revenue":100,
-            "bit_pasivo":500,
-            "bit_patrimonio_nuevo":1000,
-            "bit_origendelosrecursosarecibir": 913610000, 
-            "bit_score_jumio": 50
+            "bit_persona_politicamente_expuesta": beneficiary_data.peps,
+            "bit_parentescoconpep": beneficiary_data.peps_parent,
+            "bit_nombredelpeprelacionado": data_parent_name, 
+            "bit_cargo": data_position,
+            "bit_fechavinculacionalargo": data_date,
+            "bit_fechadesvinculacionalcargo": data_undate,
+            "address1_line1": beneficiary_data.address,
+            "bit_salario": beneficiary_data.income,
+            "revenue":float(0),
+            "bit_pasivo": beneficiary_data.egress,
+            "bit_patrimonio_nuevo":beneficiary_data.patrimony,
+            "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
+            "bit_score_jumio": int(beneficiary_data.jumio_points)
         }
 
         response=None
 
         try:
-            response = make_post_request(endpoint, data=data, headers=headers)
+            #response = make_post_request(endpoint, data=data, headers=headers)
+            response = requests.put(endpoint, data=data, headers=headers)
 
             if response:
                 return 1
