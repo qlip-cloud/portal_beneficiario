@@ -230,7 +230,7 @@ function checkStatus(){
                 }
           })
 
-    }, 100000);
+    }, 1000); //100000
 }
 
 function getRetrieval(){
