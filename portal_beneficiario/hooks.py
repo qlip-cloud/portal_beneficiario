@@ -185,7 +185,8 @@ fixtures = [
 	"qp_PO_Nationality",
     "qp_PO_Positions",
     "qp_PO_SourceFund",
-    "qp_PO_ParentType" 
+    "qp_PO_ParentType",
+    "qp_PO_DocumentType"
 ]
 
 # get_website_user_home_page = "app.website.get_home_page"
