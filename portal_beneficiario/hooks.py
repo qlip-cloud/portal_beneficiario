@@ -1,4 +1,5 @@
 from . import __version__ as app_version
+from frappe.utils.oauth import get_oauth_keys
 
 app_name = "portal_beneficiario"
 app_title = "Portal Beneficiario"
@@ -186,7 +187,7 @@ fixtures = [
     "qp_PO_Positions",
     "qp_PO_SourceFund",
     "qp_PO_ParentType",
-    "qp_PO_DocumentType"
+    "qp_PO_AccountType"
 ]
 
 # get_website_user_home_page = "app.website.get_home_page"
