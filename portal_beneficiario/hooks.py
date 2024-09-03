@@ -1,5 +1,6 @@
 from . import __version__ as app_version
-from frappe.utils.oauth import get_oauth_keys
+import frappe
+from frappe.utils.oauth import get_oauth2_authorize_url
 
 app_name = "portal_beneficiario"
 app_title = "Portal Beneficiario"
@@ -192,3 +193,17 @@ fixtures = [
 
 # get_website_user_home_page = "app.website.get_home_page"
 get_website_user_home_page = "portal_beneficiario.portal_beneficiario.uses_cases.login.redirects.get_home_page"
+
+# Social media redirect
+providers = [i.name for i in frappe.get_all("Social Login Key", filters={"enable_social_login":1}, order_by="name")]
+for provider in providers:
+	b2c_sign = frappe.get_value('Social Login Key', 'office_365', ['qp_sign_in'])
+
+	if provider == "office_365":
+		website_redirects = [
+			{
+				"source": "/", 
+				"target": get_oauth2_authorize_url(provider, '')+'&p={0}'.format(b2c_sign)
+			}  
+		]
+
