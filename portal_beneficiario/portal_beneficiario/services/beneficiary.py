@@ -21,7 +21,7 @@ def save_beneficiary(**args):
         b.link_date = getdate(args.get('link_date'))
         b.business_activity = args.get('business_type')
         b.economic_activity = args.get('business')
-        b.document_attach = args.get('document_file')
+        b.document_attach = args.get('document_attach')
         b.peps_parent = args.get('fpep')
         b.parent_name = args.get('fpep_name')
         b.parent_type = args.get('parent_type')
@@ -34,8 +34,7 @@ def save_beneficiary(**args):
         b.email = args.get('email')
         b.source_fund = args.get('source_fund')
         b.account_type = args.get('type_account')
-        b.document_attach = args.get('document_attach')
-        
+
     except Exception as e:
         return 
     else:
