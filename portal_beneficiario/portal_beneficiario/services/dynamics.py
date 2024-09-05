@@ -43,10 +43,9 @@ def call_dynamic():
     if dynamic_cnf and beneficiary_data:
 
         api_token = get_dynamic_accesstoken(dynamic_cnf)
-        print("Token")
-        print(api_token)
+
         endpoint = dynamic_cnf.dynamic_url
-        endpoint = endpoint.format(beneficiary_data.jumio_account)
+        endpoint = endpoint.format(beneficiary_data.id_dynamics)
 
         headers = {
                     "Authorization": f"Bearer {api_token}",
@@ -91,8 +90,6 @@ def call_dynamic():
 
         try:
             response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
-            print("Data Dynamics:")
-            print(all_data)
             
             if response:
                 if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary_data.name}):
