@@ -25,8 +25,9 @@
   "peps_parent",
   "parent_name",
   "parent_type",
-  "economic_activity",
   "business_activity",
+  "economic_activity",
+  "document_attach",
   "income",
   "egress",
   "assets",
@@ -35,6 +36,9 @@
   "data_declaration",
   "authorization_declaration",
   "source_fund",
+  "account_number",
+  "bank",
+  "account_type",
   "jumio_section",
   "id_dynamics",
   "jumio_status",
@@ -45,9 +49,8 @@
   "jumio_attemps",
   "form_section",
   "enable",
-  "account_number",
-  "bank",
-  "account_type"
+  "dynamics_section",
+  "dynamics_attemps"
  ],
  "fields": [
   {
@@ -281,11 +284,27 @@
    "fieldtype": "Link",
    "label": "Tipo de Cuenta",
    "options": "qp_PO_AccountType"
+  },
+  {
+   "fieldname": "dynamics_section",
+   "fieldtype": "Section Break",
+   "label": "Dynamics Section"
+  },
+  {
+   "fieldname": "dynamics_attemps",
+   "fieldtype": "Table",
+   "label": "Dynamics_Attemps",
+   "options": "qp_PO_DynamicsAttemps"
+  },
+  {
+   "fieldname": "document_attach",
+   "fieldtype": "Attach",
+   "label": "Documento Economico"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-03 10:48:17.496946",
+ "modified": "2024-09-04 20:00:03.371650",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

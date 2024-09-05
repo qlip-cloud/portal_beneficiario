@@ -16,11 +16,12 @@ def save_beneficiary(**args):
         b.nationality = args.get('nationality')
         b.address = args.get('address')
         b.city = args.get('city')
-        b.economic_activity = args.get('business')
         b.peps = args.get('pep')
         b.position = args.get('position')
         b.link_date = getdate(args.get('link_date'))
         b.business_activity = args.get('business_type')
+        b.economic_activity = args.get('business')
+        b.document_attach = args.get('document_file')
         b.peps_parent = args.get('fpep')
         b.parent_name = args.get('fpep_name')
         b.parent_type = args.get('parent_type')
@@ -32,6 +33,8 @@ def save_beneficiary(**args):
         b.authorization_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
         b.email = args.get('email')
         b.source_fund = args.get('source_fund')
+        b.account_type = args.get('type_account')
+        b.document_attach = args.get('document_attach')
         
     except Exception as e:
         return 

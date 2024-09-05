@@ -43,8 +43,12 @@ def call_dynamic():
     if dynamic_cnf and beneficiary_data:
 
         api_token = get_dynamic_accesstoken(dynamic_cnf)
+        print("Token")
+        print(api_token)
         endpoint = dynamic_cnf.dynamic_url
         endpoint = endpoint.format(beneficiary_data.jumio_account)
+        print("El endpoint de dynamcs es:")
+        print(endpoint)
 
         headers = {
                     "Authorization": f"Bearer {api_token}",
@@ -55,31 +59,81 @@ def call_dynamic():
         data_position = beneficiary_data.position[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
         data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
         data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_undate is not None else ''
+        data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.birthday is not None else ''
+        data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.document_expedition_date is not None else ''
 
         data = {
-            "bit_persona_politicamente_expuesta": beneficiary_data.peps,
-            "bit_parentescoconpep": beneficiary_data.peps_parent,
+            "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
+            "bit_genero": gender_switch(beneficiary_data.gender),
+            "bit_fecha_nacimiento": data_birthday,
+            "bit_fecha_expedicion_documento": data_document_expedition_date,
+            "bit_nacionalidad": beneficiary_data.nationality,
+            "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
+            "bit_parentescoconpep": isBoolean(beneficiary_data.peps_parent),
             "bit_nombredelpeprelacionado": data_parent_name, 
             "bit_cargo": data_position,
             "bit_fechavinculacionalargo": data_date,
-            "bit_fechadesvinculacionalcargo": data_undate,
             "address1_line1": beneficiary_data.address,
             "bit_salario": beneficiary_data.income,
             "revenue":float(0),
             "bit_pasivo": beneficiary_data.egress,
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
-            "bit_score_jumio": int(beneficiary_data.jumio_points)
+            "bit_score_jumio": int(beneficiary_data.jumio_points),
         }
+
+        # Data Empty
+        if data_undate:
+            data["bit_fechadesvinculacionalcargo"] = data_undate
+
+        # Parse data
+        all_data = json.dumps(data)
 
         response=None
 
         try:
-            response = requests.put(endpoint, data=data, headers=headers)
-            print(response)
+            response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
+            print("Data Dynamics:")
+            print(all_data)
+            
             if response:
+                if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary_data.name}):
+                    dynamics_attemps = frappe.db.get_value("qp_PO_DynamicsAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
+                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "attemps_num", dynamics_attemps.attemps_num + 1)
+                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "send_status", response.status_code)
+                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "query", all_data)
+                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "response", response.content)
+                else:
+                    ja = frappe.get_doc({
+                        "doctype":"qp_PO_DynamicsAttemps", 
+                        "parent": beneficiary_data.name, 
+                        "parentfield":"dynamics_attemps",
+                        "parenttype":"qp_PO_Beneficiario", 
+                        "attemps_num":1,
+                        "send_status": response.status_code,
+                        "query": all_data,
+                        "response":response.content
+                    })
+
+                    ja.insert()
+
+                frappe.db.commit()
                 return 1
         except Exception as e:
             raise e 
         else:
             return response
+        
+def gender_switch(gender):
+    if gender == "M":
+        return 913610000
+    elif gender == "F":
+        return 913610001
+    else:
+        return 913610002
+    
+def isBoolean(field):
+    if field == 0:
+        return False
+    else:
+        return True
