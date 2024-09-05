@@ -47,8 +47,6 @@ def call_dynamic():
         print(api_token)
         endpoint = dynamic_cnf.dynamic_url
         endpoint = endpoint.format(beneficiary_data.jumio_account)
-        print("El endpoint de dynamcs es:")
-        print(endpoint)
 
         headers = {
                     "Authorization": f"Bearer {api_token}",
