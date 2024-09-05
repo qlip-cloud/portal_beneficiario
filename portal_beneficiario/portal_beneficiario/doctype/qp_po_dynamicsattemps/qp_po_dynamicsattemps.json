@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "creation": "2024-09-04 16:15:04.506854",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "attemps_num",
+  "send_status",
+  "query",
+  "response"
+ ],
+ "fields": [
+  {
+   "fieldname": "attemps_num",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Numero intentos"
+  },
+  {
+   "fieldname": "send_status",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Estatus Envio"
+  },
+  {
+   "fieldname": "query",
+   "fieldtype": "Long Text",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Peticion"
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Respuesta"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-09-04 18:12:22.015772",
+ "modified_by": "Administrator",
+ "module": "Portal Beneficiario",
+ "name": "qp_PO_DynamicsAttemps",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

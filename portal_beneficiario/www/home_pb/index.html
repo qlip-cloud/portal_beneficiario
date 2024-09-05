@@ -61,6 +61,18 @@
             </div>
             <div class="form-row right_menu mt-3">
                 <div class="col-4">
+                    <label for="business_type" class="form-label">Actividad Laboral</label>
+                    <select id="business_type"  name="business_type"  class="form-control">
+                        <option></option>
+                        {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
+                        {% for b in ba %}
+                            <option value="{{ b.ba_code }}" {% if b.ba_code == beneficiary_data.business_activity %} selected {% endif %}>{{ b.ba_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row right_menu mt-3 activity_fields" hidden>
+                <div class="col-3">
                     <label for="business" class="form-label">Actividad Económica</label>
                     <select id="business" name="business" class="form-control">
                         <option></option>
@@ -71,14 +83,8 @@
                     </select>
                 </div>
                 <div class="col-4">
-                    <label for="business_type" class="form-label">Actividad Laboral</label>
-                    <select id="business_type"  name="business_type"  class="form-control">
-                        <option></option>
-                        {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
-                        {% for b in ba %}
-                            <option value="{{ b.ba_code }}" {% if b.ba_code == beneficiary_data.business_activity %} selected {% endif %}>{{ b.ba_name }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="document_attach" class="form-label">Documento</label>
+                    <input type="file" class="form-control" id="document_attach" name="document_attach" value=""/>
                 </div>
             </div>
             <div class="form-row right_menu mt-5">
@@ -178,6 +184,18 @@
                         {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
                         {% for s in sf %}
                             <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.source_fund %} selected {% endif %}>{{ s.sf_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row right_menu mt-3">
+                <div class="col-6">
+                    <label for="type_account" class="form-label">Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number[-4:]}} es:</label>
+                    <select id="type_account" name="type_account" class="form-control">
+                        <option selected></option>
+                        {% set act = frappe.get_all('qp_PO_AccountType', fields=['at_code', 'at_name'], order_by='at_code asc') %}
+                        {% for i in act %}
+                            <option value="{{ i.at_code }}"  {% if i.at_code == beneficiary_data.account_type %} selected {% endif %}>{{ i.at_name }}</option>
                         {% endfor %}
                     </select>
                 </div>

@@ -15,7 +15,8 @@ $( document ).ready(function() {
             passive:{required: true,number: true},
             source_fund:'required',
             pep:'required',
-            fpep:'required'
+            fpep:'required',
+            type_account: 'required'
         },
         errorClass: "input-error",
         validClass: "input-success",
@@ -68,6 +69,14 @@ $( document ).ready(function() {
             $('.fpep_fields').removeAttr('hidden');
         }else{
             $('.fpep_fields').attr('hidden', true);
+        }
+    });
+
+    $("#business_type").change(function() {
+        if(this.value == 'IN') {
+            $('.activity_fields').removeAttr('hidden');
+        }else{
+            $('.activity_fields').attr('hidden', true);
         }
     });
 
@@ -230,7 +239,7 @@ function checkStatus(){
                 }
           })
 
-    }, 100000);
+    }, 60000);
 }
 
 function getRetrieval(){
