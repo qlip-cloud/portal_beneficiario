@@ -39,6 +39,8 @@
   "account_number",
   "bank",
   "account_type",
+  "form_section",
+  "enable",
   "jumio_section",
   "id_dynamics",
   "jumio_status",
@@ -47,8 +49,6 @@
   "jumio_points",
   "jumio_iframe",
   "jumio_attemps",
-  "form_section",
-  "enable",
   "dynamics_section",
   "dynamics_attemps"
  ],
@@ -131,8 +131,9 @@
   },
   {
    "fieldname": "position",
-   "fieldtype": "Data",
-   "label": "Cargo"
+   "fieldtype": "Link",
+   "label": "Cargo",
+   "options": "qp_PO_Positions"
   },
   {
    "fieldname": "link_date",
@@ -304,7 +305,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-04 20:00:03.371650",
+ "modified": "2024-09-07 00:42:12.383350",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

@@ -10,7 +10,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Términos y Condiciones</h5>
-                                <p class="card-text">Al acceder y utilizar nuestros servicios, acepta que está sujeto <a href="files/2024.08. AUTORIZACIONES Y DECLARACIONES ESPECIALES.pdf" target="_blank" style="text-decoration: underline;">a las políticas, autorizaciones, términos y condiciones de StoneX</a>, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano.</p>
+                                <p class="card-text">Al acceder y utilizar nuestros servicios, acepta que está sujeto <a href="files/2024.08. AUTORIZACIONES Y DECLARACIONES ESPECIALES.pdf" target="_blank" style="text-decoration: underline;">las políticas, autorizaciones, términos y condiciones de StoneX</a>, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano.</p>
                                 <div class="form-check">
                                         <label class="form-check-label" for="term_conditions">Acepto</label>
                                         <input type="checkbox" class="form-check-input ml-3" id="term_conditions" name="term_conditions" value="1" {% if beneficiary_data.data_declaration == true and  beneficiary_data.data_declaration == true %} checked {% endif %}/>
@@ -62,7 +62,7 @@
             <div class="form-row right_menu mt-3">
                 <div class="col-4">
                     <label for="business_type" class="form-label">Actividad Laboral</label>
-                    <select id="business_type"  name="business_type"  class="form-control">
+                    <select id="business_type" name="business_type"  class="form-control">
                         <option></option>
                         {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
                         {% for b in ba %}
@@ -83,8 +83,8 @@
                     </select>
                 </div>
                 <div class="col-4">
-                    <label for="document_attach" class="form-label">Documento</label>
-                    <input type="file" class="form-control" id="document_attach" name="document_attach" value=""/>
+                    <label for="fileToUpload" class="form-label">Documento</label>
+                    <input type="file" class="form-control" id="fileToUpload" name="fileToUpload" accept=".pdf,image/*"/>
                 </div>
             </div>
             <div class="form-row right_menu mt-5">
@@ -102,29 +102,23 @@
                 </div>
             </div>
             <div class="form-row right_menu mt-3 pep_fields" hidden>
-                <div class="col-3">
-                    <label for="position" class="form-label">Cargo</label>
-                    <select id="position" class="form-control rq_cond">
+                <div class="col-2">
+                    <label for="pep_position" class="form-label">Cargo</label>
+                    <select id="pep_position" name="pep_position" class="form-control">
                         <option></option>
-                        {% set po = frappe.get_all('qp_PO_Positions', fields=['po_name', 'po_code'], order_by='po_code asc') %}
+                        {% set po = frappe.get_all('qp_PO_Positions', fields=['po_code', 'po_name'], order_by='po_code asc') %}
                         {% for p in po %}
                             <option value="{{ p.po_code }}" {% if p.po_code == beneficiary_data.position %} selected {% endif %}>{{ p.po_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                     <label for="link_date" class="form-label">Fecha de Vinculación</label>
                     <input type="text" class="form-control rq_cond" id="link_date" name="link_date" value="{% if beneficiary_data.link_date %}{{ frappe.format( beneficiary_data.link_date , {'fieldtype': 'Date'}) }}{% endif %}">
                 </div>
                 <div class="col-3">
-                    <label for="business_type_pep" class="form-label">Actividad Laboral</label>
-                    <select id="business_type_pep" class="form-control">
-                        <option selected></option>
-                        {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
-                        {% for b in ba %}
-                            <option value="{{ b.ba_code }}" {% if b.po_code == beneficiary_data.economic_activity %} selected {% endif %}>{{ b.ba_name }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="link_undate" class="form-label">Fecha de Desvinculación</label>
+                    <input type="text" class="form-control rq_cond" id="link_undate" name="link_undate" value="{% if beneficiary_data.link_undate %}{{ frappe.format( beneficiary_data.link_undate , {'fieldtype': 'Date'}) }}{% endif %}">
                 </div>
             </div>
             <div class="form-row right_menu mt-5">
@@ -144,11 +138,11 @@
             <div class="form-row right_menu mt-3 fpep_fields" hidden>
                 <div class="col-4">
                     <label for="fpep_name" class="form-label">Nombre</label>
-                    <input type="text" class="form-control rq_cond" id="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
+                    <input type="text" class="form-control rq_cond" id="fpep_name" name="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
                 </div>
                 <div class="col-4">
                     <label for="parent_type" class="form-label">Tipo de Parentesco</label>
-                    <select id="parent_type" class="form-control rq_cond">
+                    <select id="parent_type" name="parent_type" class="form-control rq_cond">
                         <option selected></option>
                         {% set pt = frappe.get_all('qp_PO_ParentType', fields=['pt_name', 'pt_code'], order_by='pt_code asc') %}
                         {% for p in pt %}

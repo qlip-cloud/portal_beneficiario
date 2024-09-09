@@ -1,9 +1,9 @@
 $( document ).ready(function() {
    
     $("form#pb_form").validate({
+        debug: true,
         rules:{
-            name:'required',
-            phone:'required',
+            phone:{required: true,number: true},
             nationality:'required',
             address:'required',
             city:'required',
@@ -53,6 +53,10 @@ $( document ).ready(function() {
     
     if($('#link_date')){
         $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });
+    }
+
+    if($('#link_undate')){
+        $('#link_undate').datepicker({ dateFormat: 'dd-mm-yy' });
     }
 
     $('input[type=radio][name=pep]').change(function() {
@@ -130,13 +134,7 @@ $( document ).ready(function() {
     });
 
     $("#finish").click(function (e) {
-        $.ajax({
-            url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
-            async: false
-          }).done(function(r) {
-                console.log("success");
-          }); 
-
+        this.disabled = true;
         location.reload();
     });
 
@@ -156,9 +154,42 @@ $( document ).ready(function() {
             contentType: 'application/json;charset=UTF-8',
             async: false
           }).done(function(r) {
-                if(r.message.jumio_status != "PROCESSED"){
-                    callJumio(r.message)
+
+                let response = r.message;
+
+                // Upload File
+                fileToUpload = $('#fileToUpload').prop('files');
+
+                if (fileToUpload.length != 0){
+                    
+                    var formData = new FormData();
+
+                    url_file = "/api/method/upload_file";
+
+                    formData.append("file", fileToUpload[0], fileToUpload[0].name);
+                    formData.append("is_private", 0);
+                    formData.append("doctype", "qp_PO_Beneficiario");
+                    formData.append("docname", response.name);
+                    formData.append("fieldname", "document_attach");
+
+                    call_back = (data) => {
+                        // console.log(JSON.stringify(data));
+                        if(data) {
+                            if(r.message.jumio_status != "PROCESSED"){
+                                callJumio(r.message)
+                            }
+                        }
+                    }
+
+                    send_petition_upload("", "", formData, call_back, url_file);
+                
+                } else {
+                    if(r.message.jumio_status != "PROCESSED"){
+                        callJumio(r.message)
+                    }
                 }
+
+
           });  
     });
 
@@ -185,6 +216,39 @@ function prevTab(elem) {
     $(elem).prev().find('a[data-toggle="tab"]').click();
 }
 
+function send_petition_upload(module_root, method, formData, callback, url = null){
+
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                response = JSON.parse(xhr.responseText);
+
+                if (xhr.status === 200) {                  
+                    callback(response.message);
+                } else {
+                    callback(response.message);   
+                    frappe.msgprint(__(`Error: ${response.message.msg}`));
+                }
+            }
+        }
+
+        endpoint = url ? url : setup_api_method(API_ROOT, module_root, method, true);
+        
+        xhr.open('POST',endpoint , true);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.setRequestHeader('X-Frappe-CSRF-Token', frappe.csrf_token);
+        xhr.send(formData);
+    })
+}
+
+function setup_api_method(api_root, module_root, method, has_base_root = false){
+
+    base_root = has_base_root ? "/api/method/" : "";
+    result = `${ base_root }${api_root}.${module_root}.${metohd}`;
+    return result;
+
+}
 
 function callJumio(beneficiary) {
 
@@ -195,7 +259,6 @@ function callJumio(beneficiary) {
       }).done(function(r) {
 
             if(r.message){
-                //console.log(r)
                 $('#jumio_iframe').attr('src', r.message.web.href);
                 $('#basic_btn').addClass('hidden');
                 $("#messageBox").html("Su solicitud se encuentra en estado " + beneficiary.jumio_status + ". Debe esperar que sea procesada.");
@@ -249,8 +312,18 @@ function getRetrieval(){
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
-        console.log(r.message);
+        sendDynamics();
+        // console.log(r.message);
     });
+}
+
+function sendDynamics(){
+    $.ajax({
+        url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
+        async: false
+      }).done(function(r) {
+            console.log("Success");
+      }); 
 }
 
 $('.nav-tabs').on('click', 'li', function() {

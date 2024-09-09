@@ -6,29 +6,29 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "po_name",
-  "po_code"
+  "po_code",
+  "po_name"
  ],
  "fields": [
   {
    "fieldname": "po_name",
    "fieldtype": "Data",
-   "in_global_search": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Name"
   },
   {
    "fieldname": "po_code",
    "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Code",
    "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-13 09:30:25.538539",
+ "modified": "2024-09-05 21:15:49.968177",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Positions",

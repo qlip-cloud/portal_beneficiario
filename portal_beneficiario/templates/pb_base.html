@@ -7,11 +7,19 @@
 
 {% block content %}
 <body id="basic_data_body"> 
-    <nav class="row base">
-        <div class="col-2 logo"><h1>StoneX</h1></div>
-        <div class="col-8"></div>
-        <div class="col-2"></div>
-    </nav>
+    <!-- <nav class="row base">
+        <div class="col-4" id="nav_logo"></div>
+    </nav> -->
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid" id="container-logo">
+                <a class="navbar-brand" href="#">
+                  <img src="/assets/portal_beneficiario/img/stonex_logo.jpg" alt="Logo">
+                </a>
+            </div>
+        </nav>
+    </header>
+
     <div class="row">
         <aside class="col-2 base left">
             <div class="row right_menu">
@@ -26,15 +34,22 @@
 {% endblock %}
 
 {% block footer %}
-    <footer class="row right_menu">
-        <div class="col-4 ajust" id="img_1">
-            <!-- <img src="/assets/portal_beneficiario/img/LOGO-FOGAFIN 1.png" class="img-fluid" alt="First Footer"> -->
-        </div>
-        <div class="col-4" id="img_2">
-            <!-- <img src="/assets/portal_beneficiario/img/logo-vigilado_sfc 1.png" class="img-fluid" alt="Second Footer"> -->
-        </div>
-        <div class="col-4 ajust" id="img_3">
-            <!-- <img src="/assets/portal_beneficiario/img/footer.jpg" class="img-fluid" alt="Third Footer"> -->
+    <footer class="bg-body-tertiary text-center">
+        <div class="container">
+            <section class="" id="section-footer">
+                <div class="row mh-100 justify-content-center align-items-center">
+                    <div class="col-lg-4">
+                        <div data-mdb-ripple-initclass="bg-image hover-overlay shadow-1-strong rounded" data-ripple-color="light">
+                            <img src="/assets/portal_beneficiario/img/img1.png" class="w-50 mw-75" />
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-12 mb-4 mb-md-0">
+                        <div data-mdb-ripple-init class="bg-image hover-overlay shadow-1-strong rounded" data-ripple-color="light">
+                            <img src="/assets/portal_beneficiario/img/img2.png" class="w-50 mw-75" />
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </footer>
 {% endblock %}
