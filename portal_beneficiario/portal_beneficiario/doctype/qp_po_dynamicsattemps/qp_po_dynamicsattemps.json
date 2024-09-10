@@ -39,7 +39,7 @@
   },
   {
    "fieldname": "response",
-   "fieldtype": "Data",
+   "fieldtype": "Long Text",
    "in_global_search": 1,
    "in_list_view": 1,
    "in_preview": 1,
@@ -50,7 +50,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-04 18:12:22.015772",
+ "modified": "2024-09-09 12:39:39.694351",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicsAttemps",
