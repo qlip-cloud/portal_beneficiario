@@ -49,6 +49,19 @@ nav{
     border-bottom: 3px solid #113c1e;
 }
 
+.isImportant {
+    margin-left: 0px !important;
+}
+
+.section-header {
+    margin: 20px;
+}
+
+.separator-id {
+    margin: 1px 0px 2px 0px;
+    padding: 0px;
+}
+
 footer{
     background-color: #1f1f1f;
     /* width: 100%;
@@ -78,6 +91,8 @@ input[type="number"] {
 
 .list-inline li{
     display: inline-block;
+    color: #e2e6e9;
+    size: 5px;
 }
 
 .input-error{

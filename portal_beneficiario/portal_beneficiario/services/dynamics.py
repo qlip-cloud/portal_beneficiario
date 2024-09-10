@@ -78,46 +78,33 @@ def call_dynamic():
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": int(beneficiary_data.jumio_points),
+            "bit_nada": beneficiary_data.business_activity
         }
 
         # Data Empty
         if data_undate:
             data["bit_fechadesvinculacionalcargo"] = data_undate
+ 
+        if beneficiary_data.economic_activity:
+            economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
+            data_guid = economic_data.ea_guid
+            data["bit_ClaseActividadEconomica@odata.bind"] = f'/bit_claseeconmicas({data_guid})'
 
         # Parse data
         all_data = json.dumps(data)
 
         response=None
-
         try:
             response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
-            
             if response:
-                if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary_data.name}):
-                    dynamics_attemps = frappe.db.get_value("qp_PO_DynamicsAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
-                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "attemps_num", dynamics_attemps.attemps_num + 1)
-                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "send_status", response.status_code)
-                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "query", all_data)
-                    frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "response", response.content)
-                else:
-                    ja = frappe.get_doc({
-                        "doctype":"qp_PO_DynamicsAttemps", 
-                        "parent": beneficiary_data.name, 
-                        "parentfield":"dynamics_attemps",
-                        "parenttype":"qp_PO_Beneficiario", 
-                        "attemps_num":1,
-                        "send_status": response.status_code,
-                        "query": all_data,
-                        "response":response.content
-                    })
-
-                    ja.insert()
-
-                frappe.db.commit()
+                print("----------Flag1")
+                saveDynamicsResponse(beneficiary_data, all_data, response) 
                 return 1
         except Exception as e:
+
             raise e 
         else:
+            saveDynamicsResponse(beneficiary_data, all_data, response)
             return response
         
 def gender_switch(gender):
@@ -133,3 +120,27 @@ def isBoolean(field):
         return False
     else:
         return True
+    
+def saveDynamicsResponse(beneficiary, request, response):
+
+    if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
+        dynamics_attemps = frappe.db.get_value("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}, '*', as_dict=1)
+        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "attemps_num", dynamics_attemps.attemps_num + 1)
+        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "send_status", response.status_code)
+        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "query", request)
+        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "response", response.content)
+    else:
+        ja = frappe.get_doc({
+            "doctype":"qp_PO_DynamicsAttemps", 
+            "parent": beneficiary.name, 
+            "parentfield":"dynamics_attemps",
+            "parenttype":"qp_PO_Beneficiario", 
+            "attemps_num":1,
+            "send_status": response.status_code,
+            "query": request,
+            "response":response.content
+        })
+
+        ja.insert()
+
+    frappe.db.commit()

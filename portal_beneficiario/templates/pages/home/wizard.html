@@ -10,20 +10,20 @@
                         <ul class="nav nav-tabs" role="tablist">
                             {% if beneficiary_data.enable == 1%}
                                 {% if beneficiary_data.data_declaration == false and  beneficiary_data.authorization_declaration == false%}
-                                <li role="presentation" class="active ml-5">
-                                    <a id="term_and_codition_btn" href="#step1" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">Autorización</span></a>
-                                </li>
-                                <li role="presentation" class="disabled ml-5">
-                                    <a id="basic_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false" hidden><span class="round-tab">Datos Básicos</span></a>
-                                </li>
+                                    <li role="presentation" class="active ml-5 isImportant">
+                                        <a id="term_and_codition_btn" href="#step1" data-toggle="tab" aria-controls="step1" role="tab" aria-expanded="true"><span class="round-tab">Autorización</span></a>
+                                    </li>
+                                    <li role="presentation" class="disabled ml-5 isImportant">
+                                        <a id="basic_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false" hidden><span class="round-tab">Datos Básicos</span></a>
+                                    </li>
                                 {% else %}
-                                <li role="presentation" class="active ml-5">
-                                    <a id="basic_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">Datos Básicos</span></a>
-                                </li>
+                                    <li role="presentation" class="active ml-5 isImportant">
+                                        <a id="basic_btn" href="#step2" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab">Datos Básicos</span></a>
+                                    </li>
                                 {% endif %}
                             {% endif %}
                             {% if beneficiary_data.jumio_status != "PROCESSED"%}
-                                <li role="presentation" class="disabled ml-5 ">
+                                <li role="presentation" class="disabled ml-5 isImportant">
                                     <a id="verify_btn" href="#step3" data-toggle="tab" aria-controls="step3" role="tab" aria-expanded="false" {% if beneficiary_data.enable == 1%}hidden{% endif %}><span class="round-tab">Verificación</span></a>
                                 </li>
                             {% endif %}

@@ -77,7 +77,7 @@ $( document ).ready(function() {
     });
 
     $("#business_type").change(function() {
-        if(this.value == 'IN') {
+        if(this.value == '913610001') {
             $('.activity_fields').removeAttr('hidden');
         }else{
             $('.activity_fields').attr('hidden', true);
