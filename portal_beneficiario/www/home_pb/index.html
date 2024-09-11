@@ -75,7 +75,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.economic_activity != "913610001" %} hidden {% endif %}>
+                <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.business_activity == "913610001" %} hidden {% endif %}>
                     <div class="col-md-3">
                         <label for="business" class="form-label">Actividad Económica</label>
                         <select id="business" name="business" class="form-control">
