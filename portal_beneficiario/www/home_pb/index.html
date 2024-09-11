@@ -75,7 +75,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.economic_activity == "913610001" %} hidden {% endif %}>
+                <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.economic_activity != "913610001" %} hidden {% endif %}>
                     <div class="col-md-3">
                         <label for="business" class="form-label">Actividad Económica</label>
                         <select id="business" name="business" class="form-control">
@@ -95,21 +95,21 @@
 
             <div id="container_pep" class="section-header">Información PEP
                 <hr class="separator-id" />
-                <div class="form-row right_menu mt-5">
+                <div class="form-row right_menu mt-3">
                     <div class="col-md-8">
                         <div class="form-group form-check">
                         <div class="form-check form-check-inline">
-                            <label class="form-check-label" for="pepSi">¿Persona Públicamente Expuesta?   Si</label>
-                            <input class="form-check-input ml-2" type="radio" name="pep" id="pepSi" value="1" {% if beneficiary_data.pep %} checked {% endif%}>
+                            <label class="form-check-label" for="pepSi">¿Persona Públicamente Expuesta? Si</label>
+                            <input class="form-check-input ml-2" type="radio" name="pep" id="pepSi" value="1" {% if beneficiary_data.peps %} checked {% endif%}>
                         </div>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label" for="pepNo">No</label>
-                            <input class="form-check-input ml-2" type="radio" name="pep" id="pepNo" value="0" {% if not beneficiary_data.pep %} checked {% endif%}>
+                            <input class="form-check-input ml-2" type="radio" name="pep" id="pepNo" value="0" {% if not beneficiary_data.peps %} checked {% endif%}>
                         </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-row right_menu mt-3 pep_fields" hidden>
+                <div class="form-row right_menu mt-3 ml-5 pep_fields" {% if not beneficiary_data.peps %} hidden {% endif%}>
                     <div class="col-md-2">
                         <label for="pep_position" class="form-label">Cargo</label>
                         <select id="pep_position" name="pep_position" class="form-control">
@@ -129,9 +129,9 @@
                         <input type="text" class="form-control rq_cond" id="link_undate" name="link_undate" value="{% if beneficiary_data.link_undate %}{{ frappe.format( beneficiary_data.link_undate , {'fieldtype': 'Date'}) }}{% endif %}">
                     </div>
                 </div>
-                <div class="form-row right_menu mt-5">
+                <div class="form-row right_menu">
                     <div class="col-md-8">
-                        <div class="form-group form-check">
+                        <div class="form-group form-check mt-3">
                             <div class="form-check form-check-inline">
                                 <label class="form-check-label" for="fpepSi">¿Familiar Políticamente Expuesto?   Si</label>
                                 <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepSi" value="1" {% if beneficiary_data.peps_parent %} checked {% endif%}>
@@ -143,7 +143,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-row right_menu mt-3 fpep_fields" hidden>
+                <div class="form-row right_menu mt-3 fpep_fields" {% if not beneficiary_data.peps_parent %} hidden {% endif%}>
                     <div class="col-md-4">
                         <label for="fpep_name" class="form-label">Nombre</label>
                         <input type="text" class="form-control rq_cond" id="fpep_name" name="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
