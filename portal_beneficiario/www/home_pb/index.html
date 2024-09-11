@@ -10,7 +10,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Términos y Condiciones</h5>
-                                <p class="card-text">Al acceder y utilizar nuestros servicios, acepta que está sujeto <a href="files/2024.08. AUTORIZACIONES Y DECLARACIONES ESPECIALES.pdf" target="_blank" style="text-decoration: underline;">las políticas, autorizaciones, términos y condiciones de StoneX</a>, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano.</p>
+                                <p class="card-text text-justify">Al acceder y utilizar nuestros servicios, acepta que está sujeto <a href="files/2024.08. AUTORIZACIONES Y DECLARACIONES ESPECIALES.pdf" target="_blank" style="text-decoration: underline;">las políticas, autorizaciones, términos y condiciones de StoneX</a>, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano.</p>
                                 <div class="form-check">
                                         <label class="form-check-label" for="term_conditions">Acepto</label>
                                         <input type="checkbox" class="form-check-input ml-3" id="term_conditions" name="term_conditions" value="1" {% if beneficiary_data.data_declaration == true and  beneficiary_data.data_declaration == true %} checked {% endif %}/>
@@ -31,11 +31,11 @@
                 <hr class="separator-id" />
                 
                 <div class="form-row right_menu mt-3">
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="address" class="form-label">Dirección</label>
                         <input type="input" class="form-control" id="address" name="address" value="{% if beneficiary_data.address %}{{ beneficiary_data.address }}{%endif%}"/>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="city" class="form-label">Ciudad</label>
                         <select id="city" class="form-control" name="city">
                             <option></option>
@@ -47,11 +47,11 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="phone" class="form-label">Teléfono</label>
                         <input type="text" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="nationality" class="form-label">Nacionalidad</label>
                         <select id="nationality" name="nationality" class="form-control">
                             
@@ -64,7 +64,7 @@
                     </div>
                 </div>          
                 <div class="form-row right_menu mt-3">
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="business_type" class="form-label">Actividad Laboral</label>
                         <select id="business_type" name="business_type"  class="form-control">
                             <option></option>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.economic_activity == "913610001" %} hidden {% endif %}>
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <label for="business" class="form-label">Actividad Económica</label>
                         <select id="business" name="business" class="form-control">
                             <option></option>
@@ -86,7 +86,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="fileToUpload" class="form-label">Documento</label>
                         <input type="file" class="form-control" id="fileToUpload" name="fileToUpload" accept=".pdf,image/*"/>
                     </div>
@@ -96,7 +96,7 @@
             <div id="container_pep" class="section-header">Información PEP
                 <hr class="separator-id" />
                 <div class="form-row right_menu mt-5">
-                    <div class="col-8">
+                    <div class="col-md-8">
                         <div class="form-group form-check">
                         <div class="form-check form-check-inline">
                             <label class="form-check-label" for="pepSi">¿Persona Públicamente Expuesta?   Si</label>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3 pep_fields" hidden>
-                    <div class="col-2">
+                    <div class="col-md-2">
                         <label for="pep_position" class="form-label">Cargo</label>
                         <select id="pep_position" name="pep_position" class="form-control">
                             <option></option>
@@ -120,17 +120,17 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <label for="link_date" class="form-label">Fecha de Vinculación</label>
                         <input type="text" class="form-control rq_cond" id="link_date" name="link_date" value="{% if beneficiary_data.link_date %}{{ frappe.format( beneficiary_data.link_date , {'fieldtype': 'Date'}) }}{% endif %}">
                     </div>
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <label for="link_undate" class="form-label">Fecha de Desvinculación</label>
                         <input type="text" class="form-control rq_cond" id="link_undate" name="link_undate" value="{% if beneficiary_data.link_undate %}{{ frappe.format( beneficiary_data.link_undate , {'fieldtype': 'Date'}) }}{% endif %}">
                     </div>
                 </div>
                 <div class="form-row right_menu mt-5">
-                    <div class="col-8">
+                    <div class="col-md-8">
                         <div class="form-group form-check">
                             <div class="form-check form-check-inline">
                                 <label class="form-check-label" for="fpepSi">¿Familiar Políticamente Expuesto?   Si</label>
@@ -144,11 +144,11 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3 fpep_fields" hidden>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="fpep_name" class="form-label">Nombre</label>
                         <input type="text" class="form-control rq_cond" id="fpep_name" name="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="parent_type" class="form-label">Tipo de Parentesco</label>
                         <select id="parent_type" name="parent_type" class="form-control rq_cond">
                             <option selected></option>
@@ -164,27 +164,27 @@
             <div id="container_finance" class="section-header">Información Financiera
                 <hr class="separator-id"/>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-2">
+                    <div class="col-md-4">
                         <label for="in" class="form-label">Ingresos Mensuales</label>
                         <input type="text" class="form-control number" id="in" name="in" value="{% if beneficiary_data.income %}{{beneficiary_data.income}}{%endif%}">
                     </div>
-                    <div class="col-2">
+                    <div class="col-md-4">
                         <label for="out" class="form-label">Egresos Mensuales</label>
                         <input type="text"  class="form-control number" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-2">
+                    <div class="col-md-4">
                         <label for="assets" class="form-label">Activos</label>
                         <input type="text" class="form-control number" id="assets" name="assets" value="{% if beneficiary_data.assets %}{{beneficiary_data.assets}}{%endif%}">
                     </div>
-                    <div class="col-2">
+                    <div class="col-md-4">
                         <label for="passive" class="form-label">Pasivos</label>
                         <input type="text" class="form-control number" id="passive" name="passive" value="{% if beneficiary_data.passive %}{{beneficiary_data.passive}}{%endif%}">
                     </div>
                 </div> 
                 <div class="form-row right_menu mt-3">
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <label for="source_fund" class="form-label">Origen de los dinero a recibir</label>
                         <select id="source_fund" name="source_fund" class="form-control">
                             <option selected></option>
@@ -196,7 +196,7 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="type_account" class="form-label">Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number[-4:]}} es:</label>
                         <select id="type_account" name="type_account" class="form-control">
                             <option selected></option>
