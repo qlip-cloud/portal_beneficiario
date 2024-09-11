@@ -133,7 +133,7 @@ $( document ).ready(function() {
         prevTab(active);
     });
 
-    $("#finish").click(function (e) {
+    $("#modal-buttom").click(function (e) {
         this.disabled = true;
         location.reload();
     });

@@ -98,7 +98,6 @@ def call_dynamic():
         try:
             response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
             if response:
-                print("----------Flag1")
                 saveDynamicsResponse(beneficiary_data, all_data, response) 
                 return 1
         except Exception as e:
