@@ -9,7 +9,9 @@
   "access_token_url",
   "client_id",
   "client_secret",
-  "dynamic_resource_url"
+  "dynamic_resource_url",
+  "dynamic_account_url",
+  "dynamic_update_account_url"
  ],
  "fields": [
   {
@@ -36,11 +38,21 @@
    "fieldname": "dynamic_resource_url",
    "fieldtype": "Data",
    "label": "Dynamic Resource URL"
+  },
+  {
+   "fieldname": "dynamic_account_url",
+   "fieldtype": "Long Text",
+   "label": "Dynamic Account Bank URL"
+  },
+  {
+   "fieldname": "dynamic_update_account_url",
+   "fieldtype": "Long Text",
+   "label": "Dynamic Update Account Bank URL"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-02 20:25:21.321524",
+ "modified": "2024-09-12 10:53:21.064755",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicConfigs",
