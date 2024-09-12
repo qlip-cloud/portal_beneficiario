@@ -18,8 +18,8 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
     }
   
     endpoint = dynamics_conf.dynamic_account_url
-    # endpoint = endpoint.format(id_dynamics, account_last_numbers)
-    endpoint = endpoint.format("cd7e6707-aa55-ef11-a317-002248046730", "4621")
+    endpoint = endpoint.format(id_dynamics, account_last_numbers)
+    # endpoint = endpoint.format("cd7e6707-aa55-ef11-a317-002248046730", "4621")
 
     response=None
     try:
