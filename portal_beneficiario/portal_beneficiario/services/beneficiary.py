@@ -5,9 +5,7 @@ from frappe import _
 import frappe.sessions
 from six import string_types
 from frappe.utils import getdate
-
-CODIGO_EMPLEADO = "913610000"
-CODIGO_ASALARIADO = "0010"
+from . import constantes
 
 @frappe.whitelist()
 def save_beneficiary(**args):
@@ -24,7 +22,7 @@ def save_beneficiary(**args):
         b.link_date = getdate(args.get('link_date')) if args.get('link_date') else ""
         b.link_undate = getdate(args.get('link_undate')) if args.get('link_undate') else ""
         b.business_activity = args.get('business_type')
-        b.economic_activity = args.get('business') if args.get('business_type') != CODIGO_EMPLEADO else CODIGO_ASALARIADO
+        b.economic_activity = args.get('business') if args.get('business_type') != constantes.CODIGO_EMPLEADO else constantes.CODIGO_ASALARIADO
         b.peps_parent = args.get('fpep')
         b.parent_name = args.get('fpep_name') if args.get('fpep_name') else ""
         b.parent_type = args.get('parent_type') if args.get('parent_type') else ""
