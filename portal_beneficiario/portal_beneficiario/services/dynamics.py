@@ -73,8 +73,9 @@ def call_dynamic():
             "bit_fechavinculacionalargo": data_date,
             "address1_line1": beneficiary_data.address,
             "bit_salario": beneficiary_data.income,
-            "revenue":beneficiary_data.income,
-            "bit_pasivo": beneficiary_data.egress,
+            "revenue":beneficiary_data.assets,
+            "bit_otros_rendimientos":beneficiary_data.egress,
+            "bit_pasivo": beneficiary_data.passive,
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": int(beneficiary_data.jumio_points),
@@ -97,7 +98,6 @@ def call_dynamic():
         try:
             response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
             if response:
-                print("----------Flag1")
                 saveDynamicsResponse(beneficiary_data, all_data, response) 
                 return 1
         except Exception as e:

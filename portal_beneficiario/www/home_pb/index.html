@@ -216,6 +216,22 @@
     <div id='verificacion_sect' class="right_menu">
         <div class="form-row right_menu mt-3">
             <div class="col-8">
+                <div class="modal fade" id="modal-id" tabindex="-1" role="dialog" aria-labelledby="modal-finish" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-finish">Stonex</h5>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Verificación Finalizada. Muchas Gracias
+                        </div>
+                        <div class="modal-footer">
+                            <button id="modal-buttom" type="button" class="rounded btn btn-dark btn-lg mt-5 ml-3">Aceptar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe id="jumio_iframe" class="embed-responsive-item" width="70%" height="80%" src="{% if beneficiary_data.jumio_iframe %}{{beneficiary_data.jumio_iframe}}{%endif%}" allow="camera;autoplay;fullscreen;clipboard-read;clipboard-write;accelerometer;gyroscope;magnetometer" allowfullscreen></iframe>
                 </div>
