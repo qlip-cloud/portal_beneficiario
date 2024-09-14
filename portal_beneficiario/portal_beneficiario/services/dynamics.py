@@ -11,70 +11,6 @@ from frappe.integrations.utils import make_get_request, make_post_request
 from six import string_types, text_type
 from urllib.parse import quote_plus
 
-def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_last_numbers):
-
-    headers = {
-            "Authorization": f"Bearer {token}"
-    }
-  
-    endpoint = dynamics_conf.dynamic_account_url
-    endpoint = endpoint.format(id_dynamics, account_last_numbers)
-    # endpoint = endpoint.format("cd7e6707-aa55-ef11-a317-002248046730", "4621")
-
-    response=None
-    try:
-        response = make_get_request(endpoint, headers=headers)
-
-        if response:
-
-            # Guarda traza
-            # saveRequestDynamicsAccount(beneficiary, endpoint, response)
-
-            # Get ID Cuenta Bancaria
-            data = response.get("value")
-            id_bancario = data[0].get('bit_datos_bancariosid')
-            if data:
-                update_banking_dato(beneficiary, dynamics_conf, token, id_bancario)
-
-            return 1
-    except Exception as e:
-        raise e 
-    else:
-        # saveRequestDynamicsAccount(beneficiary, endpoint, response)
-        return response
-
-
-def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
-
-    endpoint = dynamics_conf.dynamic_update_account_url
-    endpoint = endpoint.format(id_account)
-
-    headers = {
-                    "Authorization": f"Bearer {token}",
-                    "Content-Type": "application/json"
-    }
-
-    data = {
-            "bit_tipo_producto": beneficiary.account_type,
-            "statuscode": 1,
-    }
-
-    # Parse data
-    parse_data = json.dumps(data)
-
-    response=None
-    try:
-        response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
-        if response:
-
-            print("Envio a dynamics estatus", response.status_code)
-            return 1
-    except Exception as e:
-        raise e 
-    else:
-        print("Envio a dynamics estatus", response.status_code)
-        return response
-
 
 def get_dynamic_accesstoken(dynamic_cnf):
 
@@ -133,9 +69,7 @@ def call_dynamic():
             "telephone1": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
             "bit_parentescoconpep": isBoolean(beneficiary_data.peps_parent),
-            "bit_nombredelpeprelacionado": data_parent_name, 
             "bit_cargo": data_position,
-            "bit_fechavinculacionalargo": data_date,
             "address1_line1": beneficiary_data.address,
             "bit_salario": beneficiary_data.income,
             "revenue":beneficiary_data.assets,
@@ -148,8 +82,14 @@ def call_dynamic():
         }
 
         # Data Empty
+        if data_date:
+            data["bit_fechavinculacionalargo"] = data_date
+
         if data_undate:
             data["bit_fechadesvinculacionalcargo"] = data_undate
+
+        if data_parent_name:
+            data["bit_nombredelpeprelacionado"] = data_parent_name
  
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
@@ -173,7 +113,70 @@ def call_dynamic():
             saveDynamicsResponse(beneficiary_data, all_data, response)
             return response
       
-   
+def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_last_numbers):
+
+    headers = {
+            "Authorization": f"Bearer {token}"
+    }
+  
+    endpoint = dynamics_conf.dynamic_account_url
+    endpoint = endpoint.format(id_dynamics, account_last_numbers)
+    # endpoint = endpoint.format("cd7e6707-aa55-ef11-a317-002248046730", "4621")
+
+    response=None
+    try:
+        response = requests.get(endpoint, headers=headers)
+        if response:
+            data = response.json()
+
+            # Data
+            if len(data.get('value')) > 0:
+                id_bancario = data.get('value')[0].get('bit_datos_bancariosid')
+                saveRequestDynamicsAccount(beneficiary, endpoint, response)
+
+                # Send code type account
+                update_banking_dato(beneficiary, dynamics_conf, token, id_bancario)
+            else:
+                saveRequestDynamicsAccount(beneficiary, endpoint, response)       
+
+            return 1
+    
+    except Exception as e:
+        raise e 
+    else:
+        saveRequestDynamicsAccount(beneficiary, endpoint, response)
+        return response
+
+
+def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
+    endpoint = dynamics_conf.dynamic_update_account_url
+    endpoint = endpoint.format(id_account)
+
+    headers = {
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json"
+    }
+
+    data = {
+            "bit_tipo_producto": beneficiary.account_type,
+            "statuscode": 1,
+    }
+
+    # Parse data
+    parse_data = json.dumps(data)
+
+    response=None
+    try:
+        response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
+        if response:
+            saveRequestDynamicsDato(beneficiary, parse_data, response)
+            return 1
+    except Exception as e:
+        raise e 
+    else:
+        saveRequestDynamicsDato(beneficiary, parse_data, response)
+        return response
+
 def saveDynamicsResponse(beneficiary, request, response):
 
     if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
@@ -215,6 +218,29 @@ def saveRequestDynamicsAccount(beneficiary, request, response):
             "send_status": response.status_code,
             "query": request,
             "response":response.content
+        })
+
+        ja.insert()
+
+    frappe.db.commit()
+
+
+def saveRequestDynamicsDato(beneficiary, request, response):
+    
+    if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
+        dynamics_attemps = frappe.db.get_value("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}, '*', as_dict=1)
+        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "send_status_dato", response.status_code)
+        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "query_dato", request)
+        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "response_dato", response.content)
+    else:
+        ja = frappe.get_doc({
+            "doctype":"qp_PO_DynamicsAttemps", 
+            "parent": beneficiary.name, 
+            "parentfield":"dynamics_attemps",
+            "parenttype":"qp_PO_Beneficiario", 
+            "send_status_dato": response.status_code,
+            "query_dato": request,
+            "response_dato":response.content
         })
 
         ja.insert()

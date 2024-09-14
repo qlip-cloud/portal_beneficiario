@@ -17,15 +17,37 @@ def save_beneficiary(**args):
         b.nationality = args.get('nationality')
         b.address = args.get('address')
         b.city = args.get('city')
-        b.peps = args.get('pep')
-        b.position = args.get('pep_position') if args.get('pep_position') else ""
-        b.link_date = getdate(args.get('link_date')) if args.get('link_date') else ""
-        b.link_undate = getdate(args.get('link_undate')) if args.get('link_undate') else ""
+
         b.business_activity = args.get('business_type')
-        b.economic_activity = args.get('business') if args.get('business_type') != constantes.CODIGO_EMPLEADO else constantes.CODIGO_ASALARIADO
+
+        # Economic validations
+        if args.get('business_type') == constantes.CODIGO_INDEPENDIENTE:
+            b.economic_activity = args.get('business') 
+        elif args.get('business_type') == constantes.CODIGO_EMPLEADO:
+            b.economic_activity = constantes.CODIGO_ASALARIADO
+        else:
+            b.economic_activity = ""
+
+        b.peps = args.get('pep')
+        # Peps validations
+        if int(args.get('pep')) == 1:
+            b.position = args.get('pep_position') if args.get('pep_position') else ""
+            b.link_date = getdate(args.get('link_date')) if args.get('link_date') else ""
+            b.link_undate = getdate(args.get('link_undate')) if args.get('link_undate') else ""
+        else:
+            b.position = ""
+            b.link_date = ""
+            b.link_undate = ""
+        
         b.peps_parent = args.get('fpep')
-        b.parent_name = args.get('fpep_name') if args.get('fpep_name') else ""
-        b.parent_type = args.get('parent_type') if args.get('parent_type') else ""
+        # Peps Family
+        if int(args.get('fpep')) == 1:
+            b.parent_name = args.get('fpep_name') if args.get('fpep_name') else ""
+            b.parent_type = args.get('parent_type') if args.get('parent_type') else ""
+        else:
+            b.parent_name = ""
+            b.parent_type = ""
+
         b.income =  args.get('in')
         b.egress =  args.get('out')
         b.assets = args.get('assets')
