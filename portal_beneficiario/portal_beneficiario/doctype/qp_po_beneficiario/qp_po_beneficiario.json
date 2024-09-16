@@ -14,6 +14,7 @@
   "birthday",
   "document_expedition_date",
   "document_expedition_city",
+  "document_expedition_country",
   "phone",
   "nationality",
   "address",
@@ -301,11 +302,16 @@
    "fieldname": "document_attach",
    "fieldtype": "Attach",
    "label": "Documento Economico"
+  },
+  {
+   "fieldname": "document_expedition_country",
+   "fieldtype": "Data",
+   "label": "Pais Expedicion Documento"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-07 00:42:12.383350",
+ "modified": "2024-09-16 12:22:40.195906",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
