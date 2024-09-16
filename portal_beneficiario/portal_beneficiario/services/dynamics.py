@@ -61,10 +61,12 @@ def call_dynamic():
         data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.document_expedition_date is not None else ''
 
         data = {
-            "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
+            # "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
             "bit_genero": gender_switch(beneficiary_data.gender),
             "bit_fecha_nacimiento": data_birthday,
             "bit_fecha_expedicion_documento": data_document_expedition_date,
+            "bit_lugar_de_nacimiento_jumio": beneficiary_data.document_expedition_city,
+            "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
             "bit_nacionalidad": beneficiary_data.nationality,
             "telephone1": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
@@ -131,22 +133,20 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
 
             # Data
             if len(data.get('value')) > 0:
-                id_bancario = data.get('value')[0].get('bit_datos_bancariosid')
                 saveRequestDynamicsAccount(beneficiary, endpoint, response)
 
                 # Send code type account
+                id_bancario = data.get('value')[0].get('bit_datos_bancariosid')
                 update_banking_dato(beneficiary, dynamics_conf, token, id_bancario)
             else:
                 saveRequestDynamicsAccount(beneficiary, endpoint, response)       
 
             return 1
-    
     except Exception as e:
         raise e 
     else:
         saveRequestDynamicsAccount(beneficiary, endpoint, response)
         return response
-
 
 def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
     endpoint = dynamics_conf.dynamic_update_account_url

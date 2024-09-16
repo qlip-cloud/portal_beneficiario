@@ -104,6 +104,17 @@ def get_jumio_retrieval():
 
             if response:
 
+                # Note
+                # extraction = response.get("capabilities").get("extraction")[0].get("decision").get("type")
+                # similarity = response.get("capabilities").get("similarity")[0].get("decision").get("type")
+                # liveness = response.get("capabilities").get("liveness")[0].get("decision").get("type")
+                # dataChecks = response.get("capabilities").get("dataChecks")[0].get("decision").get("type")
+                # usability_len = response.get("capabilities").get("usability")
+
+                # for item in usability_len:
+                #     print(item.get("credentials").get("category"))
+                #     print(item.get("decision").get("type"))
+
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_points", response.get("decision").get("risk").get("score"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "be_name", response.get("capabilities").get("extraction")[0].get("data").get("firstName"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "surname", response.get("capabilities").get("extraction")[0].get("data").get("lastName"))
@@ -113,6 +124,7 @@ def get_jumio_retrieval():
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "birthday", response.get("capabilities").get("extraction")[0].get("data").get("dateOfBirth"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_city", response.get("capabilities").get("extraction")[0].get("data").get("placeOfBirth"))
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_country", response.get("capabilities").get("extraction")[0].get("data").get("issuingCountry"))
                 
                 if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
                     jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
