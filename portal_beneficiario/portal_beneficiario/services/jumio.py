@@ -84,7 +84,7 @@ def get_jumio_retrieval():
     beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
 
     rejects_list = []
-    rejects_string = []
+    rejects_string = ""
     data_usability = dict()
 
     if jumio_cnf and beneficiary_data:
