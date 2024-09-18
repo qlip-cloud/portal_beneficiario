@@ -48,6 +48,7 @@
   "jumio_workflowexecution",
   "jumio_account",
   "jumio_points",
+  "jumio_rejects",
   "jumio_iframe",
   "jumio_attemps",
   "dynamics_section",
@@ -307,11 +308,16 @@
    "fieldname": "document_expedition_country",
    "fieldtype": "Data",
    "label": "Pais Expedicion Documento"
+  },
+  {
+   "fieldname": "jumio_rejects",
+   "fieldtype": "Small Text",
+   "label": "Jumio Rechazo Notas"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-16 12:22:40.195906",
+ "modified": "2024-09-18 11:14:18.927860",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
