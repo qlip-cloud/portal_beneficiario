@@ -8,6 +8,7 @@ from frappe import _
 from six import string_types
 from frappe.utils import getdate
 from frappe.integrations.utils import make_get_request, make_post_request
+from datetime import datetime
 from six import string_types, text_type
 from urllib.parse import quote_plus
 
@@ -54,14 +55,14 @@ def call_dynamic():
                 }
         
         data_parent_name = beneficiary_data.parent_name[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
-        data_position = beneficiary_data.position[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
+        data_position = beneficiary_data.position[0:100]
         data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
         data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_undate is not None else ''
         data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.birthday is not None else ''
         data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.document_expedition_date is not None else ''
+        data_date_now = datetime.now()
 
         data = {
-            # "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
             "bit_genero": gender_switch(beneficiary_data.gender),
             "bit_fecha_nacimiento": data_birthday,
             "bit_fecha_expedicion_documento": data_document_expedition_date,
@@ -71,7 +72,6 @@ def call_dynamic():
             "telephone1": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
             "bit_parentescoconpep": isBoolean(beneficiary_data.peps_parent),
-            "bit_cargo": data_position,
             "address1_line1": beneficiary_data.address,
             "bit_salario": beneficiary_data.income,
             "revenue":beneficiary_data.assets,
@@ -80,10 +80,15 @@ def call_dynamic():
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": int(beneficiary_data.jumio_points),
-            "bit_nada": beneficiary_data.business_activity
+            "bit_notas_jumio": beneficiary_data.jumio_rejects,
+            "bit_nada": beneficiary_data.business_activity,
+            "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S")
         }
 
         # Data Empty
+        if data_position:
+            data["bit_cargo"] = ''.join(data_position)
+
         if data_date:
             data["bit_fechavinculacionalargo"] = data_date
 
@@ -92,6 +97,7 @@ def call_dynamic():
 
         if data_parent_name:
             data["bit_nombredelpeprelacionado"] = data_parent_name
+            
  
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
