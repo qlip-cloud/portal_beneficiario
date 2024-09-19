@@ -1,14 +1,16 @@
 $( document ).ready(function() {
    
     $("form#pb_form").validate({
-        debug: true,
         rules:{
             phone:{required: true,number: true},
             nationality:'required',
             address:'required',
+            country: 'required',
             city:'required',
             business:'required',
             business_type:'required',
+            fileToUpload: 'required',
+            pep_position: 'required',
             in:{required: true,number: true},
             out:{required: true,number: true},
             assets:{required: true,number: true},
@@ -31,8 +33,8 @@ $( document ).ready(function() {
             $(element).addClass(validClass);
         },
         showErrors: function(errorMap, errorList) {
-            if(errorList.lenght > 0)
-                $("#messageBox").html("Contiene un total de " + this.numberOfInvalids() + " campos requeridos y obligatorios sin completar");
+            if(errorList.length > 0)
+                $("#messageBox").html("Contiene un total de " + this.numberOfInvalids() + " campos requeridos y obligatorios sin completar.");
 
             var i, elements, error;
 
@@ -53,6 +55,7 @@ $( document ).ready(function() {
 
     // Set Name
     $('#client_name').text(frappe.session.user_fullname);
+
 
     if($('#link_date')){
         $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });

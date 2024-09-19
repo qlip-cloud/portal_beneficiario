@@ -31,12 +31,12 @@
                 <hr class="separator-id" />
                 
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-4">
-                        <label for="address" class="form-label">Dirección Residencia</label>
+                    <div class="col-md-3">
+                        <label for="address" class="form-label">* Dirección Residencia</label>
                         <input type="input" class="form-control" id="address" name="address" value="{% if beneficiary_data.address %}{{ beneficiary_data.address.upper() }}{%endif%}" maxlength="150"/>
                     </div>
-                    <div class="col-md-4">
-                        <label for="country" class="form-label">País</label>
+                    <div class="col-md-3">
+                        <label for="country" class="form-label">* País</label>
                         <select id="country" class="form-control" name="country">
                             <option></option>
                             {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_code asc') %}
@@ -45,8 +45,8 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-4">
-                        <label for="city" class="form-label">Ciudad</label>
+                    <div class="col-md-3">
+                        <label for="city" class="form-label">* Ciudad</label>
                         <select id="city" class="form-control" name="city">
                             <option></option>
                             {% set ci = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code', 'ci_country'], order_by='ci_code asc') %}
@@ -57,12 +57,12 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-4">
-                        <label for="phone" class="form-label">Teléfono</label>
-                        <input type="number" maxlength="10" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
+                    <div class="col-md-3">
+                        <label for="phone" class="form-label">* Teléfono</label>
+                        <input type="number" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
                     </div>
-                    <div class="col-md-4">
-                        <label for="nationality" class="form-label">Nacionalidad</label>
+                    <div class="col-md-3">
+                        <label for="nationality" class="form-label">* Nacionalidad</label>
                         <select id="nationality" name="nationality" class="form-control">
                             
                             {% set na = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_code asc') %}
@@ -74,8 +74,8 @@
                     </div>
                 </div>          
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-4">
-                        <label for="business_type" class="form-label">Actividad Laboral</label>
+                    <div class="col-md-3">
+                        <label for="business_type" class="form-label">* Actividad Laboral</label>
                         <select id="business_type" name="business_type"  class="form-control">
                             <option></option>
                             {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
@@ -87,7 +87,7 @@
                 </div>
                 <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.business_activity != "913610001" %} hidden {% endif %}>
                     <div class="col-md-3">
-                        <label for="business" class="form-label">*Actividad Económica</label>
+                        <label for="business" class="form-label">* Actividad Económica</label>
                         <select id="business" name="business" class="form-control">
                             <option></option>
                             {% set ea = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc') %}
@@ -97,7 +97,7 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="fileToUpload" class="form-label" data-toggle="tooltip" data-placement="bottom" title="Adjunte alguno de los siguientes soportes financieros según le aplique: Declaración de renta, certificado de ingresos o estados financieros certificados por contador público.">*Adjuntar soporte financiero</label>
+                        <label for="fileToUpload" class="form-label" data-toggle="tooltip" data-placement="bottom" title="Adjunte alguno de los siguientes soportes financieros según le aplique: Declaración de renta, certificado de ingresos o estados financieros certificados por contador público.">* Adjuntar soporte financiero</label>
                         <input type="file" class="form-control" id="fileToUpload" name="fileToUpload" accept=".pdf,image/*"/>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                 </div>
                 <div class="form-row right_menu mt-3 ml-5 pep_fields" {% if not beneficiary_data.peps %} hidden {% endif%}>
                     <div class="col-md-2">
-                        <label for="pep_position" class="form-label">Cargo</label>
+                        <label for="pep_position" class="form-label">* Cargo</label>
                         <input type="text" class="form-control" id="pep_position" name="pep_position" value="{% if beneficiary_data.position %}{{ beneficiary_data.position }}{%endif%}" maxlength="200">
                         <!-- <select id="pep_position" name="pep_position" class="form-control">
                             <option></option>
@@ -156,11 +156,11 @@
                 </div>
                 <div class="form-row right_menu mt-3 fpep_fields" {% if not beneficiary_data.peps_parent %} hidden {% endif%}>
                     <div class="col-md-4">
-                        <label for="fpep_name" class="form-label">Nombre del Familiar</label>
+                        <label for="fpep_name" class="form-label">* Nombre del Familiar</label>
                         <input type="text" class="form-control rq_cond" id="fpep_name" name="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
                     </div>
                     <div class="col-md-4">
-                        <label for="parent_type" class="form-label">Tipo de Parentesco</label>
+                        <label for="parent_type" class="form-label">* Tipo de Parentesco</label>
                         <select id="parent_type" name="parent_type" class="form-control rq_cond">
                             <option selected></option>
                             {% set pt = frappe.get_all('qp_PO_ParentType', fields=['pt_name', 'pt_code'], order_by='pt_code asc') %}
@@ -176,27 +176,27 @@
                 <hr class="separator-id"/>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
-                        <label for="in" class="form-label">Ingresos Mensuales</label>
+                        <label for="in" class="form-label">* Ingresos Mensuales</label>
                         <input type="text" class="form-control number" id="in" name="in" value="{% if beneficiary_data.income %}{{beneficiary_data.income}}{%endif%}">
                     </div>
                     <div class="col-md-4">
-                        <label for="out" class="form-label">Egresos Mensuales</label>
+                        <label for="out" class="form-label">* Egresos Mensuales</label>
                         <input type="text"  class="form-control number" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
-                        <label for="assets" class="form-label">Activos</label>
+                        <label for="assets" class="form-label">* Activos</label>
                         <input type="text" class="form-control number" id="assets" name="assets" value="{% if beneficiary_data.assets %}{{beneficiary_data.assets}}{%endif%}">
                     </div>
                     <div class="col-md-4">
-                        <label for="passive" class="form-label">Pasivos</label>
+                        <label for="passive" class="form-label">* Pasivos</label>
                         <input type="text" class="form-control number" id="passive" name="passive" value="{% if beneficiary_data.passive %}{{beneficiary_data.passive}}{%endif%}">
                     </div>
                 </div> 
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
-                        <label for="source_fund" class="form-label">Origen de los dinero a recibir</label>
+                        <label for="source_fund" class="form-label">* Origen de los dinero a recibir</label>
                         <select id="source_fund" name="source_fund" class="form-control">
                             <option selected></option>
                             {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
@@ -208,7 +208,7 @@
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-6">
-                        <label for="type_account" class="form-label">Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number[-4:]}} es:</label>
+                        <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number[-4:]}} es:</label>
                         <select id="type_account" name="type_account" class="form-control">
                             <option selected></option>
                             {% set act = frappe.get_all('qp_PO_AccountType', fields=['at_code', 'at_name'], order_by='at_code asc') %}
