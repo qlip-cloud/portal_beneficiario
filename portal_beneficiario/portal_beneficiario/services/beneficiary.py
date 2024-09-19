@@ -16,8 +16,8 @@ def save_beneficiary(**args):
         b.phone = args.get('phone')
         b.nationality = args.get('nationality').upper()
         b.address = args.get('address').upper()
+        b.country = args.get('country').upper()
         b.city = args.get('city').upper()
-
         b.business_activity = args.get('business_type')
 
         # Economic validations

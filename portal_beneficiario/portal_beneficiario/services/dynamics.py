@@ -68,7 +68,7 @@ def call_dynamic():
             "bit_fecha_expedicion_documento": data_document_expedition_date,
             "bit_lugar_de_nacimiento_jumio": beneficiary_data.document_expedition_city,
             "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
-            "bit_nacionalidad": beneficiary_data.nationality,
+            "bit_nacionalidad": beneficiary_data.nationality.upper(),
             "telephone1": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
             "bit_parentescoconpep": isBoolean(beneficiary_data.peps_parent),
