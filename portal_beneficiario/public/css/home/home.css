@@ -4,6 +4,9 @@
     box-sizing: border-box;
 }
 
+body {
+    text-transform: capitalize;
+}
 
 nav{
     width: 100%;

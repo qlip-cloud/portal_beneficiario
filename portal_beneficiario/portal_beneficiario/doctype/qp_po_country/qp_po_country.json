@@ -1,44 +1,37 @@
 {
  "actions": [],
- "autoname": "field:ci_code",
- "creation": "2024-07-22 14:23:14.644153",
+ "autoname": "field:co_code",
+ "creation": "2024-09-19 12:15:28.904223",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "ci_code",
-  "ci_name",
-  "ci_country"
+  "co_code",
+  "co_name"
  ],
  "fields": [
   {
-   "fieldname": "ci_code",
+   "fieldname": "co_code",
    "fieldtype": "Data",
    "label": "Code",
    "unique": 1
   },
   {
-   "fieldname": "ci_name",
+   "fieldname": "co_name",
    "fieldtype": "Data",
    "in_global_search": 1,
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Name"
-  },
-  {
-   "fieldname": "ci_country",
-   "fieldtype": "Link",
-   "label": "Code Country",
-   "options": "qp_PO_Country"
+   "label": "Nombre"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-19 12:21:48.913948",
+ "modified": "2024-09-19 12:15:35.302857",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
- "name": "qp_PO_City",
+ "name": "qp_PO_Country",
  "owner": "Administrator",
  "permissions": [
   {
@@ -56,6 +49,5 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "title_field": "ci_name",
  "track_changes": 1
 }

@@ -18,6 +18,7 @@
   "phone",
   "nationality",
   "address",
+  "country",
   "city",
   "peps",
   "position",
@@ -133,9 +134,8 @@
   },
   {
    "fieldname": "position",
-   "fieldtype": "Link",
-   "label": "Cargo",
-   "options": "qp_PO_Positions"
+   "fieldtype": "Small Text",
+   "label": "Cargo"
   },
   {
    "fieldname": "link_date",
@@ -313,11 +313,17 @@
    "fieldname": "jumio_rejects",
    "fieldtype": "Small Text",
    "label": "Jumio Rechazo Notas"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Pais",
+   "options": "qp_PO_Country"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-18 11:14:18.927860",
+ "modified": "2024-09-19 12:24:33.194596",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
