@@ -32,24 +32,34 @@
                 
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
-                        <label for="address" class="form-label">Dirección</label>
-                        <input type="input" class="form-control" id="address" name="address" value="{% if beneficiary_data.address %}{{ beneficiary_data.address }}{%endif%}"/>
+                        <label for="address" class="form-label">Dirección Residencia</label>
+                        <input type="input" class="form-control" id="address" name="address" value="{% if beneficiary_data.address %}{{ beneficiary_data.address.upper() }}{%endif%}" maxlength="150"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="country" class="form-label">País</label>
+                        <select id="country" class="form-control" name="country">
+                            <option></option>
+                            {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_code asc') %}
+                            {% for c in co %}
+                                <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country %} selected {% endif %}>{{ c.co_name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="col-md-4">
                         <label for="city" class="form-label">Ciudad</label>
                         <select id="city" class="form-control" name="city">
                             <option></option>
-                            {% set ci = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
-                            {% for c in ci %}
-                                <option value="{{ c.ci_code }}" {% if c.ci_code == beneficiary_data.city %} selected {% endif %}>{{ c.ci_name }}</option>
-                            {% endfor %}
+                            {% set ci = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code', 'ci_country'], order_by='ci_code asc') %}
+                                {% for c in ci %}
+                                    <option value="{{ c.ci_code }}" {% if c.ci_code == beneficiary_data.city %} selected {% endif %}>{{ c.ci_name }}</option>
+                                {% endfor %}
                         </select>
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
                         <label for="phone" class="form-label">Teléfono</label>
-                        <input type="text" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
+                        <input type="number" maxlength="10" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
                     </div>
                     <div class="col-md-4">
                         <label for="nationality" class="form-label">Nacionalidad</label>
@@ -70,24 +80,24 @@
                             <option></option>
                             {% set ba = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc') %}
                             {% for b in ba %}
-                                <option value="{{ b.ba_code }}" {% if b.ba_code == beneficiary_data.business_activity %} selected {% endif %}>{{ b.ba_name }}</option>
+                                <option value="{{ b.ba_code }}" {% if b.ba_code == beneficiary_data.business_activity %} selected {% endif %}>{{ b.ba_name.upper() }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.business_activity != "913610001" %} hidden {% endif %}>
                     <div class="col-md-3">
-                        <label for="business" class="form-label">Actividad Económica</label>
+                        <label for="business" class="form-label">*Actividad Económica</label>
                         <select id="business" name="business" class="form-control">
                             <option></option>
                             {% set ea = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc') %}
                             {% for e in ea %}
-                                <option value="{{ e.ea_code }}" {% if e.ea_code == beneficiary_data.economic_activity %} selected {% endif %}>{{e.ea_code}} - {{ e.ea_name }}</option>
+                                <option value="{{ e.ea_code }}" {% if e.ea_code == beneficiary_data.economic_activity %} selected {% endif %}>{{e.ea_code}} - {{ e.ea_name.upper() }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="fileToUpload" class="form-label">Adjuntar Declaración de Renta</label>
+                        <label for="fileToUpload" class="form-label" data-toggle="tooltip" data-placement="bottom" title="Adjunte alguno de los siguientes soportes financieros según le aplique: Declaración de renta, certificado de ingresos o estados financieros certificados por contador público.">*Adjuntar soporte financiero</label>
                         <input type="file" class="form-control" id="fileToUpload" name="fileToUpload" accept=".pdf,image/*"/>
                     </div>
                 </div>
@@ -99,7 +109,7 @@
                     <div class="col-md-8">
                         <div class="form-group form-check">
                         <div class="form-check form-check-inline">
-                            <label class="form-check-label" for="pepSi">¿Es usted una persona expuesta políticamente? Si</label>
+                            <label class="form-check-label" for="pepSi" data-toggle="tooltip" data-placement="bottom" title="Es una persona que desempeña o ha desempeñado funciones públicas a nivel nacional o en el extranjero o ejerce funciones directivas en una Organización Internacional.">¿Es usted una Persona Expuesta Políticamente (PEP)? Si</label>
                             <input class="form-check-input ml-2" type="radio" name="pep" id="pepSi" value="1" {% if beneficiary_data.peps %} checked {% endif%}>
                         </div>
                         <div class="form-check form-check-inline">
@@ -112,13 +122,14 @@
                 <div class="form-row right_menu mt-3 ml-5 pep_fields" {% if not beneficiary_data.peps %} hidden {% endif%}>
                     <div class="col-md-2">
                         <label for="pep_position" class="form-label">Cargo</label>
-                        <select id="pep_position" name="pep_position" class="form-control">
+                        <input type="text" class="form-control" id="pep_position" name="pep_position" value="{% if beneficiary_data.position %}{{ beneficiary_data.position }}{%endif%}" maxlength="200">
+                        <!-- <select id="pep_position" name="pep_position" class="form-control">
                             <option></option>
                             {% set po = frappe.get_all('qp_PO_Positions', fields=['po_code', 'po_name'], order_by='po_code asc') %}
                             {% for p in po %}
                                 <option value="{{ p.po_code }}" {% if p.po_code == beneficiary_data.position %} selected {% endif %}>{{ p.po_name }}</option>
                             {% endfor %}
-                        </select>
+                        </select> -->
                     </div>
                     <div class="col-md-3">
                         <label for="link_date" class="form-label">Fecha de Vinculación</label>
@@ -133,7 +144,7 @@
                     <div class="col-md-8">
                         <div class="form-group form-check mt-3">
                             <div class="form-check form-check-inline">
-                                <label class="form-check-label" for="fpepSi">¿Usted es un familiar de una persona expuesta políticamente?   Si</label>
+                                <label class="form-check-label" for="fpepSi" data-toggle="tooltip" data-placement="bottom" title="(i) Personas con las que tengan sociedad conyugal, de hecho, o de derecho; (ii) Familiares hasta segundo grado de consanguinidad, primero afinidad y primero civil.">¿Posee vinculos familiares con una Persona Expuesta Políticamente?   Si</label>
                                 <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepSi" value="1" {% if beneficiary_data.peps_parent %} checked {% endif%}>
                             </div>
                             <div class="form-check form-check-inline">
@@ -145,7 +156,7 @@
                 </div>
                 <div class="form-row right_menu mt-3 fpep_fields" {% if not beneficiary_data.peps_parent %} hidden {% endif%}>
                     <div class="col-md-4">
-                        <label for="fpep_name" class="form-label">Nombre</label>
+                        <label for="fpep_name" class="form-label">Nombre del Familiar</label>
                         <input type="text" class="form-control rq_cond" id="fpep_name" name="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
                     </div>
                     <div class="col-md-4">
@@ -154,7 +165,7 @@
                             <option selected></option>
                             {% set pt = frappe.get_all('qp_PO_ParentType', fields=['pt_name', 'pt_code'], order_by='pt_code asc') %}
                             {% for p in pt %}
-                                <option value="{{ p.pt_code }}" {% if p.pt_code == beneficiary_data.parent_type %} selected {% endif %}>{{ p.pt_name }}</option>
+                                <option value="{{ p.pt_code }}" {% if p.pt_code == beneficiary_data.parent_type %} selected {% endif %}>{{ p.pt_name.upper() }}</option>
                             {% endfor %}
                         </select>
                     </div>           
@@ -190,7 +201,7 @@
                             <option selected></option>
                             {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
                             {% for s in sf %}
-                                <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.source_fund %} selected {% endif %}>{{ s.sf_name }}</option>
+                                <option value="{{ s.sf_code }}"  {% if s.sf_code == beneficiary_data.source_fund %} selected {% endif %}>{{ s.sf_name.upper() }}</option>
                             {% endfor %}
                         </select>
                     </div>

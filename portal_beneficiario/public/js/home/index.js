@@ -50,7 +50,10 @@ $( document ).ready(function() {
 			}
         }
     });
-    
+
+    // Set Name
+    $('#client_name').text(frappe.session.user_fullname);
+
     if($('#link_date')){
         $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });
     }
