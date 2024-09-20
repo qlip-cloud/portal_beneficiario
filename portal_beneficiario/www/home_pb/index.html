@@ -59,7 +59,7 @@
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-3">
                         <label for="phone" class="form-label">* Teléfono</label>
-                        <input type="number" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
+                        <input type="tel" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
                     </div>
                     <div class="col-md-3">
                         <label for="nationality" class="form-label">* Nacionalidad</label>
@@ -123,13 +123,6 @@
                     <div class="col-md-2">
                         <label for="pep_position" class="form-label">* Cargo</label>
                         <input type="text" class="form-control" id="pep_position" name="pep_position" value="{% if beneficiary_data.position %}{{ beneficiary_data.position }}{%endif%}" maxlength="200">
-                        <!-- <select id="pep_position" name="pep_position" class="form-control">
-                            <option></option>
-                            {% set po = frappe.get_all('qp_PO_Positions', fields=['po_code', 'po_name'], order_by='po_code asc') %}
-                            {% for p in po %}
-                                <option value="{{ p.po_code }}" {% if p.po_code == beneficiary_data.position %} selected {% endif %}>{{ p.po_name }}</option>
-                            {% endfor %}
-                        </select> -->
                     </div>
                     <div class="col-md-3">
                         <label for="link_date" class="form-label">Fecha de Vinculación</label>
@@ -175,27 +168,27 @@
             <div id="container_finance" class="section-header">Información Financiera
                 <hr class="separator-id"/>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="in" class="form-label">* Ingresos Mensuales</label>
                         <input type="text" class="form-control number" id="in" name="in" value="{% if beneficiary_data.income %}{{beneficiary_data.income}}{%endif%}">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="out" class="form-label">* Egresos Mensuales</label>
-                        <input type="text"  class="form-control number" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
+                        <input type="text" class="form-control number" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="assets" class="form-label">* Activos</label>
                         <input type="text" class="form-control number" id="assets" name="assets" value="{% if beneficiary_data.assets %}{{beneficiary_data.assets}}{%endif%}">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="passive" class="form-label">* Pasivos</label>
                         <input type="text" class="form-control number" id="passive" name="passive" value="{% if beneficiary_data.passive %}{{beneficiary_data.passive}}{%endif%}">
                     </div>
                 </div> 
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="source_fund" class="form-label">* Origen de los dinero a recibir</label>
                         <select id="source_fund" name="source_fund" class="form-control">
                             <option selected></option>
@@ -207,7 +200,7 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number[-4:]}} es:</label>
                         <select id="type_account" name="type_account" class="form-control">
                             <option selected></option>

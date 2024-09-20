@@ -1,8 +1,9 @@
 $( document ).ready(function() {
    
     $("form#pb_form").validate({
+        debug: false,
         rules:{
-            phone:{required: true,number: true},
+            phone: {required: true,number: true, maxlength: 20},
             nationality:'required',
             address:'required',
             country: 'required',
@@ -10,7 +11,7 @@ $( document ).ready(function() {
             business:'required',
             business_type:'required',
             fileToUpload: 'required',
-            pep_position: 'required',
+            pep_position: {required:true, maxlength: 200},
             in:{required: true,number: true},
             out:{required: true,number: true},
             assets:{required: true,number: true},
@@ -18,6 +19,8 @@ $( document ).ready(function() {
             source_fund:'required',
             pep:'required',
             fpep:'required',
+            fpep_name: 'required',
+            parent_type: 'required',
             type_account: 'required'
         },
         errorClass: "input-error",
