@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-3">
-                        <label for="phone" class="form-label">* Teléfono</label>
+                        <label for="phone" class="form-label">* Celular</label>
                         <input type="tel" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
                     </div>
                     <div class="col-md-3">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.business_activity != "913610001" %} hidden {% endif %}>
-                    <div class="col-md-3">
+                    <div class="col-md-3 business_field">
                         <label for="business" class="form-label">* Actividad Económica</label>
                         <select id="business" name="business" class="form-control">
                             <option></option>
@@ -125,7 +125,7 @@
                         <input type="text" class="form-control" id="pep_position" name="pep_position" value="{% if beneficiary_data.position %}{{ beneficiary_data.position }}{%endif%}" maxlength="200">
                     </div>
                     <div class="col-md-3">
-                        <label for="link_date" class="form-label">Fecha de Vinculación</label>
+                        <label for="link_date" class="form-label">* Fecha de Vinculación</label>
                         <input type="text" class="form-control rq_cond" id="link_date" name="link_date" value="{% if beneficiary_data.link_date %}{{ frappe.format( beneficiary_data.link_date , {'fieldtype': 'Date'}) }}{% endif %}">
                     </div>
                     <div class="col-md-3">

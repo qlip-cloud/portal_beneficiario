@@ -12,6 +12,7 @@ $( document ).ready(function() {
             business_type:'required',
             fileToUpload: 'required',
             pep_position: {required:true, maxlength: 200},
+            link_date: 'required',
             in:{required: true,number: true},
             out:{required: true,number: true},
             assets:{required: true,number: true},
@@ -56,9 +57,14 @@ $( document ).ready(function() {
         }
     });
 
+    // Form validate
+    validatePositiveNumbers($('#in'));
+    validatePositiveNumbers($('#out'));
+    validatePositiveNumbers($('#assets'));
+    validatePositiveNumbers($('#passive'));
+
     // Set Name
     $('#client_name').text(frappe.session.user_fullname);
-
 
     if($('#link_date')){
         $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });
@@ -86,8 +92,16 @@ $( document ).ready(function() {
     });
 
     $("#business_type").change(function() {
-        if(this.value == '913610001') {
-            $('.activity_fields').removeAttr('hidden');
+        if(['913610001','913610003','913610004'].includes(this.value)) {
+            
+            if(['913610003','913610004'].includes(this.value)){
+                $('.activity_fields').removeAttr('hidden');
+                $('.business_field').attr('hidden', true);
+            } else {
+                $('.business_field').removeAttr('hidden');
+                $('.activity_fields').removeAttr('hidden');
+            }
+                
         }else{
             $('.activity_fields').attr('hidden', true);
         }
@@ -311,7 +325,7 @@ function checkStatus(){
                 }
           })
 
-    }, 60000);
+    }, 6000);
 }
 
 function getRetrieval(){
@@ -349,3 +363,10 @@ $('.nav-tabs').on('click', 'li', function() {
 
     li_active.removeClass('active');
 });
+
+function validatePositiveNumbers(element){
+    element.on('keyup', function(){
+        var val = this.value;
+        this.value = val.replace(/\D|\-/,'');
+    });
+}

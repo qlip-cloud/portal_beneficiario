@@ -16,7 +16,11 @@
   "sep_status_dato",
   "send_status_dato",
   "query_dato",
-  "response_dato"
+  "response_dato",
+  "sep_status_adjunto",
+  "send_status_attach",
+  "query_attach",
+  "response_attach"
  ],
  "fields": [
   {
@@ -93,12 +97,36 @@
    "fieldname": "response_dato",
    "fieldtype": "Small Text",
    "label": "Respuesta Dato Bancario"
+  },
+  {
+   "fieldname": "sep_status_adjunto",
+   "fieldtype": "Section Break",
+   "label": "Estatus Servicio Adjunto"
+  },
+  {
+   "fieldname": "send_status_attach",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Estatus adjunto"
+  },
+  {
+   "fieldname": "query_attach",
+   "fieldtype": "Text",
+   "label": "Peticion Servicio Adjunto"
+  },
+  {
+   "fieldname": "response_attach",
+   "fieldtype": "Small Text",
+   "label": "Repuesta Servicio Adjunto"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-14 12:00:32.367035",
+ "modified": "2024-09-20 19:46:02.666244",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicsAttemps",
