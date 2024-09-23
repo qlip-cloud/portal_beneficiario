@@ -238,13 +238,11 @@ def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code,
             "parent": beneficiary.name, 
             "parentfield":"dynamics_attemps",
             "parenttype":"qp_PO_Beneficiario",
+            "attemps_num": 1,
             doc_status_code: response.status_code,
             doc_request: request,
             doc_response: response.content
         })
-
-        if doc_attemps:
-            ja["attemps_num"] = 1
 
         ja.insert()
 
