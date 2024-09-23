@@ -325,7 +325,7 @@ function checkStatus(){
                 }
           })
 
-    }, 6000);
+    }, 60000);
 }
 
 function getRetrieval(){
