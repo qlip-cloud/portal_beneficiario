@@ -63,8 +63,18 @@ $( document ).ready(function() {
     validatePositiveNumbers($('#assets'));
     validatePositiveNumbers($('#passive'));
 
-    // Set Name
-    $('#client_name').text(frappe.session.user_fullname);
+    // Set Name    
+    var split_cookie = document.cookie.split(";");
+    var name = '';
+    
+    if(split_cookie.length > 0){
+        name = split_cookie[2];
+        name = decodeURIComponent(name.split("=")[1]);
+
+        if(name){
+            $('#client_name').text(`- Sr(a). ${name}`);
+        }
+    }
 
     if($('#link_date')){
         $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });
