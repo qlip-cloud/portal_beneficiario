@@ -82,7 +82,8 @@ def call_dynamic():
             "bit_score_jumio": int(beneficiary_data.jumio_points),
             "bit_notas_jumio": beneficiary_data.jumio_rejects,
             "bit_nada": beneficiary_data.business_activity,
-            "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S")
+            "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
+            "bit_canal": 913610001
         }
 
         # Data Empty

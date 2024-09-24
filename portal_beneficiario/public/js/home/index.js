@@ -57,6 +57,24 @@ $( document ).ready(function() {
         }
     });
 
+    $("#modal-buttom").click(function (e) {
+        var me = this;
+        me.logged_out = true;
+
+        console.log(me);
+
+        return frappe.call({
+            method: "logout",
+            callback: function(r){
+                if(r.exc){
+                     return;
+                }
+                window.location.replace("https://www.stonexcolombia.com/");
+            }
+        });
+    });
+
+
     // Form validate
     validatePositiveNumbers($('#in'));
     validatePositiveNumbers($('#out'));

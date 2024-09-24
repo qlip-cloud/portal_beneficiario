@@ -20,8 +20,6 @@ def save_beneficiary(**args):
         b.city = args.get('city').upper()
         b.business_activity = args.get('business_type')
 
-        # print("ATTACH:----------------", args.get('fileToUpload'))
-
         # Economic validations
         if args.get('business_type') == constantes.CODIGO_INDEPENDIENTE:
             b.economic_activity = args.get('business') 
