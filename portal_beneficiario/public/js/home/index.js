@@ -191,7 +191,7 @@ $( document ).ready(function() {
         });
 
         if ( $('#fileToUpload').length > 0){
-            indexed_array.document_send = true
+            indexed_array.document_send = "1"
         }
 
         $.ajax({

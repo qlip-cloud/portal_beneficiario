@@ -28,8 +28,8 @@ def save_beneficiary(**args):
         else:
             b.economic_activity = ""
 
-        if args.get('document_send'):
-            b.document_attach = True
+        if int(args.get('document_send')) == 1:
+            b.document_attach = args.get('document_send')
 
         b.peps = args.get('pep')
         # Peps validations
