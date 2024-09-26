@@ -210,8 +210,6 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
         "mimetype": "application/pdf",
         "objectid_account@odata.bind": f'/accounts({beneficiary.id_dynamics})'
     }
-
-    print("DATA:", data)
         
     # Parse data
     all_data = json.dumps(data)
