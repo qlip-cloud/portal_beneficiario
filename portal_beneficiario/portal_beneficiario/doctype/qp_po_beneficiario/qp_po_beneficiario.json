@@ -68,8 +68,9 @@
   },
   {
    "fieldname": "document_type",
-   "fieldtype": "Data",
-   "label": "Tipo Documento"
+   "fieldtype": "Link",
+   "label": "Tipo Documento",
+   "options": "qp_PO_DocumentType"
   },
   {
    "fieldname": "document_number",
@@ -323,7 +324,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-19 12:24:33.194596",
+ "modified": "2024-09-26 11:28:02.634321",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

@@ -61,8 +61,6 @@ $( document ).ready(function() {
         var me = this;
         me.logged_out = true;
 
-        console.log(me);
-
         return frappe.call({
             method: "logout",
             callback: function(r){
@@ -73,7 +71,6 @@ $( document ).ready(function() {
             }
         });
     });
-
 
     // Form validate
     validatePositiveNumbers($('#in'));
@@ -184,11 +181,6 @@ $( document ).ready(function() {
         prevTab(active);
     });
 
-    $("#modal-buttom").click(function (e) {
-        this.disabled = true;
-        location.reload();
-    });
-
     $("#save_beneficiary").click(function (e) {
 
         var unindexed_array = $('#pb_form').serializeArray()
@@ -197,6 +189,10 @@ $( document ).ready(function() {
         $.map(unindexed_array, function(n, i){
             indexed_array[n['name']] = n['value'];
         });
+
+        if ( $('#fileToUpload').length > 0){
+            indexed_array.document_send = "1"
+        }
 
         $.ajax({
             url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.save_beneficiary",
@@ -224,7 +220,7 @@ $( document ).ready(function() {
                     formData.append("fieldname", "document_attach");
 
                     call_back = (data) => {
-                        // console.log(JSON.stringify(data));
+
                         if(data) {
                             if(r.message.jumio_status != "PROCESSED"){
                                 callJumio(r.message)
@@ -335,7 +331,7 @@ function checkStatus(){
             dataType: 'json',
             contentType: 'application/json;charset=UTF-8',
           }).done(function(r) {
-                //console.log(r.message);
+
                 if(r.message == "PROCESSED")
                 {
                     clearInterval(refreshIntervalId);
@@ -364,7 +360,7 @@ function getRetrieval(){
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
         sendDynamics();
-        // console.log(r.message);
+
     });
 }
 
@@ -373,7 +369,7 @@ function sendDynamics(){
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         async: false
       }).done(function(r) {
-            console.log("Success");
+
       }); 
 }
 

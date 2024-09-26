@@ -54,6 +54,10 @@ def call_dynamic():
                     "Content-Type": "application/json"
                 }
         
+        if beneficiary_data.document_type:
+            document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
+            data_document_type = document_type.do_code
+        
         data_parent_name = beneficiary_data.parent_name[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
         data_position = beneficiary_data.position[0:100]
         data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
@@ -66,6 +70,7 @@ def call_dynamic():
             "bit_genero": gender_switch(beneficiary_data.gender),
             "bit_fecha_nacimiento": data_birthday,
             "bit_fecha_expedicion_documento": data_document_expedition_date,
+            "bit_tipo_de_documento": data_document_type,
             "bit_lugar_de_nacimiento_jumio": beneficiary_data.document_expedition_city,
             "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
             "bit_nacionalidad": beneficiary_data.nationality.upper(),
@@ -100,12 +105,14 @@ def call_dynamic():
             data["bit_nombredelpeprelacionado"] = data_parent_name
 
         # Send Attach
-        # sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
+        sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
  
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
             data_guid = economic_data.ea_guid
             data["bit_ClaseActividadEconomica@odata.bind"] = f'/bit_claseeconmicas({data_guid})'
+
+
 
         # Parse data
         all_data = json.dumps(data)
@@ -191,10 +198,11 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
 def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 
     # docAttach = frappe.db.get_value("File", {"attached_to_name": beneficiary.name})
-    docAttach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
+    doc_attach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
+    doc_extension = extFile(doc_attach.file_name.split(".")[-1])
     
-    docName =  frappe.db.get("File", {"attached_to_name": beneficiary.name}).name
-    docContent = base64.b64encode(frappe.get_doc("File", docName).get_content())
+    doc_name =  frappe.db.get("File", {"attached_to_name": beneficiary.name}).name
+    doc_content = base64.b64encode(frappe.get_doc("File", doc_name).get_content())
 
     endpoint = dynamics_conf.dynamic_document_url
 
@@ -205,9 +213,9 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
     
     data = {
         "subject": "Documento Stonex",
-        "filename": docAttach.file_name,
-        "documentbody": docContent.decode("utf-8"),
-        "mimetype": "application/pdf",
+        "filename": doc_attach.file_name,
+        "documentbody": doc_content.decode("utf-8"),
+        "mimetype": doc_extension,
         "objectid_account@odata.bind": f'/accounts({beneficiary.id_dynamics})'
     }
         
@@ -270,3 +278,11 @@ def isBoolean(field):
         return False
     else:
         return True
+    
+def extFile(extension):
+    if extension == "png":
+        return "image/png"
+    elif extension == "jpeg" or extension == "jpg":
+        return "image/jpeg"
+    elif extension == "pdf":
+        return "application/pdf"
