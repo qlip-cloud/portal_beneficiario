@@ -353,7 +353,7 @@ function checkStatus(){
                 }
           })
 
-    }, 60000);
+    }, 6000);
 }
 
 function getRetrieval(){

@@ -100,7 +100,7 @@ def call_dynamic():
             data["bit_nombredelpeprelacionado"] = data_parent_name
 
         # Send Attach
-        # sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)            
+        # sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
  
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
@@ -190,6 +190,12 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
 
 def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 
+    # docAttach = frappe.db.get_value("File", {"attached_to_name": beneficiary.name})
+    docAttach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
+    
+    docName =  frappe.db.get("File", {"attached_to_name": beneficiary.name}).name
+    docContent = base64.b64encode(frappe.get_doc("File", docName).get_content())
+
     endpoint = dynamics_conf.dynamic_document_url
 
     headers = {
@@ -198,12 +204,14 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
             }
     
     data = {
-        "subject": "Archivo Prueba",
-        "filename": "archivo.pdf",
-        "documentbody":"",
+        "subject": "Documento Stonex",
+        "filename": docAttach.file_name,
+        "documentbody": docContent.decode("utf-8"),
         "mimetype": "application/pdf",
         "objectid_account@odata.bind": f'/accounts({beneficiary.id_dynamics})'
     }
+
+    print("DATA:", data)
         
     # Parse data
     all_data = json.dumps(data)
