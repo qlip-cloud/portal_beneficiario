@@ -1,0 +1,24 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_Positions",
+  "modified": "2024-08-06 10:59:31.018503",
+  "name": "GO",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "po_code": "GO",
+  "po_name": "Gobernador"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "qp_PO_Positions",
+  "modified": "2024-08-06 10:59:46.662656",
+  "name": "CO",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "po_code": "CO",
+  "po_name": "Congresista"
+ }
+]

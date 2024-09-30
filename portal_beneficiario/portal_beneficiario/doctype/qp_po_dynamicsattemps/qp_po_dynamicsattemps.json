@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "creation": "2024-09-04 16:15:04.506854",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "attemps_num",
+  "send_status",
+  "query",
+  "response",
+  "sep_status_account_bank_group",
+  "send_status_account_bank",
+  "query_account_bank",
+  "response_account_bank",
+  "sep_status_dato",
+  "send_status_dato",
+  "query_dato",
+  "response_dato",
+  "sep_status_adjunto",
+  "send_status_attach",
+  "query_attach",
+  "response_attach"
+ ],
+ "fields": [
+  {
+   "fieldname": "attemps_num",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Numero intentos"
+  },
+  {
+   "fieldname": "send_status",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Estatus Envio"
+  },
+  {
+   "fieldname": "query",
+   "fieldtype": "Long Text",
+   "label": "Peticion"
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Small Text",
+   "label": "Respuesta"
+  },
+  {
+   "fieldname": "send_status_account_bank",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Estatus Envio Cuenta Bancaria"
+  },
+  {
+   "fieldname": "query_account_bank",
+   "fieldtype": "Long Text",
+   "label": "Peticion Servicio Cuenta"
+  },
+  {
+   "fieldname": "response_account_bank",
+   "fieldtype": "Long Text",
+   "label": "Respuesta Servicio Cuenta"
+  },
+  {
+   "fieldname": "sep_status_account_bank_group",
+   "fieldtype": "Section Break",
+   "label": "Estatus Servicio Cuenta Bancaria"
+  },
+  {
+   "fieldname": "sep_status_dato",
+   "fieldtype": "Section Break",
+   "label": "Estatus Servicio Actualiza Dato"
+  },
+  {
+   "fieldname": "send_status_dato",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Estatus Envio Dato Bancario"
+  },
+  {
+   "fieldname": "query_dato",
+   "fieldtype": "Long Text",
+   "label": "Peticion Dato Bancario"
+  },
+  {
+   "fieldname": "response_dato",
+   "fieldtype": "Small Text",
+   "label": "Respuesta Dato Bancario"
+  },
+  {
+   "fieldname": "sep_status_adjunto",
+   "fieldtype": "Section Break",
+   "label": "Estatus Servicio Adjunto"
+  },
+  {
+   "fieldname": "send_status_attach",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Estatus adjunto"
+  },
+  {
+   "fieldname": "query_attach",
+   "fieldtype": "Text",
+   "label": "Peticion Servicio Adjunto"
+  },
+  {
+   "fieldname": "response_attach",
+   "fieldtype": "Small Text",
+   "label": "Repuesta Servicio Adjunto"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-09-20 19:46:02.666244",
+ "modified_by": "Administrator",
+ "module": "Portal Beneficiario",
+ "name": "qp_PO_DynamicsAttemps",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

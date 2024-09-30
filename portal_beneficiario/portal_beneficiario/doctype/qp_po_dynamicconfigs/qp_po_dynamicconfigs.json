@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "creation": "2024-08-29 19:37:07.497515",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "dynamic_url",
+  "access_token_url",
+  "client_id",
+  "client_secret",
+  "dynamic_resource_url",
+  "dynamic_account_url",
+  "dynamic_update_account_url",
+  "dynamic_document_url"
+ ],
+ "fields": [
+  {
+   "fieldname": "dynamic_url",
+   "fieldtype": "Data",
+   "label": "Dynamic Url"
+  },
+  {
+   "fieldname": "access_token_url",
+   "fieldtype": "Data",
+   "label": "Access Token Url"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Client Id"
+  },
+  {
+   "fieldname": "client_secret",
+   "fieldtype": "Data",
+   "label": "Client Secret"
+  },
+  {
+   "fieldname": "dynamic_resource_url",
+   "fieldtype": "Data",
+   "label": "Dynamic Resource URL"
+  },
+  {
+   "fieldname": "dynamic_account_url",
+   "fieldtype": "Long Text",
+   "label": "Dynamic Account Bank URL"
+  },
+  {
+   "fieldname": "dynamic_update_account_url",
+   "fieldtype": "Long Text",
+   "label": "Dynamic Update Account Bank URL"
+  },
+  {
+   "fieldname": "dynamic_document_url",
+   "fieldtype": "Data",
+   "label": "Dynamic Send Document URL"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-09-20 18:32:28.533440",
+ "modified_by": "Administrator",
+ "module": "Portal Beneficiario",
+ "name": "qp_PO_DynamicConfigs",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

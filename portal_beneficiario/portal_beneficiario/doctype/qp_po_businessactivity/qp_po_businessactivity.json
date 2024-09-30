@@ -13,6 +13,10 @@
   {
    "fieldname": "ba_code",
    "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Code",
    "unique": 1
   },
@@ -24,7 +28,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-22 14:26:34.676800",
+ "modified": "2024-08-13 09:28:43.984119",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_BusinessActivity",
@@ -45,5 +49,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "title_field": "ba_name",
  "track_changes": 1
 }
