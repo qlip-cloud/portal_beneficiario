@@ -1,0 +1,261 @@
+.text-green,
+.text-white {
+    text-align: left;
+    font: normal normal 900 6vw/5vw Heebo;
+    letter-spacing: 0px;
+    color: #00551D;
+    opacity: 1;
+}
+
+.text-bold,
+.text-bold-white {
+    text-align: left;
+    font: normal normal 900 4vw/5vw Heebo;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+}
+
+.text-normal,
+.text-normal-white {
+    text-align: left;
+    font: normal normal normal 2vw/2.5vw Heebo;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+}
+
+.text-white,
+.text-bold-white,
+.text-normal-white {
+    color: #FFFFFF;
+}
+
+.principal-login {
+    background-image: url("/assets/portal_beneficiario/img/land-background.png");
+    background-position-x: right;
+    background-repeat: no-repeat;
+}
+
+.panel-bienvenida {
+    background-image: url("/assets/portal_beneficiario/img/bienvenida.png");
+    background-position-x: right;
+    background-repeat: no-repeat;
+}
+
+
+.welcome-height {
+    height: 92vh;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 5vw;
+    padding-right: 5vw;
+}
+
+.go_session {
+    text-align: left;
+    text-decoration: underline !important;
+    font: normal normal normal 22px/32px Heebo;
+    letter-spacing: 0px;
+    color: #B4B4B4 !important;
+    cursor: pointer;
+}
+
+.inicio_sesion {
+    height: 60vh !important;
+    background-color: #00551D;
+
+}
+
+.qlip {
+    background-image: url("/assets/portal_beneficiario/img/qlip.png");
+    background-repeat: no-repeat;
+    background-size: 60%;
+    background-position-x: right;
+    background-position-y: center;
+
+}
+
+.buttom {
+    text-align: center;
+    font: normal normal 900 2vw Heebo;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    background-color: #fff;
+    padding: 0.5em;
+    width: 40%;
+    text-decoration: none !important;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.section-height {
+    height: 90vh;
+
+}
+
+#inicio_sesion_small {
+    height: 40vh;
+
+    background-color: #00551D;
+    display: none;
+}
+
+.admin-button {
+    background-image: url('/assets/qlip_bussines_theme/icons/avatar_transparente60.png');
+    background-size: cover;
+    background-color: white !important;
+    border-radius: 35px;
+    width: 70px;
+    height: 70px;
+    font-size: 3rem;
+    box-shadow: 0px 0px 15px #00000029;
+    padding: 0;
+    position: sticky;
+    margin-left: 92%;
+    margin-top: 38%;
+}
+
+.admin-button:hover,
+.admin-button:focus,
+.admin-button:active,
+.admin-button.active {
+    background-color: white;
+    color: lightgray;
+    border: 0px transparent;
+    box-shadow: 0px 0px 15px #00000029;
+}
+
+.admin-button i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.admin-login {
+    top: 55vh;
+    left: 33%;
+}
+
+
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 6px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+
+.toggle-password {
+    right: 9px;
+    top: 9px;
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+
+.social-button,
+.register-button {
+    border-radius: 9px;
+    font: normal normal medium 25px/30px Montserrat;
+
+    text-align: left;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    text-align: center;
+    width: 35%;
+    margin-bottom: 5em;
+    height: 4em;
+    align-content: center;
+}
+.register-button{
+    background: transparent linear-gradient(90deg, #137EEE 0%, #0D1876 100%) 0% 0% no-repeat padding-box;
+
+}
+
+.social-button {
+    border: 1px solid #1046AC;
+    border-radius: 9px;
+    opacity: 1;
+    color: #0E2B8C;
+
+}
+
+@media (max-width: 576px) {
+    #inicio_sesion_small p {
+        margin-top: 5vw;
+    }
+
+    .qlip {
+
+        background-position-x: center;
+
+
+    }
+
+    #inicio_sesion_small {
+        height: 50vh;
+        display: block;
+
+    }
+
+    .inicio_sesion {
+        display: none !important;
+
+    }
+
+    .welcome-height,
+    .section-height {
+        height: 40vh;
+
+    }
+
+    .panel-bienvenida {
+        background-size: 100%;
+    }
+
+    .text-green,
+    .text-white {
+        font-size: 10vw;
+        line-height: 6vw;
+    }
+
+    .text-bold,
+    .text-bold-white {
+        font-size: 8vw;
+        line-height: 8vw;
+
+    }
+
+    .text-normal,
+    .text-normal-white {
+        font-size: 4vw;
+        line-height: 6.5vw;
+
+    }
+
+    .flex {
+        justify-content: start;
+    }
+
+    .youtube-container {
+        height: 50vh;
+    }
+}

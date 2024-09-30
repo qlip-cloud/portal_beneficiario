@@ -173,3 +173,7 @@ user_data_fields = [
 # 	"portal_beneficiario.auth.validate"
 # ]
 
+website_redirects = [
+    {"source": "/login", "target": "/login-qlip"},
+]
+
