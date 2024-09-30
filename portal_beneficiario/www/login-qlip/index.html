@@ -19,15 +19,15 @@
             <p class="text-bold ">Bienvenido a Stonex !</p>
 
             {% for provider in provider_logins %}
-                <p class="text-normal">Eres nuevo en Stonex?</p>
+            <p class="text-normal">Eres nuevo en Stonex?</p>
 
-                <a href="{{ provider.register_url }}" class="btn register-button ">
-                    <span>{{ _("Crear Usuario") }}</span></a>
-                <p class="text-normal">Ya tienes usuario?</p>
+            <a href="{{ provider.register_url }}" class="btn register-button ">
+                <span>{{ _("Crear Usuario") }}</span></a>
+            <p class="text-normal">Ya tienes usuario?</p>
 
-                <a href="{{ provider.auth_url }}" class="btn social-button">
-                    <span>{{ _("Iniciar Sesion") }}</span></a>
-                {% endfor %}
+            <a href="{{ provider.auth_url }}" class="btn social-button">
+                <span>{{ _("Iniciar Sesion") }}</span></a>
+            {% endfor %}
 
         </div>
         <div class="col-lg-6 welcome-height panel-login flex" style="justify-content: end; align-items: end;">
@@ -37,6 +37,16 @@
         </div>
 
 
+    </div>
+    <div class="row footer-qlip ">
+        <div class="col-xs-12 col-lg-6 img-class" >
+            
+            <img width="40%" src="/assets/portal_beneficiario/img/img2.png" id="img2">
+        </div>
+        <div class="col-xs-12 col-lg-6 img-class" >
+            <img width="30%" src="/assets/portal_beneficiario/img/img1.png" id="img1">
+
+        </div>
     </div>
 </div>
 
@@ -94,7 +104,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-<script>{% include "templates/includes/login/login.js" %}</script>
 
 </html>
 
