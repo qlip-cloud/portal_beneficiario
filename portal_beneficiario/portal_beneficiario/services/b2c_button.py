@@ -48,12 +48,13 @@ def handler(context):
                 # Ajustes para manejar diferentes claves sociales
                 # Nueva versión para manejar aplicación de valley floral
                 b2c_sign = frappe.get_value('Social Login Key', 'office_365', ['qp_sign_in'])
-
+                register_url = get_oauth2_authorize_url(provider, redirect_to)+'&p={0}&prompt=login'.format(b2c_sign),
+                register_url = register_url[0].replace("B2C_1_inicio_stonex_Pro", "B2C_1_registro_stonex_PRO")
                 context.provider_logins.append({
                     "name": provider,
                     "provider_name": provider_name,
                     "auth_url": get_oauth2_authorize_url(provider, redirect_to)+'&p={0}'.format(b2c_sign),
-                    "register_url": get_oauth2_authorize_url(provider, redirect_to)+'&p={0}&prompt=login'.format(b2c_sign),
+                    "register_url": register_url,
                     "icon": icon
                 })
             else:
