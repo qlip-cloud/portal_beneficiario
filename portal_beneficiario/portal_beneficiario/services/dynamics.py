@@ -57,7 +57,20 @@ def call_dynamic():
         if beneficiary_data.document_type:
             document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
             data_document_type = document_type.do_code
+
+        if beneficiary_data.country_of_birth:
+            get_country = frappe.db.get_value('qp_PO_Country', {'co_code': beneficiary_data.country_of_birth}, '*', as_dict=1)
+            data_place_birth = get_country.co_guid_code
         
+        if beneficiary_data.city_of_birth:
+            get_city = frappe.db.get_value('qp_PO_City', {'ci_code': beneficiary_data.city_of_birth}, '*', as_dict=1)
+            data_city_birth = get_city.ci_guid_code
+
+        if beneficiary_data.business_activity:
+            get_bussines_sector = frappe.db.get_value('qp_PO_BusinessActivity', {'ba_code': beneficiary_data.business_activity}, '*', as_dict=1)
+            data_business = get_bussines_sector.ba_code
+            data_industrial_sector = get_bussines_sector.ba_industrial_sector
+
         data_parent_name = beneficiary_data.parent_name[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
         data_position = beneficiary_data.position[0:100]
         data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
@@ -71,8 +84,11 @@ def call_dynamic():
             "bit_fecha_nacimiento": data_birthday,
             "bit_fecha_expedicion_documento": data_document_expedition_date,
             "bit_tipo_de_documento": data_document_type,
-            "bit_lugar_de_nacimiento_jumio": beneficiary_data.document_expedition_city,
+            "bit_numero_documento_jumio": beneficiary_data.document_number,
             "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
+            "bit_lugar_de_nacimiento_jumio": beneficiary_data.document_expedition_city,
+            "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',
+            "bit_Lugar_Nacimiento@odata.bind": f'/bit_ciudads({data_city_birth})',
             "bit_nacionalidad": beneficiary_data.nationality.upper(),
             "telephone3": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
@@ -86,7 +102,8 @@ def call_dynamic():
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": int(beneficiary_data.jumio_points),
             "bit_notas_jumio": beneficiary_data.jumio_rejects,
-            "bit_nada": beneficiary_data.business_activity,
+            "bit_nada": data_business,
+            "bit_sectorindustrial": data_industrial_sector,
             "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
             "bit_canal": 913610001
         }
@@ -105,15 +122,14 @@ def call_dynamic():
             data["bit_nombredelpeprelacionado"] = data_parent_name
 
         # Send Attach
-        sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
+        # sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
  
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
             data_guid = economic_data.ea_guid
             data["bit_ClaseActividadEconomica@odata.bind"] = f'/bit_claseeconmicas({data_guid})'
 
-
-
+            
         # Parse data
         all_data = json.dumps(data)
 

@@ -7,7 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "ba_code",
-  "ba_name"
+  "ba_name",
+  "ba_industrial_sector"
  ],
  "fields": [
   {
@@ -23,12 +24,23 @@
   {
    "fieldname": "ba_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
    "label": "Name"
+  },
+  {
+   "fieldname": "ba_industrial_sector",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Code Industrial Sector"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-13 09:28:43.984119",
+ "modified": "2024-09-30 12:45:51.956187",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_BusinessActivity",
