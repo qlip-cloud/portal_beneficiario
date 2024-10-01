@@ -7,13 +7,15 @@
  "engine": "InnoDB",
  "field_order": [
   "co_code",
-  "co_name"
+  "co_name",
+  "co_guid_code"
  ],
  "fields": [
   {
    "fieldname": "co_code",
    "fieldtype": "Data",
-   "label": "Code",
+   "in_list_view": 1,
+   "label": "Code ISO",
    "unique": 1
   },
   {
@@ -24,11 +26,20 @@
    "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Nombre"
+  },
+  {
+   "fieldname": "co_guid_code",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Code Guid Country"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-19 12:15:35.302857",
+ "modified": "2024-09-30 10:39:17.229963",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Country",
