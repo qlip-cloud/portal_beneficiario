@@ -28,13 +28,15 @@ def get_dynamic_accesstoken(dynamic_cnf):
         try:
             response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
-             raise e 
+            print("ERROR DYNAMICS TOKEN:", e)
+            raise e 
         else:
             return response.get("access_token")
 
 
 @frappe.whitelist()
 def call_dynamic():
+    print("CALL DYAMICS")
     
     dynamic_cnf = frappe.db.get_list("qp_PO_DynamicConfigs", fields=["*"])[0]
 
@@ -150,7 +152,7 @@ def call_dynamic():
                 get_bank_account(beneficiary_data, dynamic_cnf, api_token, beneficiary_data.id_dynamics, beneficiary_data.account_number[-4:])
                 return 1
         except Exception as e:
-
+            print("ERROR DYNAMICS:", e)
             raise e 
         else:
             saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
