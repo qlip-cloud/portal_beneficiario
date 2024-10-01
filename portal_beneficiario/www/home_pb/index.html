@@ -29,7 +29,7 @@
             
             <div id="container_personal" class="section-header"><span class="bold-section-header">Datos Personales</span>
 
-                <a id="client_name" name="client_name" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab"> - Sr(a). {{ beneficiary_name }}</span></a>
+                <a id="client_name" name="client_name" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab"> - Sr(a). {{ beneficiary_name.upper() }}</span></a>
                 <hr class="separator-id" />
                 
                 <div class="form-row right_menu mt-3">
@@ -82,7 +82,7 @@
                             {% set na = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_code asc') %}
                             <option></option>
                             {% for n in na %}
-                                <option value="{{ n.na_code }}" {% if n.na_code == beneficiary_data.nationality %} selected {% endif %} >{{ n.na_name }}</option>
+                                <option value="{{ n.na_code }}" {% if n.na_code == beneficiary_data.nationality %} selected {% endif %} >{{ n.na_name.upper() }}</option>
                             {% endfor %}
                         </select>
                     </div>
