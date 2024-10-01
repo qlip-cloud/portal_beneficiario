@@ -18,6 +18,9 @@ def save_beneficiary(**args):
         b.address = args.get('address').upper()
         b.country = args.get('country').upper()
         b.city = args.get('city').upper()
+        b.department = args.get('department').upper()
+        b.country_of_birth = args.get('country_birth').upper()
+        b.city_of_birth = args.get('city_birth').upper()
         b.business_activity = args.get('business_type')
 
         # Economic validations
@@ -68,8 +71,33 @@ def save_beneficiary(**args):
         frappe.db.commit()
         return b
 
+
 @frappe.whitelist()
 def get_status():
     user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
     beneficiary_status = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, 'jumio_status', as_dict=1)
     return beneficiary_status.jumio_status
+
+
+@frappe.whitelist()
+def get_cities(**args):
+    if args.get('is_only_city') == "1":
+        deparment = frappe.db.get_value("qp_PO_TerritorialUnit", {'tu_country': args.get('code')}, 'tu_code', as_dict=1)
+
+        values = {"country": args.get('code')}
+        cities = frappe.db.sql("""
+                                SELECT ci_code, ci_name
+                                FROM `tabqp_PO_City` ci
+                                LEFT JOIN `tabqp_PO_TerritorialUnit` ti ON ci_deparment = tu_code
+                                WHERE ti.tu_country = %(country)s
+                              """, values=values, as_dict=1)
+    else:
+        cities = frappe.db.get_values("qp_PO_City", filters={"ci_deparment": args.get('code')}, fieldname=['ci_code', 'ci_name'], as_dict=1)
+           
+    return cities
+
+
+@frappe.whitelist()
+def get_deparments(**args):
+    deparments = frappe.db.get_values("qp_PO_TerritorialUnit", filters={"tu_country": args.get('code')}, fieldname=['tu_code', 'tu_name'], as_dict=1)
+    return deparments

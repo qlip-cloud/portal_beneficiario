@@ -17,8 +17,11 @@
   "document_expedition_country",
   "phone",
   "nationality",
+  "country_of_birth",
+  "city_of_birth",
   "address",
   "country",
+  "department",
   "city",
   "peps",
   "position",
@@ -124,7 +127,7 @@
   {
    "fieldname": "city",
    "fieldtype": "Link",
-   "label": "Ciudad",
+   "label": "Ciudad de Residencia",
    "options": "qp_PO_City"
   },
   {
@@ -301,8 +304,9 @@
    "options": "qp_PO_DynamicsAttemps"
   },
   {
+   "default": "0",
    "fieldname": "document_attach",
-   "fieldtype": "Attach",
+   "fieldtype": "Check",
    "label": "Documento Economico"
   },
   {
@@ -318,13 +322,31 @@
   {
    "fieldname": "country",
    "fieldtype": "Link",
-   "label": "Pais",
+   "label": "Pais de Residencia",
    "options": "qp_PO_Country"
+  },
+  {
+   "fieldname": "country_of_birth",
+   "fieldtype": "Link",
+   "label": "Pais de Nacimiento",
+   "options": "qp_PO_Country"
+  },
+  {
+   "fieldname": "city_of_birth",
+   "fieldtype": "Link",
+   "label": "Ciudad de Nacimiento",
+   "options": "qp_PO_City"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Departamento Residencia",
+   "options": "qp_PO_TerritorialUnit"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-26 11:28:02.634321",
+ "modified": "2024-09-30 11:07:23.794403",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

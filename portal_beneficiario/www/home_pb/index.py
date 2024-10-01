@@ -34,6 +34,15 @@ def get_context(context):
 
     beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
 
+    id_contact = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
+    if id_contact:
+        id_contact = id_contact.name.split("-")[-1]
+        name_beneficiary = frappe.db.get_value('Supplier', {'supplier_name': id_contact}, '*', as_dict=1)
+        name_beneficiary = name_beneficiary.first_name
+    else:
+        name_beneficiary = ""
+
+
     if not beneficiary_data:
         frappe.throw("Beneficiario aun no ha sido registrado. Por favor comunique al Administrador.", frappe.PermissionError)
 
@@ -41,6 +50,7 @@ def get_context(context):
         "is_navbar_custom": True,
         "csrf_token": csrf_token,
         "beneficiary_data":beneficiary_data,
+        "beneficiary_name": name_beneficiary,
         "no_cache":1
     })
         

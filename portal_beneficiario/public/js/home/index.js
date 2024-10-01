@@ -5,9 +5,12 @@ $( document ).ready(function() {
         rules:{
             phone: {required: true,number: true, maxlength: 20},
             nationality:'required',
+            country_birth: 'required',
+            city_birth: 'required',
             address:'required',
             country: 'required',
             city:'required',
+            department: 'required',
             business:'required',
             business_type:'required',
             fileToUpload: 'required',
@@ -57,6 +60,59 @@ $( document ).ready(function() {
         }
     });
 
+    $("#country").change(function (e) {
+        if(this.value != '') {
+            $('#department').removeAttr('disabled');
+
+            $.ajax({
+                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
+                data: {"code": this.value},
+                dataType: 'json',
+                async: false
+            }).done(function(r) {
+                if(r.message){          
+                    data = r.message;
+                    
+                    $("#department").empty();
+                    $("#department").append("<option></option>");
+                    
+                    for (var key in data){
+                        $("#department").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
+                    }
+        
+                } else {
+                    alert("Sistema en mantenimiento, disculpe las molestias ocasionadas.");
+                } 
+            });
+
+        } else {
+            $('#department').val('');
+            $('#department').attr('disabled', true);
+        }
+    });
+
+    $("#department").change(function (e) {
+        if(this.value != '') {
+            $('#city').removeAttr('disabled');
+            getCities(this.value, $('#city'), 0);
+
+        } else {
+            $('#city').val('');
+            $('#city').attr('disabled', true);
+        }
+    });
+
+    $("#country_birth").change(function (e) {
+        if(this.value != '') {
+            $('#city_birth').removeAttr('disabled');
+            getCities(this.value, $('#city_birth'), 1);
+
+        } else {
+            $('#city_birth').val('');
+            $('#city_birth').attr('disabled', true);
+        }
+    });
+
     $("#modal-buttom").click(function (e) {
         var me = this;
         me.logged_out = true;
@@ -77,19 +133,6 @@ $( document ).ready(function() {
     validatePositiveNumbers($('#out'));
     validatePositiveNumbers($('#assets'));
     validatePositiveNumbers($('#passive'));
-
-    // Set Name    
-    var split_cookie = document.cookie.split(";");
-    var name = '';
-    
-    if(split_cookie.length > 0){
-        name = split_cookie[2];
-        name = decodeURIComponent(name.split("=")[1]);
-
-        if(name){
-            $('#client_name').text(`- Sr(a). ${name}`);
-        }
-    }
 
     if($('#link_date')){
         $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });
@@ -139,6 +182,7 @@ $( document ).ready(function() {
             $('#acept_term').attr('disabled', true);
         }
     });
+
 
     $("#acept_term").click(function (e) {
         $('#term_and_codition_btn').attr('hidden', true);
@@ -349,7 +393,7 @@ function checkStatus(){
                 }
           })
 
-    }, 60000);
+    }, 6000);
 }
 
 function getRetrieval(){
@@ -392,5 +436,30 @@ function validatePositiveNumbers(element){
     element.on('keyup', function(){
         var val = this.value;
         this.value = val.replace(/\D|\-/,'');
+    });
+}
+
+
+function getCities(value, field, isCity) {
+    
+    $.ajax({
+        url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_cities",
+        data: {"code": value, "is_only_city": isCity},
+        dataType: 'json',
+        async: false
+    }).done(function(r) {
+        if(r.message){          
+            data = r.message;
+            
+            field.empty();
+            field.append("<option></option>");
+            
+            for (var key in data){
+                field.append(`<option value='${data[key].ci_code}'>${data[key].ci_name.toUpperCase()}</option>`);
+            }
+
+        } else {
+            alert("Sistema en mantenimiento, disculpe las molestias ocasionadas.");
+        } 
     });
 }
