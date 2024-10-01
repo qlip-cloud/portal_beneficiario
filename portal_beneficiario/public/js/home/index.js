@@ -237,7 +237,7 @@ $( document ).ready(function() {
         fileToUpload = $('#fileToUpload').prop('files');
 
         if (fileToUpload.length != 0){
-            indexed_array.document_send = "1"
+            indexed_array.document_send = true
         }
 
         $.ajax({

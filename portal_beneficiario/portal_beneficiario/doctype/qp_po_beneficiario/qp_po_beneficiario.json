@@ -32,6 +32,7 @@
   "parent_type",
   "business_activity",
   "economic_activity",
+  "document_attach",
   "income",
   "egress",
   "assets",
@@ -335,11 +336,17 @@
    "fieldtype": "Link",
    "label": "Departamento Residencia",
    "options": "qp_PO_TerritorialUnit"
+  },
+  {
+   "default": "0",
+   "fieldname": "document_attach",
+   "fieldtype": "Check",
+   "label": "Documento Economico"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-01 08:58:54.173189",
+ "modified": "2024-10-01 11:21:40.421988",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
