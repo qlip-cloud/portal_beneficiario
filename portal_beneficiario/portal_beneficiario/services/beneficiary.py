@@ -11,15 +11,43 @@ from . import constantes
 def save_beneficiary(**args):
     #Se procede a guardar el beneficiario
     b = frappe.get_doc('qp_PO_Beneficiario', args.get('name'))
+    print("----------------",b)
+    print("phone",args.get('phone'))
+    print("nationality",args.get('nationality'))
+    print("address",args.get('address'))
+    print("country",args.get('country'))
+    print("city",args.get('city'))
+    print("department",args.get('department'))
+    print("country_birth",args.get('country_birth'))
+    print("city_birth",args.get('city_birth'))
+    print("business_type",args.get('business_type'))
+    print("business",args.get('business'))
+    print("pep",args.get('pep'))
+    print("pep_position",args.get('pep_position'))
+    print("link_date",args.get('link_date'))
+    print("link_undate",args.get('link_undate'))
+    print("fpep",args.get('fpep'))
+    print("fpep_name",args.get('fpep_name'))
+    print("parent_type",args.get('parent_type'))
+    print("in",args.get('in'))
+    print("out",args.get('out'))
+    print("assets",args.get('assets'))
+    print("passive",args.get('passive'))
+    print("term_conditions",args.get('term_conditions'))
+    print("email",args.get('email'))
+    print("source_fund", args.get('source_fund'))
+    print("type_account",args.get('type_account'))
+    print("document_send",args.get('document_send'))
+    print("document_send", type(args.get('document_send')))
 
     try:
         b.phone = args.get('phone')
         b.nationality = args.get('nationality').upper()
         b.address = args.get('address').upper()
-        b.country = args.get('country').upper()
+        b.country = args.get('country')
         b.city = args.get('city').upper()
-        b.department = args.get('department').upper()
-        b.country_of_birth = args.get('country_birth').upper()
+        b.department = args.get('department')
+        b.country_of_birth = args.get('country_birth')
         b.city_of_birth = args.get('city_birth').upper()
         b.business_activity = args.get('business_type')
 
@@ -32,7 +60,7 @@ def save_beneficiary(**args):
             b.economic_activity = ""
 
         if int(args.get('document_send')) == 1:
-            b.document_attach = args.get('document_send')
+            b.document_attach = True
 
         b.peps = args.get('pep')
         # Peps validations
@@ -65,7 +93,7 @@ def save_beneficiary(**args):
         b.account_type = args.get('type_account').upper()
 
     except Exception as e:
-        return 
+        return e
     else:
         b.save()
         frappe.db.commit()
@@ -81,6 +109,7 @@ def get_status():
 
 @frappe.whitelist()
 def get_cities(**args):
+
     if args.get('is_only_city') == "1":
         deparment = frappe.db.get_value("qp_PO_TerritorialUnit", {'tu_country': args.get('code')}, 'tu_code', as_dict=1)
 

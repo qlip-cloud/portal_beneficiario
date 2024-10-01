@@ -58,6 +58,10 @@ def call_dynamic():
             document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
             data_document_type = document_type.do_code
 
+        if beneficiary_data.city:
+            get_city = frappe.db.get_value('qp_PO_City', {'ci_code': beneficiary_data.city}, '*', as_dict=1)
+            data_city = get_city.ci_guid_code
+
         if beneficiary_data.country_of_birth:
             get_country = frappe.db.get_value('qp_PO_Country', {'co_code': beneficiary_data.country_of_birth}, '*', as_dict=1)
             data_place_birth = get_country.co_guid_code
@@ -87,6 +91,7 @@ def call_dynamic():
             "bit_numero_documento_jumio": beneficiary_data.document_number,
             "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
             "bit_lugar_de_nacimiento_jumio": beneficiary_data.document_expedition_city,
+            "bit_Ciudad@odata.bind": f'/bit_ciudads({data_city})',
             "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',
             "bit_Lugar_Nacimiento@odata.bind": f'/bit_ciudads({data_city_birth})',
             "bit_nacionalidad": beneficiary_data.nationality.upper(),
@@ -121,8 +126,12 @@ def call_dynamic():
         if data_parent_name:
             data["bit_nombredelpeprelacionado"] = data_parent_name
 
+        if beneficiary_data.parent_type:
+            data["bit_tipoparentezco"] = beneficiary_data.parent_type
+
         # Send Attach
-        # sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
+        if beneficiary_data.document_attach:
+            sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
  
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
@@ -215,42 +224,44 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 
     # docAttach = frappe.db.get_value("File", {"attached_to_name": beneficiary.name})
     doc_attach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
-    doc_extension = extFile(doc_attach.file_name.split(".")[-1])
-    
-    doc_name =  frappe.db.get("File", {"attached_to_name": beneficiary.name}).name
-    doc_content = base64.b64encode(frappe.get_doc("File", doc_name).get_content())
 
-    endpoint = dynamics_conf.dynamic_document_url
-
-    headers = {
-                "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json"
-            }
-    
-    data = {
-        "subject": "Documento Stonex",
-        "filename": doc_attach.file_name,
-        "documentbody": doc_content.decode("utf-8"),
-        "mimetype": doc_extension,
-        "objectid_account@odata.bind": f'/accounts({beneficiary.id_dynamics})'
-    }
+    if doc_attach:
+        doc_extension = extFile(doc_attach.file_name.split(".")[-1])
         
-    # Parse data
-    all_data = json.dumps(data)
+        doc_name =  frappe.db.get("File", {"attached_to_name": beneficiary.name}).name
+        doc_content = base64.b64encode(frappe.get_doc("File", doc_name).get_content())
 
-    response=None
-    try:
-        response = requests.request("POST", endpoint, data=all_data, headers=headers)
-        if response:
+        endpoint = dynamics_conf.dynamic_document_url
+
+        headers = {
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json"
+                }
+        
+        data = {
+            "subject": "Documento Stonex",
+            "filename": doc_attach.file_name,
+            "documentbody": doc_content.decode("utf-8"),
+            "mimetype": doc_extension,
+            "objectid_account@odata.bind": f'/accounts({beneficiary.id_dynamics})'
+        }
+            
+        # Parse data
+        all_data = json.dumps(data)
+
+        response=None
+        try:
+            response = requests.request("POST", endpoint, data=all_data, headers=headers)
+            if response:
+                saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach")
+                pass
+                return 1
+        except Exception as e:
+
+            raise e 
+        else:
             saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach")
-            pass
-            return 1
-    except Exception as e:
-
-        raise e 
-    else:
-        saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach")
-        return response
+            return response
     
 
 def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code, doc_request, doc_response, doc_attemps=False):

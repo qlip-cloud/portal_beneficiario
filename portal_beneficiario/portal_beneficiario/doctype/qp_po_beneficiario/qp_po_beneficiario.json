@@ -32,7 +32,6 @@
   "parent_type",
   "business_activity",
   "economic_activity",
-  "document_attach",
   "income",
   "egress",
   "assets",
@@ -304,12 +303,6 @@
    "options": "qp_PO_DynamicsAttemps"
   },
   {
-   "default": "0",
-   "fieldname": "document_attach",
-   "fieldtype": "Check",
-   "label": "Documento Economico"
-  },
-  {
    "fieldname": "document_expedition_country",
    "fieldtype": "Data",
    "label": "Pais Expedicion Documento"
@@ -346,7 +339,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-30 11:07:23.794403",
+ "modified": "2024-10-01 08:58:54.173189",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",
