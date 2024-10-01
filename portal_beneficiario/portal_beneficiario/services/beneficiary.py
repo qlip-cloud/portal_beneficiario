@@ -16,10 +16,10 @@ def save_beneficiary(**args):
         b.phone = args.get('phone')
         b.nationality = args.get('nationality').upper()
         b.address = args.get('address').upper()
-        b.country = args.get('country').upper()
+        b.country = args.get('country')
         b.city = args.get('city').upper()
-        b.department = args.get('department').upper()
-        b.country_of_birth = args.get('country_birth').upper()
+        b.department = args.get('department')
+        b.country_of_birth = args.get('country_birth')
         b.city_of_birth = args.get('city_birth').upper()
         b.business_activity = args.get('business_type')
 
@@ -32,7 +32,7 @@ def save_beneficiary(**args):
             b.economic_activity = ""
 
         if int(args.get('document_send')) == 1:
-            b.document_attach = args.get('document_send')
+            b.document_attach = True
 
         b.peps = args.get('pep')
         # Peps validations
@@ -65,7 +65,7 @@ def save_beneficiary(**args):
         b.account_type = args.get('type_account').upper()
 
     except Exception as e:
-        return 
+        return e
     else:
         b.save()
         frappe.db.commit()
@@ -81,6 +81,7 @@ def get_status():
 
 @frappe.whitelist()
 def get_cities(**args):
+
     if args.get('is_only_city') == "1":
         deparment = frappe.db.get_value("qp_PO_TerritorialUnit", {'tu_country': args.get('code')}, 'tu_code', as_dict=1)
 

@@ -234,7 +234,9 @@ $( document ).ready(function() {
             indexed_array[n['name']] = n['value'];
         });
 
-        if ( $('#fileToUpload').length > 0){
+        fileToUpload = $('#fileToUpload').prop('files');
+
+        if (fileToUpload.length != 0){
             indexed_array.document_send = "1"
         }
 
@@ -248,9 +250,7 @@ $( document ).ready(function() {
 
                 let response = r.message;
 
-                // Upload File
-                fileToUpload = $('#fileToUpload').prop('files');
-
+                // Upload File        
                 if (fileToUpload.length != 0){
                     
                     var formData = new FormData();
@@ -352,7 +352,7 @@ function callJumio(beneficiary) {
             if(r.message){
                 $('#jumio_iframe').attr('src', r.message.web.href);
                 $('#basic_btn').addClass('hidden');
-                $("#messageBox").html("Su solicitud se encuentra en estado " + beneficiary.jumio_status + ". Debe esperar que sea procesada.");
+                $("#messageBox").html("¡Gracias por tu paciencia! Estamos validando tu identidad de manera segura. En pocos minutos, todo estará listo.");
                 $('#messageBox').removeClass('hidden')
                 checkStatus()
             }else{
