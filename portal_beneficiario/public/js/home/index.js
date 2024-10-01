@@ -393,7 +393,7 @@ function checkStatus(){
                 }
           })
 
-    }, 6000);
+    }, 60000);
 }
 
 function getRetrieval(){
@@ -403,6 +403,7 @@ function getRetrieval(){
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
+        console.log("Response:", JSON.stringify(r));
         sendDynamics();
 
     });
@@ -413,7 +414,7 @@ function sendDynamics(){
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         async: false
       }).done(function(r) {
-
+        console.log("Response DYNAMICS:", JSON.stringify(r));
       }); 
 }
 
