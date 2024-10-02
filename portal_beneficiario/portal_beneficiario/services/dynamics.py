@@ -98,7 +98,6 @@ def call_dynamic():
             "telephone3": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
             "bit_parentescoconpep": isBoolean(beneficiary_data.peps_parent),
-            "address1_line1": beneficiary_data.address,
             "bit_salario": beneficiary_data.income,
             "revenue":beneficiary_data.assets,
             "bit_otros_rendimientos":beneficiary_data.egress,
@@ -138,13 +137,21 @@ def call_dynamic():
             data_guid = economic_data.ea_guid
             data["bit_ClaseActividadEconomica@odata.bind"] = f'/bit_claseeconmicas({data_guid})'
 
-            
+        data_address = {          
+            "address1_line1": beneficiary_data.address 
+        }
+
         # Parse data
         all_data = json.dumps(data)
 
         response=None
         try:
             response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
+            send_address = requests.request("PATCH", endpoint, data=json.dumps(data_address), headers=headers)
+
+            if send_address:
+                pass
+            
             if response:
                 saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
                 get_bank_account(beneficiary_data, dynamic_cnf, api_token, beneficiary_data.id_dynamics, beneficiary_data.account_number[-4:])
