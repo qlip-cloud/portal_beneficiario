@@ -42,6 +42,19 @@ def call_dynamic():
 
     beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
 
+    contact_data = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
+    if contact_data:
+        id_supplier = contact_data.name.split("-")[-1]
+        supplier_data = frappe.db.get_value('Supplier', {'supplier_name': id_supplier}, '*', as_dict=1)
+
+        if supplier_data:
+            document_id_qlip = supplier_data.tax_id
+
+    if document_id_qlip != beneficiary_data.document_number:
+        score = 100
+    else:
+        score = int(beneficiary_data.jumio_points)
+
     if dynamic_cnf and beneficiary_data:
 
         api_token = get_dynamic_accesstoken(dynamic_cnf)
@@ -84,6 +97,7 @@ def call_dynamic():
         data_date_now = datetime.now()
 
         data = {
+            "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
             "bit_genero": gender_switch(beneficiary_data.gender),
             "bit_fecha_nacimiento": data_birthday,
             "bit_fecha_expedicion_documento": data_document_expedition_date,
@@ -104,7 +118,7 @@ def call_dynamic():
             "bit_pasivo": beneficiary_data.passive,
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
-            "bit_score_jumio": int(beneficiary_data.jumio_points),
+            "bit_score_jumio": score,
             "bit_notas_jumio": beneficiary_data.jumio_rejects,
             "bit_nada": data_business,
             "bit_sectorindustrial": data_industrial_sector,
