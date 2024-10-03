@@ -43,12 +43,13 @@ def call_dynamic():
     beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
 
     contact_data = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
+    
+    document_id_qlip = ""
     if contact_data:
         id_supplier = contact_data.name.split("-")[-1]
         supplier_data = frappe.db.get_value('Supplier', {'supplier_name': id_supplier}, '*', as_dict=1)
-
-        if supplier_data:
-            document_id_qlip = supplier_data.tax_id
+        document_id_qlip = supplier_data.tax_id
+   
 
     if document_id_qlip != beneficiary_data.document_number:
         score = 100
