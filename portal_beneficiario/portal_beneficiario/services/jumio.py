@@ -7,6 +7,7 @@ from six import string_types
 from frappe.utils import getdate
 from frappe.integrations.utils import make_get_request, make_post_request
 import base64
+import requests
 from six import string_types, text_type
 from . import constantes
 
@@ -92,6 +93,7 @@ def get_jumio_retrieval():
         api_token = get_jumio_accesstoken(jumio_cnf)
         endpoint = jumio_cnf.retrieval_url
         endpoint = endpoint.format(beneficiary_data.jumio_account, beneficiary_data.jumio_workflowexecution)
+        endpoint_file = f'{endpoint}/generate'
         headers = {"Authorization": f"Bearer {api_token}"}
         data = {}
         
@@ -99,6 +101,12 @@ def get_jumio_retrieval():
 
         try:
             response = make_get_request(endpoint, data=data, headers=headers)
+            response_file = requests.get(endpoint_file, data=data, headers=headers)
+            
+            # File Jumio
+            data_file = ""
+            if response_file:
+                data_file = response_file.json()
 
             if response:
 
@@ -137,6 +145,7 @@ def get_jumio_retrieval():
 
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_points", response.get("decision").get("risk").get("score"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_rejects", rejects_string)
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_file", data_file.get("presignedUrl"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "be_name", response.get("capabilities").get("extraction")[0].get("data").get("firstName"))
                 frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "surname", response.get("capabilities").get("extraction")[0].get("data").get("lastName"))
                 
@@ -155,6 +164,9 @@ def get_jumio_retrieval():
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "query", endpoint if endpoint else json.dumps(data, default=json_handler))
                     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "response", json.dumps(response, default=json_handler))
+                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_status", response_file.status_code)
+                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_request", endpoint_file)
+                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_response", response_file.content)
                 else:
                     ja = frappe.get_doc({
                         "doctype":"qp_PO_JumioAttemps", 
@@ -163,7 +175,10 @@ def get_jumio_retrieval():
                         "parenttype":"qp_PO_Beneficiario", 
                         "attemps_num":0,
                         "query":endpoint if endpoint else json.dumps(data, default=json_handler),
-                        "response":json.dumps(response, default=json_handler)
+                        "response":json.dumps(response, default=json_handler),
+                        "jumio_file_status": response_file.status_code,
+                        "jumio_file_request": endpoint_file,
+                        "jumio_file_response": response_file.content
                     })
 
                     ja.insert()
