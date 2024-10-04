@@ -6,9 +6,13 @@
  "engine": "InnoDB",
  "field_order": [
   "attemps_num",
+  "jumio_rejections",
   "query",
   "response",
-  "jumio_rejections"
+  "jumio_sec",
+  "jumio_file_status",
+  "jumio_file_request",
+  "jumio_file_response"
  ],
  "fields": [
   {
@@ -27,7 +31,7 @@
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Consulta"
+   "label": "Consulta Retrieval"
   },
   {
    "fieldname": "response",
@@ -36,18 +40,38 @@
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Respuesta"
+   "label": "Respuesta Retrieval"
   },
   {
    "fieldname": "jumio_rejections",
    "fieldtype": "Data",
    "label": "Jumio Rechazos"
+  },
+  {
+   "fieldname": "jumio_file_status",
+   "fieldtype": "Data",
+   "label": "Estatus Servicio de Archivo"
+  },
+  {
+   "fieldname": "jumio_file_request",
+   "fieldtype": "Text",
+   "label": "Peticion Servicio de Archivo"
+  },
+  {
+   "fieldname": "jumio_file_response",
+   "fieldtype": "Text",
+   "label": "Respuesta Servicio de Archivo"
+  },
+  {
+   "fieldname": "jumio_sec",
+   "fieldtype": "Section Break",
+   "label": "Servicio Documento Jumio"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-16 15:01:56.180262",
+ "modified": "2024-10-03 20:15:50.747628",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_JumioAttemps",

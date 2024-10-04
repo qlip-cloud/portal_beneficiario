@@ -53,6 +53,7 @@
   "jumio_account",
   "jumio_points",
   "jumio_rejects",
+  "jumio_file",
   "jumio_iframe",
   "jumio_attemps",
   "dynamics_section",
@@ -342,11 +343,16 @@
    "fieldname": "document_attach",
    "fieldtype": "Check",
    "label": "Documento Economico"
+  },
+  {
+   "fieldname": "jumio_file",
+   "fieldtype": "Long Text",
+   "label": "Jumio Documento"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-01 11:21:40.421988",
+ "modified": "2024-10-04 09:59:44.087609",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

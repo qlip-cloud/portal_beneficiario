@@ -124,7 +124,9 @@ def call_dynamic():
             "bit_nada": data_business,
             "bit_sectorindustrial": data_industrial_sector,
             "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
-            "bit_canal": 913610001
+            "bit_canal": 913610001,
+            "bit_documento_identificacion": beneficiary_data.jumio_file,
+            "bit_formulario_vinculacion": beneficiary_data.jumio_file
         }
 
         # Data Empty
