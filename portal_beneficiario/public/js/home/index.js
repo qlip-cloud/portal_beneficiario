@@ -352,7 +352,7 @@ function callJumio(beneficiary) {
             if(r.message){
                 $('#jumio_iframe').attr('src', r.message.web.href);
                 $('#basic_btn').addClass('hidden');
-                $("#messageBox").html("¡Gracias por tu paciencia! Estamos validando tu identidad de manera segura. En pocos minutos, todo estará listo.");
+                $("#messageBox").html("Estamos verificando tu identidad. Este proceso es rápido y seguro. Por favor, sigue las instrucciones en pantalla.");
                 $('#messageBox').removeClass('hidden')
                 checkStatus()
             }else{

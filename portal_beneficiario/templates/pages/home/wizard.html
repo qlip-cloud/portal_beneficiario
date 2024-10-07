@@ -30,7 +30,8 @@
                             {% endif %}
                         </ul>
                     </div>
-                    <div id="messageBox" class="{% if beneficiary_data.enable == 1%}hidden{% endif %}">{% if beneficiary_data.enable == 0%}¡Gracias por tu paciencia! Estamos validando tu identidad de manera segura. En pocos minutos, todo estará listo.{% endif %}</div>
+                    <div id="messageBox" class="{% if beneficiary_data.enable == 1%}hidden{% endif %}">{% if beneficiary_data.enable == 0%}Estamos verificando tu identidad. Este proceso es rápido y seguro. Por favor, sigue las instrucciones en pantalla.
+                        {% endif %}</div>
                     <form id="pb_form" role="form" class="login-box mt-5">
                         <input id="name" name="name" type="hidden" value="{{beneficiary_data.name}}">
                         <input id="email" name="email" type="hidden" value="{{beneficiary_data.email}}">
