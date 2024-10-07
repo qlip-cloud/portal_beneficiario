@@ -1,35 +1,47 @@
 {
  "actions": [],
- "autoname": "field:do_name",
- "creation": "2024-09-26 11:24:36.704593",
+ "autoname": "field:co_code",
+ "creation": "2024-09-19 12:15:28.904223",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "do_name",
-  "do_code"
+  "co_code",
+  "co_name",
+  "co_guid_code"
  ],
  "fields": [
   {
-   "fieldname": "do_code",
+   "fieldname": "co_code",
    "fieldtype": "Data",
-   "label": "Code"
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Code ISO",
+   "unique": 1
   },
   {
-   "fieldname": "do_name",
+   "fieldname": "co_name",
    "fieldtype": "Data",
+   "label": "Nombre"
+  },
+  {
+   "fieldname": "co_guid_code",
+   "fieldtype": "Data",
+   "in_global_search": 1,
    "in_list_view": 1,
+   "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Name",
-   "unique": 1
+   "label": "Code Guid Country"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-26 11:35:30.822913",
+ "modified": "2024-10-01 11:20:07.494268",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
- "name": "qp_PO_DocumentType",
+ "name": "qp_PO_Country",
  "owner": "Administrator",
  "permissions": [
   {

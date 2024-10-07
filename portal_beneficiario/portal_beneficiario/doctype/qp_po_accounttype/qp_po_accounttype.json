@@ -1,35 +1,37 @@
 {
  "actions": [],
- "autoname": "field:do_name",
- "creation": "2024-09-26 11:24:36.704593",
+ "autoname": "field:at_code",
+ "creation": "2024-09-03 10:47:18.522848",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "do_name",
-  "do_code"
+  "at_code",
+  "at_name"
  ],
  "fields": [
   {
-   "fieldname": "do_code",
+   "fieldname": "at_code",
    "fieldtype": "Data",
-   "label": "Code"
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Code",
+   "unique": 1
   },
   {
-   "fieldname": "do_name",
+   "fieldname": "at_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Name",
-   "unique": 1
+   "label": "Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-26 11:35:30.822913",
+ "modified": "2024-09-04 22:24:38.181500",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
- "name": "qp_PO_DocumentType",
+ "name": "qp_PO_AccountType",
  "owner": "Administrator",
  "permissions": [
   {

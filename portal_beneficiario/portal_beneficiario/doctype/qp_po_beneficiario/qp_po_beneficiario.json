@@ -5,8 +5,6 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "id_dynamics",
-  "id_jumio",
   "be_name",
   "surname",
   "document_type",
@@ -16,18 +14,25 @@
   "birthday",
   "document_expedition_date",
   "document_expedition_city",
+  "document_expedition_country",
   "phone",
   "nationality",
+  "country_of_birth",
+  "city_of_birth",
   "address",
+  "country",
+  "department",
   "city",
   "peps",
   "position",
   "link_date",
+  "link_undate",
   "peps_parent",
   "parent_name",
   "parent_type",
-  "economic_activity",
   "business_activity",
+  "economic_activity",
+  "document_attach",
   "income",
   "egress",
   "assets",
@@ -35,19 +40,30 @@
   "patrimony",
   "data_declaration",
   "authorization_declaration",
+  "source_fund",
+  "account_number",
+  "bank",
+  "account_type",
+  "form_section",
+  "enable",
+  "jumio_section",
+  "id_dynamics",
+  "jumio_status",
+  "jumio_workflowexecution",
+  "jumio_account",
   "jumio_points",
-  "source_fund"
+  "jumio_rejects",
+  "jumio_file",
+  "jumio_iframe",
+  "jumio_attemps",
+  "dynamics_section",
+  "dynamics_attemps"
  ],
  "fields": [
   {
    "fieldname": "id_dynamics",
    "fieldtype": "Data",
    "label": "Id Dynamics"
-  },
-  {
-   "fieldname": "id_jumio",
-   "fieldtype": "Data",
-   "label": "Id Jumio"
   },
   {
    "fieldname": "surname",
@@ -112,7 +128,7 @@
   {
    "fieldname": "city",
    "fieldtype": "Link",
-   "label": "Ciudad",
+   "label": "Ciudad de Residencia",
    "options": "qp_PO_City"
   },
   {
@@ -123,7 +139,7 @@
   },
   {
    "fieldname": "position",
-   "fieldtype": "Data",
+   "fieldtype": "Small Text",
    "label": "Cargo"
   },
   {
@@ -211,11 +227,132 @@
    "fieldtype": "Link",
    "label": "Source Fund",
    "options": "qp_PO_SourceFund"
+  },
+  {
+   "default": "PENDING",
+   "fieldname": "jumio_status",
+   "fieldtype": "Select",
+   "label": "Jumio Status",
+   "options": "PENDING\nPROCESSED\nSESSION_EXPIRED\nTOKEN_EXPIRED"
+  },
+  {
+   "fieldname": "jumio_workflowexecution",
+   "fieldtype": "Data",
+   "label": "Jumio workflowExecution"
+  },
+  {
+   "fieldname": "jumio_account",
+   "fieldtype": "Data",
+   "label": "Jumio account"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable",
+   "fieldtype": "Check",
+   "label": "Enable Data Form"
+  },
+  {
+   "fieldname": "jumio_iframe",
+   "fieldtype": "Long Text",
+   "label": "Jumio Iframe"
+  },
+  {
+   "fieldname": "jumio_attemps",
+   "fieldtype": "Table",
+   "label": "Jumio Attemps",
+   "options": "qp_PO_JumioAttemps"
+  },
+  {
+   "fieldname": "jumio_section",
+   "fieldtype": "Section Break",
+   "label": "Jumio Section"
+  },
+  {
+   "fieldname": "form_section",
+   "fieldtype": "Section Break",
+   "label": "Form"
+  },
+  {
+   "fieldname": "link_undate",
+   "fieldtype": "Date",
+   "label": "Fecha Desvinculacion"
+  },
+  {
+   "fieldname": "account_number",
+   "fieldtype": "Data",
+   "label": "Numero de Cuenta"
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Banco"
+  },
+  {
+   "fieldname": "account_type",
+   "fieldtype": "Link",
+   "label": "Tipo de Cuenta",
+   "options": "qp_PO_AccountType"
+  },
+  {
+   "fieldname": "dynamics_section",
+   "fieldtype": "Section Break",
+   "label": "Dynamics Section"
+  },
+  {
+   "fieldname": "dynamics_attemps",
+   "fieldtype": "Table",
+   "label": "Dynamics_Attemps",
+   "options": "qp_PO_DynamicsAttemps"
+  },
+  {
+   "fieldname": "document_expedition_country",
+   "fieldtype": "Data",
+   "label": "Pais Expedicion Documento"
+  },
+  {
+   "fieldname": "jumio_rejects",
+   "fieldtype": "Small Text",
+   "label": "Jumio Rechazo Notas"
+  },
+  {
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Pais de Residencia",
+   "options": "qp_PO_Country"
+  },
+  {
+   "fieldname": "country_of_birth",
+   "fieldtype": "Link",
+   "label": "Pais de Nacimiento",
+   "options": "qp_PO_Country"
+  },
+  {
+   "fieldname": "city_of_birth",
+   "fieldtype": "Link",
+   "label": "Ciudad de Nacimiento",
+   "options": "qp_PO_City"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Departamento Residencia",
+   "options": "qp_PO_TerritorialUnit"
+  },
+  {
+   "default": "0",
+   "fieldname": "document_attach",
+   "fieldtype": "Check",
+   "label": "Documento Economico"
+  },
+  {
+   "fieldname": "jumio_file",
+   "fieldtype": "Long Text",
+   "label": "Jumio Documento"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-14 09:17:13.203299",
+ "modified": "2024-10-04 09:59:44.087609",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

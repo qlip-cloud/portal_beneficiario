@@ -1,35 +1,49 @@
 {
  "actions": [],
- "autoname": "field:do_name",
- "creation": "2024-09-26 11:24:36.704593",
+ "autoname": "field:tu_code",
+ "creation": "2024-09-26 23:13:02.351251",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "do_name",
-  "do_code"
+  "tu_code",
+  "tu_name",
+  "tu_guid_code",
+  "tu_country"
  ],
  "fields": [
   {
-   "fieldname": "do_code",
-   "fieldtype": "Data",
-   "label": "Code"
-  },
-  {
-   "fieldname": "do_name",
+   "fieldname": "tu_code",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Name",
+   "label": "Code",
    "unique": 1
+  },
+  {
+   "fieldname": "tu_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name"
+  },
+  {
+   "fieldname": "tu_guid_code",
+   "fieldtype": "Data",
+   "label": "Code Guid Deparment"
+  },
+  {
+   "fieldname": "tu_country",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Code Country",
+   "options": "qp_PO_Country"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-26 11:35:30.822913",
+ "modified": "2024-09-30 08:56:26.734462",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
- "name": "qp_PO_DocumentType",
+ "name": "qp_PO_TerritorialUnit",
  "owner": "Administrator",
  "permissions": [
   {

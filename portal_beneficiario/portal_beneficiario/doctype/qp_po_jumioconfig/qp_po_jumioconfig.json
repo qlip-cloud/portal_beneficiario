@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "creation": "2024-08-16 11:48:38.429152",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "access_token_url",
+  "account_url",
+  "client_id",
+  "client_secret",
+  "retrieval_url",
+  "id_jumio"
+ ],
+ "fields": [
+  {
+   "fieldname": "access_token_url",
+   "fieldtype": "Data",
+   "label": "Access Token URL"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Client ID"
+  },
+  {
+   "fieldname": "client_secret",
+   "fieldtype": "Data",
+   "label": "Client Secret"
+  },
+  {
+   "fieldname": "account_url",
+   "fieldtype": "Data",
+   "label": "Account URL"
+  },
+  {
+   "fieldname": "retrieval_url",
+   "fieldtype": "Data",
+   "label": "Retrieval URL"
+  },
+  {
+   "fieldname": "id_jumio",
+   "fieldtype": "Data",
+   "label": "Id Jumio"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-28 17:29:00.621319",
+ "modified_by": "Administrator",
+ "module": "Portal Beneficiario",
+ "name": "qp_PO_JumioConfig",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

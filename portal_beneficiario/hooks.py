@@ -40,15 +40,12 @@ app_license = "MIT"
 # ----------
 
 # application home page (will override Website Settings)
-#home_page = "home/index"
-
-#base_template = "portal_beneficiario/templates/pb_base.html"
+# home_page = "login"
 
 # website user home page (by Role)
-role_home_page = {
-	"Customer": "/home_pb",
-    "Administrator":"/app"
-}
+# role_home_page = {
+#	"Role": "home_page"
+# }
 
 # Generators
 # ----------
@@ -176,17 +173,25 @@ user_data_fields = [
 # 	"portal_beneficiario.auth.validate"
 # ]
 
+website_redirects = [
+    {"source": "/login", "target": "/login-qlip"},
+]
+
 fixtures = [
     # export all records from the Category table
 	"qp_PO_BusinessActivity",
 	"qp_PO_City",
-	"qp_PO_DocumentType",
 	"qp_PO_EconomicActivity",
 	"qp_PO_Nationality",
     "qp_PO_Positions",
     "qp_PO_SourceFund",
-    "qp_PO_ParentType" 
+    "qp_PO_ParentType",
+    "qp_PO_AccountType"
 ]
 
 # get_website_user_home_page = "app.website.get_home_page"
 get_website_user_home_page = "portal_beneficiario.portal_beneficiario.uses_cases.login.redirects.get_home_page"
+
+#website_redirects = [
+#	{"source": "/", "target": "https://authqlip.b2clogin.com/authqlip.onmicrosoft.com/B2C_1_inicio_stonex_Pro/oauth2/v2.0/authorize?redirect_uri=https%3A%2F%2Fstonex-qa.qlip.cloud%2Fapi%2Fmethod%2Ffrappe.integrations.oauth2_logins.login_via_office365&state=eyJzaXRlIjogImh0dHBzOi8vc3RvbmV4LXFhLnFsaXAuY2xvdWQiLCAidG9rZW4iOiAiZjRlMDMzZjU2ZjRmNWIyMWVmYjMwNmE1ZjAxMTlhMjk4NjhmY2NmYzJiOTI2MWJmMzI4OTIxM2QiLCAicmVkaXJlY3RfdG8iOiBudWxsfQ%3D%3D&response_type=code&scope=openid&client_id=1d9b1450-7a00-4669-be39-f3fc5d8c2d6f&p=B2C_1_inicio_stonex_Pro"}
+#]
