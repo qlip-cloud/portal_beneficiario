@@ -51,10 +51,13 @@ def call_dynamic():
         document_id_qlip = supplier_data.tax_id
    
 
+    # Solicitud de Stonex
     if document_id_qlip != beneficiary_data.document_number:
         score = 100
+        notas_jumio = "Documento diferente"
     else:
         score = int(beneficiary_data.jumio_points)
+        notas_jumio = beneficiary_data.jumio_rejects
 
     if dynamic_cnf and beneficiary_data:
 
@@ -120,7 +123,7 @@ def call_dynamic():
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": score,
-            "bit_notas_jumio": beneficiary_data.jumio_rejects,
+            "bit_notas_jumio": notas_jumio,
             "bit_nada": data_business,
             "bit_sectorindustrial": data_industrial_sector,
             "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
