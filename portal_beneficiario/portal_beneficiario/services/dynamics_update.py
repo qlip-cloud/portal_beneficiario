@@ -28,7 +28,8 @@ def get_dynamic_accesstoken(dynamic_cnf):
         try:
             response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
-            raise e 
+            frappe.log_error(message=e, title="Exception: get_dynamic_accesstoken")
+            return e 
         else:
             return response.get("access_token")
       
@@ -182,7 +183,7 @@ def update_dynamics(**args):
                 
                 return 1
         except Exception as e:
-            raise e 
+            frappe.log_error(message=e, title="Exception: update_dynamics")
             return e
         else:
             saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", True)
@@ -216,7 +217,8 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
 
             return 1
     except Exception as e:
-        raise e 
+        frappe.log_error(message=e, title="Exception: get_bank_account")
+        return e
     else:
         saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", False)
         return response
@@ -246,7 +248,8 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
             saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
             return 1
     except Exception as e:
-        raise e 
+        frappe.log_error(message=e, title="Exception: update_banking_dato")
+        return e
     else:
         saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
         return response
@@ -289,8 +292,8 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
                 pass
                 return 1
         except Exception as e:
-
-            raise e 
+            frappe.log_error(message=e, title="Exception: sendDocumentDynamics")
+            return e 
         else:
             saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach", False)
             return response
