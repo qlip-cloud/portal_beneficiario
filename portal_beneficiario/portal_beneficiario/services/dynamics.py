@@ -51,10 +51,13 @@ def call_dynamic():
         document_id_qlip = supplier_data.tax_id
    
 
+    # Solicitud de Stonex
     if document_id_qlip != beneficiary_data.document_number:
         score = 100
+        notas_jumio = "Documento diferente"
     else:
         score = int(beneficiary_data.jumio_points)
+        notas_jumio = beneficiary_data.jumio_rejects
 
     if dynamic_cnf and beneficiary_data:
 
@@ -120,7 +123,7 @@ def call_dynamic():
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": score,
-            "bit_notas_jumio": beneficiary_data.jumio_rejects,
+            "bit_notas_jumio": notas_jumio,
             "bit_nada": data_business,
             "bit_sectorindustrial": data_industrial_sector,
             "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
@@ -174,9 +177,10 @@ def call_dynamic():
                 get_bank_account(beneficiary_data, dynamic_cnf, api_token, beneficiary_data.id_dynamics, beneficiary_data.account_number[-4:])
                 return 1
         except Exception as e:
-            raise e 
+            frappe.log_error(message=e, title="Exc Envio a Dynamics: call_dynamics")
             return e
         else:
+            frappe.log_error(message=response, title="Envio a Dynamics: call_dynamics")
             saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
             return response
 
@@ -208,8 +212,10 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
 
             return 1
     except Exception as e:
+        frappe.log_error(message=e, title="Exc Envio a Dynamics: get_bank_account")
         raise e 
     else:
+        frappe.log_error(message=response, title="Envio a Dynamics: get_bank_account")
         saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", doc_attemps=False)
         return response
 

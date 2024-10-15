@@ -403,17 +403,22 @@ function getRetrieval(){
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
+        console.log("Success Jumio - getRetrieval -> sendDynamics");
         sendDynamics();
-
-    });
+    }).fail(function(r){
+        console.log("Fail Send Dynamics" + r);
+      });
 }
 
 function sendDynamics(){
+    console.log("Llamando a Dynamics");
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         async: false
       }).done(function(r) {
-        console.log("Success");
+        console.log("Success Dynamics");
+      }).fail(function(r){
+        console.log("Fail process Dynamics" + r);
       }); 
 }
 
