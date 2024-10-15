@@ -44,6 +44,9 @@ def handler(context):
                 icon = get_icon_html(icon_url, small=True)
 
         if (get_oauth_keys(provider) and client_secret and client_id and base_url):
+
+            REGISTER_URL = "https://authqlip.b2clogin.com/authqlip.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_registro_stonex_PRO&client_id=1d9b1450-7a00-4669-be39-f3fc5d8c2d6f&nonce=defaultNonce&redirect_uri=https://stonex-qa.qlip.cloud/login&scope=openid&response_type=id_token&prompt=login"
+
             if provider == "office_365":
                 # Ajustes para manejar diferentes claves sociales
                 # Nueva versión para manejar aplicación de valley floral
@@ -54,7 +57,7 @@ def handler(context):
                     "name": provider,
                     "provider_name": provider_name,
                     "auth_url": get_oauth2_authorize_url(provider, redirect_to)+'&p={0}'.format(b2c_sign),
-                    "register_url": register_url,
+                    "register_url": REGISTER_URL,
                     "icon": icon
                 })
             else:
@@ -63,7 +66,7 @@ def handler(context):
                         "name": provider,
                         "provider_name": provider_name,
                         "auth_url": get_oauth2_authorize_url(provider, redirect_to),
-                        "register_url": get_oauth2_authorize_url(provider, redirect_to) + "&prompt=login",
+                        "register_url": REGISTER_URL,
                         "icon": icon,
                     }
                 )

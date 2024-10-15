@@ -404,16 +404,20 @@ function getRetrieval(){
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
         sendDynamics();
-
+    }).fail(function(r){
+        console.log(r);
     });
 }
 
 function sendDynamics(){
+    console.log("Llamando a Dynamics");
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         async: false
       }).done(function(r) {
-        console.log("Success");
+
+      }).fail(function(r){
+        console.log(r);
       }); 
 }
 
@@ -438,7 +442,6 @@ function validatePositiveNumbers(element){
         this.value = val.replace(/\D|\-/,'');
     });
 }
-
 
 function getCities(value, field, isCity) {
     

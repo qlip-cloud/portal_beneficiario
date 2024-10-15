@@ -29,21 +29,25 @@ def get_dynamic_accesstoken(dynamic_cnf):
             response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
             frappe.log_error(message=e, title="Exception: get_dynamic_accesstoken")
-            raise e 
+            return e 
         else:
             return response.get("access_token")
-
+      
 
 @frappe.whitelist()
-def call_dynamic():
+def update_dynamics(**args):
+
+    code_beneficiary = args.get('name')
+    code_dynamics = args.get('id_dynamics')
     
     dynamic_cnf = frappe.db.get_list("qp_PO_DynamicConfigs", fields=["*"])[0]
 
-    user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
+    beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'name': code_beneficiary}, '*', as_dict=1)
 
-    beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+    contact_data = frappe.db.get_value("Contact", {'user': beneficiary_data.email}, '*', as_dict=1)
 
-    contact_data = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
+    # Update ID
+    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, 'id_dynamics', code_dynamics)
     
     document_id_qlip = ""
     if contact_data:
@@ -52,20 +56,17 @@ def call_dynamic():
         document_id_qlip = supplier_data.tax_id
    
 
-    # Solicitud de Stonex
     if document_id_qlip != beneficiary_data.document_number:
         score = 100
-        notas_jumio = "Documento diferente"
     else:
         score = int(beneficiary_data.jumio_points)
-        notas_jumio = beneficiary_data.jumio_rejects
 
     if dynamic_cnf and beneficiary_data:
 
         api_token = get_dynamic_accesstoken(dynamic_cnf)
 
         endpoint = dynamic_cnf.dynamic_url
-        endpoint = endpoint.format(beneficiary_data.id_dynamics)
+        endpoint = endpoint.format(code_dynamics)
 
         headers = {
                     "Authorization": f"Bearer {api_token}",
@@ -97,12 +98,15 @@ def call_dynamic():
         data_position = beneficiary_data.position[0:100]
         data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
         data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_undate is not None else ''
-        
+        data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.birthday is not None else ''
+        data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.document_expedition_date is not None else ''
         data_date_now = datetime.now()
 
         data = {
             "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
             "bit_genero": gender_switch(beneficiary_data.gender),
+            "bit_fecha_nacimiento": data_birthday,
+            "bit_fecha_expedicion_documento": data_document_expedition_date,
             "bit_tipo_de_documento": data_document_type,
             "bit_numero_documento_jumio": beneficiary_data.document_number,
             "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
@@ -121,7 +125,7 @@ def call_dynamic():
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": score,
-            "bit_notas_jumio": notas_jumio,
+            "bit_notas_jumio": beneficiary_data.jumio_rejects,
             "bit_nada": data_business,
             "bit_sectorindustrial": data_industrial_sector,
             "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
@@ -131,14 +135,6 @@ def call_dynamic():
         }
 
         # Data Empty
-        if beneficiary_data.birthday:
-            data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d %H:%M:%S")
-            data["bit_fecha_nacimiento"] = data_birthday
-
-        if beneficiary_data.document_expedition_date:
-            data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S")
-            data["bit_fecha_expedicion_documento"] = data_document_expedition_date
-        
         if data_position:
             data["bit_cargo"] = ''.join(data_position)
 
@@ -154,10 +150,7 @@ def call_dynamic():
         if beneficiary_data.parent_type:
             data["bit_tipoparentezco"] = beneficiary_data.parent_type
 
-        # Send Attach
-        if beneficiary_data.document_attach:
-            sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
- 
+
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
             data_guid = economic_data.ea_guid
@@ -179,14 +172,21 @@ def call_dynamic():
                 pass
             
             if response:
-                saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
-                get_bank_account(beneficiary_data, dynamic_cnf, api_token, beneficiary_data.id_dynamics, beneficiary_data.account_number[-4:])
+                saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", True)
+                
+                # Set type accpunt
+                get_bank_account(beneficiary_data, dynamic_cnf, api_token, code_dynamics, beneficiary_data.account_number[-4:])
+                
+                # Send Attach
+                if beneficiary_data.document_attach:
+                    sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
+                
                 return 1
         except Exception as e:
-            frappe.log_error(message=e, title="Exception: call_dynamic")
+            frappe.log_error(message=e, title="Exception: update_dynamics")
             return e
         else:
-            saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
+            saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", True)
             return response
 
 
@@ -207,20 +207,20 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
 
             # Data
             if len(data.get('value')) > 0:
-                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", doc_attemps=False)
+                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", False)
 
                 # Send code type account
                 id_bancario = data.get('value')[0].get('bit_datos_bancariosid')
                 update_banking_dato(beneficiary, dynamics_conf, token, id_bancario)
             else:
-                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", doc_attemps=False)   
+                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", False)   
 
             return 1
     except Exception as e:
         frappe.log_error(message=e, title="Exception: get_bank_account")
-        raise e 
+        return e
     else:
-        saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", doc_attemps=False)
+        saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", False)
         return response
 
 
@@ -245,18 +245,19 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
     try:
         response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
         if response:
-            saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", doc_attemps=False)
+            saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
             return 1
     except Exception as e:
         frappe.log_error(message=e, title="Exception: update_banking_dato")
-        raise e 
+        return e
     else:
-        saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", doc_attemps=False)
+        saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
         return response
 
 
 def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 
+    # docAttach = frappe.db.get_value("File", {"attached_to_name": beneficiary.name})
     doc_attach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
 
     if doc_attach:
@@ -287,28 +288,21 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
         try:
             response = requests.request("POST", endpoint, data=all_data, headers=headers)
             if response:
-                saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach")
+                saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach", False)
                 pass
                 return 1
         except Exception as e:
             frappe.log_error(message=e, title="Exception: sendDocumentDynamics")
-            raise e 
+            return e 
         else:
-            saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach")
+            saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach", False)
             return response
     
 
-def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code, doc_request, doc_response, doc_attemps=False):
-    if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
-        dynamics_attemps = frappe.db.get_value("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}, '*', as_dict=1)
+def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code, doc_request, doc_response, is_new_register):
 
-        if doc_attemps:
-            frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "attemps_num", dynamics_attemps.attemps_num + 1)
+    if is_new_register:
 
-        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_status_code, response.status_code)
-        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_request, request)
-        frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_response, response.content)
-    else:
         ja = frappe.get_doc({
             "doctype":"qp_PO_DynamicsAttemps", 
             "parent": beneficiary.name, 
@@ -318,9 +312,23 @@ def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code,
             doc_status_code: response.status_code,
             doc_request: request,
             doc_response: response.content
-        })
+            })
 
         ja.insert()
+
+    else:
+        
+        if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
+            dynamics_attemps = frappe.db.sql("""
+                                SELECT * 
+                                FROM `tabqp_PO_DynamicsAttemps` dy 
+                                order by dy.creation desc 
+                                limit 1;
+                                """, values={"parent": beneficiary.name}, as_dict=1)
+
+            frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps[0].name, doc_status_code, response.status_code)
+            frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps[0].name, doc_request, request)
+            frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps[0].name, doc_response, response.content)
 
     frappe.db.commit()
 
@@ -339,7 +347,8 @@ def isBoolean(field):
         return False
     else:
         return True
-    
+
+
 def extFile(extension):
     if extension == "png":
         return "image/png"

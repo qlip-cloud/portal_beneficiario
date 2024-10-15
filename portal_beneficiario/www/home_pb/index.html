@@ -43,7 +43,7 @@
                             <option></option>
                             {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_code asc') %}
                             {% for c in co %}
-                                <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country %} selected {% endif %}>{{ c.co_name }}</option>
+                                <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country %} selected {% endif %}>{{ c.co_name.upper() }}</option>
                             {% endfor %}
                         </select>
                     </div>
