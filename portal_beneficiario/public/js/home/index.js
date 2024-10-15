@@ -403,11 +403,10 @@ function getRetrieval(){
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
-        console.log("Success Jumio - getRetrieval -> sendDynamics");
         sendDynamics();
     }).fail(function(r){
-        console.log("Fail Send Dynamics" + r);
-      });
+        console.log(r);
+    });
 }
 
 function sendDynamics(){
@@ -416,9 +415,9 @@ function sendDynamics(){
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         async: false
       }).done(function(r) {
-        console.log("Success Dynamics");
+
       }).fail(function(r){
-        console.log("Fail process Dynamics" + r);
+        console.log(r);
       }); 
 }
 
@@ -443,7 +442,6 @@ function validatePositiveNumbers(element){
         this.value = val.replace(/\D|\-/,'');
     });
 }
-
 
 function getCities(value, field, isCity) {
     
