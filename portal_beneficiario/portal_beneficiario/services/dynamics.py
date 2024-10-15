@@ -177,9 +177,10 @@ def call_dynamic():
                 get_bank_account(beneficiary_data, dynamic_cnf, api_token, beneficiary_data.id_dynamics, beneficiary_data.account_number[-4:])
                 return 1
         except Exception as e:
-            raise e 
+            frappe.log_error(message=e, title="Exc Envio a Dynamics: call_dynamics")
             return e
         else:
+            frappe.log_error(message=response, title="Envio a Dynamics: call_dynamics")
             saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
             return response
 
@@ -211,8 +212,10 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
 
             return 1
     except Exception as e:
+        frappe.log_error(message=e, title="Exc Envio a Dynamics: get_bank_account")
         raise e 
     else:
+        frappe.log_error(message=response, title="Envio a Dynamics: get_bank_account")
         saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", doc_attemps=False)
         return response
 
