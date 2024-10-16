@@ -97,7 +97,6 @@ def call_dynamic():
         data_position = beneficiary_data.position[0:100]
         data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
         data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_undate is not None else ''
-        
         data_date_now = datetime.now()
 
         data = {
