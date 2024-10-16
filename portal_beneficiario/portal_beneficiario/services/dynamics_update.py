@@ -58,8 +58,10 @@ def update_dynamics(**args):
 
     if document_id_qlip != beneficiary_data.document_number:
         score = 100
+        notas_jumio = "Documento diferente"
     else:
         score = int(beneficiary_data.jumio_points)
+        notas_jumio = beneficiary_data.jumio_rejects
 
     if dynamic_cnf and beneficiary_data:
 
@@ -98,15 +100,11 @@ def update_dynamics(**args):
         data_position = beneficiary_data.position[0:100]
         data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
         data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_undate is not None else ''
-        data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.birthday is not None else ''
-        data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.document_expedition_date is not None else ''
         data_date_now = datetime.now()
 
         data = {
             "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
             "bit_genero": gender_switch(beneficiary_data.gender),
-            "bit_fecha_nacimiento": data_birthday,
-            "bit_fecha_expedicion_documento": data_document_expedition_date,
             "bit_tipo_de_documento": data_document_type,
             "bit_numero_documento_jumio": beneficiary_data.document_number,
             "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
@@ -125,7 +123,7 @@ def update_dynamics(**args):
             "bit_patrimonio_nuevo":beneficiary_data.patrimony,
             "bit_origendelosrecursosarecibir": beneficiary_data.source_fund, 
             "bit_score_jumio": score,
-            "bit_notas_jumio": beneficiary_data.jumio_rejects,
+            "bit_notas_jumio": notas_jumio,
             "bit_nada": data_business,
             "bit_sectorindustrial": data_industrial_sector,
             "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
@@ -135,6 +133,14 @@ def update_dynamics(**args):
         }
 
         # Data Empty
+        if beneficiary_data.birthday:
+            data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d %H:%M:%S")
+            data["bit_fecha_nacimiento"] = data_birthday
+
+        if beneficiary_data.document_expedition_date:
+            data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S")
+            data["bit_fecha_expedicion_documento"] = data_document_expedition_date
+
         if data_position:
             data["bit_cargo"] = ''.join(data_position)
 
