@@ -28,6 +28,11 @@ nav{
     border-right: 1px solid #707070;
 }
 
+.l-help {
+    position: absolute;
+    bottom: 0;
+}
+
 .right{
     height: 100%;
     padding:0;
