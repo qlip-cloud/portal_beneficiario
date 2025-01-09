@@ -76,14 +76,17 @@ def call_dynamic():
             document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
             data_document_type = document_type.do_code
 
+        data_city = ""
         if beneficiary_data.city:
             get_city = frappe.db.get_value('qp_PO_City', {'ci_code': beneficiary_data.city}, '*', as_dict=1)
             data_city = get_city.ci_guid_code
 
+        data_place_birth = ""
         if beneficiary_data.country_of_birth:
             get_country = frappe.db.get_value('qp_PO_Country', {'co_code': beneficiary_data.country_of_birth}, '*', as_dict=1)
             data_place_birth = get_country.co_guid_code
         
+        data_city_birth = ""
         if beneficiary_data.city_of_birth:
             get_city = frappe.db.get_value('qp_PO_City', {'ci_code': beneficiary_data.city_of_birth}, '*', as_dict=1)
             data_city_birth = get_city.ci_guid_code
