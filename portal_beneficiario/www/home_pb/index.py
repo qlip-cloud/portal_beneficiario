@@ -4,10 +4,12 @@ import json
 from frappe import _
 import frappe.sessions
 from six import string_types
-from frappe.utils import getdate
+from frappe.utils import getdate, now
 
 
 def get_context(context):
+
+    context.no_cache = 1
 
     if frappe.session.user == "Guest":
         frappe.throw(_("Log in to access this page."), frappe.PermissionError)
@@ -30,9 +32,15 @@ def get_context(context):
     # TODO: Find better fix
     boot_json = re.sub(r"</script\>", "", boot_json)
 
+    print(f"{now()} - frappe.session Stonex-Qlip: {frappe.session.user}")
+
     user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
 
+    print(f"{now()} - user Stonex-Qlip: {user}")
+
     beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+
+    print(f"{now()} - beneficiary_data Stonex-Qlip: {beneficiary_data}")
 
     id_contact = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
     if id_contact:
