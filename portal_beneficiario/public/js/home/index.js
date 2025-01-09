@@ -410,7 +410,6 @@ function getRetrieval(){
 }
 
 function sendDynamics(){
-    console.log("Llamando a Dynamics");
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         async: false
