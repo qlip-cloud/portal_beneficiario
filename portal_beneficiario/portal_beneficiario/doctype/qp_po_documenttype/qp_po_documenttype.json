@@ -13,6 +13,8 @@
   {
    "fieldname": "do_code",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Code"
   },
   {
@@ -26,7 +28,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-26 11:35:30.822913",
+ "modified": "2024-10-30 13:14:57.826296",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DocumentType",

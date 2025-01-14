@@ -23,171 +23,188 @@ def get_jumio_accesstoken(jumio_cnf):
         data = 'grant_type=client_credentials'
 
         response=None
+        
         try:
             response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
+             frappe.log_error(title='Excepcion: get_jumio_accesstoken()', message=f'Error en peticion en peticion de token Jumio {endpoint}: {e}')
              raise e 
         else:
             return response.get("access_token")
 
 @frappe.whitelist()
 def get_jumio_iframe():
+
+    try:
     
-    jumio_cnf = frappe.db.get_list("qp_PO_JumioConfig", fields=["*"])[0]
+        jumio_cnf = frappe.db.get_list("qp_PO_JumioConfig", fields=["*"])[0]
 
-    user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
+        user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
 
-    beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
-    
-    if jumio_cnf and beneficiary_data:
+        beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+        
+        if jumio_cnf and beneficiary_data:
 
-        if beneficiary_data.jumio_status != "PROCESSED":
-            api_token = get_jumio_accesstoken(jumio_cnf)
-            endpoint = jumio_cnf.account_url
-            headers = {
-                "Authorization": f"Bearer {api_token}",
-                "Content-Type": "application/json"
-                }
+            if beneficiary_data.jumio_status != "PROCESSED":
+                api_token = get_jumio_accesstoken(jumio_cnf)
+                endpoint = jumio_cnf.account_url
+                headers = {
+                    "Authorization": f"Bearer {api_token}",
+                    "Content-Type": "application/json"
+                    }
 
-            data = json.dumps({
-                "customerInternalReference":beneficiary_data.id_dynamics,
-                "workflowDefinition":{
-                    "key": jumio_cnf.id_jumio
-                }
-            })
+                data = json.dumps({
+                    "customerInternalReference":beneficiary_data.id_dynamics,
+                    "workflowDefinition":{
+                        "key": jumio_cnf.id_jumio
+                    }
+                })
 
-            response=None
+                response=None
 
-            try:
-                response = make_post_request(endpoint, data=data, headers=headers)
+                try:
+                    response = make_post_request(endpoint, data=data, headers=headers)
 
-                if response:
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", response.get("workflowExecution").get("id"))
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_account", response.get("account").get("id"))
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_iframe", response.get("web").get("href"))
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 0)
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
-                    frappe.db.commit()
-            except Exception as e:
-                raise e 
+                    if response:
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", response.get("workflowExecution").get("id"))
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_account", response.get("account").get("id"))
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_iframe", response.get("web").get("href"))
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 0)
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
+                        frappe.db.commit()
+                except Exception as e:
+                    frappe.log_error(title='Excepcion: get_jumio_iframe()', message=f'Error en peticion a iframe Jumio {user.email}: {e}')
+                    raise e 
+                else:
+                    return response
             else:
-                return response
-        else:
-            return {"web":{"href":beneficiary_data.jumio_iframe}}
+                return {"web":{"href":beneficiary_data.jumio_iframe}}
+    
+    except Exception as e:
+        frappe.log_error(title='Excepcion: get_jumio_iframe()', message=f'Error cargando datos de Iframe Jumio {user.email}: {e}')
+        raise e
         
 @frappe.whitelist()
 def get_jumio_retrieval():
+
+    try:
     
-    jumio_cnf = frappe.db.get_list("qp_PO_JumioConfig", fields=["*"])[0]
+        jumio_cnf = frappe.db.get_list("qp_PO_JumioConfig", fields=["*"])[0]
 
-    user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
+        user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
 
-    beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+        beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
 
-    rejects_list = []
-    rejects_string = ""
-    data_usability = dict()
+        rejects_list = []
+        rejects_string = ""
+        data_usability = dict()
 
-    if jumio_cnf and beneficiary_data:
+        if jumio_cnf and beneficiary_data:
 
-        api_token = get_jumio_accesstoken(jumio_cnf)
-        endpoint = jumio_cnf.retrieval_url
-        endpoint = endpoint.format(beneficiary_data.jumio_account, beneficiary_data.jumio_workflowexecution)
-        endpoint_file = f'{endpoint}/generate'
-        headers = {"Authorization": f"Bearer {api_token}"}
-        data = {}
-        
-        response=None
-
-        try:
-            response = make_get_request(endpoint, data=data, headers=headers)
-            response_file = requests.get(endpoint_file, data=data, headers=headers)
+            api_token = get_jumio_accesstoken(jumio_cnf)
+            endpoint = jumio_cnf.retrieval_url
+            endpoint = endpoint.format(beneficiary_data.jumio_account, beneficiary_data.jumio_workflowexecution)
+            endpoint_file = f'{endpoint}/generate'
+            headers = {"Authorization": f"Bearer {api_token}"}
+            data = {}
             
-            # File Jumio
-            data_file = ""
-            if response_file:
-                data_file = response_file.json()
+            response=None
 
-            if response:
+            try:
+                response = make_get_request(endpoint, data=data, headers=headers)
+                response_file = requests.get(endpoint_file, data=data, headers=headers)
+                
+                # File Jumio
+                data_file = ""
+                if response_file:
+                    data_file = response_file.json()
 
-                # Note
-                data_notes = dict()
-                extraction = response.get("capabilities").get("extraction")[0].get("decision").get("type")
-                similarity = response.get("capabilities").get("similarity")[0].get("decision").get("type")
-                liveness = response.get("capabilities").get("liveness")[0].get("decision").get("type")
-                dataChecks = response.get("capabilities").get("dataChecks")[0].get("decision").get("type")
-                usability = response.get("capabilities").get("usability")
+                if response:
 
-                data_notes["extraction"] = extraction
-                data_notes["similarity"] = similarity
-                data_notes["liveness"] = liveness
-                data_notes["dataChecks"] = dataChecks
+                    # Note
+                    data_notes = dict()
+                    extraction = response.get("capabilities").get("extraction")[0].get("decision").get("type")
+                    similarity = response.get("capabilities").get("similarity")[0].get("decision").get("type")
+                    liveness = response.get("capabilities").get("liveness")[0].get("decision").get("type")
+                    dataChecks = response.get("capabilities").get("dataChecks")[0].get("decision").get("type")
+                    usability = response.get("capabilities").get("usability")
 
-                for item in data_notes:
-                    reject_string = get_validation_rejected(item, constantes.VALUE_REJECTS, data_notes)                    
-                    if reject_string:
-                        rejects_list.append(reject_string)
+                    data_notes["extraction"] = extraction
+                    data_notes["similarity"] = similarity
+                    data_notes["liveness"] = liveness
+                    data_notes["dataChecks"] = dataChecks
+
+                    for item in data_notes:
+                        reject_string = get_validation_rejected(item, constantes.VALUE_REJECTS, data_notes)                    
+                        if reject_string:
+                            rejects_list.append(reject_string)
 
 
-                # Usability
-                for item in usability:
-                    data_usability[item.get("credentials")[0].get("category")] = item.get("decision").get("type")
-                    
-                # Validate dict
-                for item in data_usability:
-                    reject_string = get_validation_rejected(item, constantes.VALUE_REJECTS, data_usability)
-
-                    if reject_string:
-                        rejects_list.append(f'usability:{reject_string}')
+                    # Usability
+                    for item in usability:
+                        data_usability[item.get("credentials")[0].get("category")] = item.get("decision").get("type")
                         
-                # Chain
-                rejects_string = ";".join(rejects_list)
+                    # Validate dict
+                    for item in data_usability:
+                        reject_string = get_validation_rejected(item, constantes.VALUE_REJECTS, data_usability)
 
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_points", response.get("decision").get("risk").get("score"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_rejects", rejects_string)
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_file", data_file.get("presignedUrl"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "be_name", response.get("capabilities").get("extraction")[0].get("data").get("firstName"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "surname", response.get("capabilities").get("extraction")[0].get("data").get("lastName"))
-                
-                if response.get("capabilities").get("extraction")[0].get("data").get("type") == constantes.TYPE_DOCUMENT:
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_type", response.get("capabilities").get("extraction")[0].get("data").get("subType"))
-                
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_number", response.get("capabilities").get("extraction")[0].get("data").get("documentNumber"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "gender", response.get("capabilities").get("extraction")[0].get("data").get("gender"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "birthday", response.get("capabilities").get("extraction")[0].get("data").get("dateOfBirth"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_city", response.get("capabilities").get("extraction")[0].get("data").get("placeOfBirth"))
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_country", response.get("capabilities").get("extraction")[0].get("data").get("issuingCountry"))
-                
-                if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
-                    jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "query", endpoint if endpoint else json.dumps(data, default=json_handler))
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "response", json.dumps(response, default=json_handler))
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_status", response_file.status_code)
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_request", endpoint_file)
-                    frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_response", response_file.content)
-                else:
-                    ja = frappe.get_doc({
-                        "doctype":"qp_PO_JumioAttemps", 
-                        "parent": beneficiary_data.name, 
-                        "parentfield":"jumio_attemps",
-                        "parenttype":"qp_PO_Beneficiario", 
-                        "attemps_num":0,
-                        "query":endpoint if endpoint else json.dumps(data, default=json_handler),
-                        "response":json.dumps(response, default=json_handler),
-                        "jumio_file_status": response_file.status_code,
-                        "jumio_file_request": endpoint_file,
-                        "jumio_file_response": response_file.content
-                    })
+                        if reject_string:
+                            rejects_list.append(f'usability:{reject_string}')
+                            
+                    # Chain
+                    rejects_string = ";".join(rejects_list)
 
-                    ja.insert()
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_points", response.get("decision").get("risk").get("score"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_rejects", rejects_string)
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_file", data_file.get("presignedUrl"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "be_name", response.get("capabilities").get("extraction")[0].get("data").get("firstName"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "surname", response.get("capabilities").get("extraction")[0].get("data").get("lastName"))
+                    
+                    if response.get("capabilities").get("extraction")[0].get("data").get("type") == constantes.TYPE_DOCUMENT:
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_type", response.get("capabilities").get("extraction")[0].get("data").get("subType"))
+                    
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_number", response.get("capabilities").get("extraction")[0].get("data").get("documentNumber"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "gender", response.get("capabilities").get("extraction")[0].get("data").get("gender"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "birthday", response.get("capabilities").get("extraction")[0].get("data").get("dateOfBirth"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_city", response.get("capabilities").get("extraction")[0].get("data").get("placeOfBirth"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_country", response.get("capabilities").get("extraction")[0].get("data").get("issuingCountry"))
+                    
+                    if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
+                        jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
+                        frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
+                        frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "query", endpoint if endpoint else json.dumps(data, default=json_handler))
+                        frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "response", json.dumps(response, default=json_handler))
+                        frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_status", response_file.status_code)
+                        frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_request", endpoint_file)
+                        frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_response", response_file.content)
+                    else:
+                        ja = frappe.get_doc({
+                            "doctype":"qp_PO_JumioAttemps", 
+                            "parent": beneficiary_data.name, 
+                            "parentfield":"jumio_attemps",
+                            "parenttype":"qp_PO_Beneficiario", 
+                            "attemps_num":0,
+                            "query":endpoint if endpoint else json.dumps(data, default=json_handler),
+                            "response":json.dumps(response, default=json_handler),
+                            "jumio_file_status": response_file.status_code,
+                            "jumio_file_request": endpoint_file,
+                            "jumio_file_response": response_file.content
+                        })
 
-                frappe.db.commit()
-        except Exception as e:
-            raise e 
-        else:
-            return response
+                        ja.insert()
+
+                    frappe.db.commit()
+            
+            except Exception as e:
+                frappe.log_error(title='Excepcion en get_jumio_retrieval()', message=f'get_jumio_retrieval() - Error guardando datos de retrieval del beneficiario {user.email}: {e}')
+                raise e 
+            else:
+                return response
+    
+    except Exception as ex:
+        frappe.log_error(title='Excepcion en get_jumio_retrieval()', message=f'get_jumio_retrieval() - Excepcion en metodo: {e}')
+        raise ex
 
 
 @frappe.whitelist(allow_guest=True)

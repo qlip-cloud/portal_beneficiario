@@ -25,11 +25,12 @@ def get_dynamic_accesstoken(dynamic_cnf):
         data = f'grant_type=client_credentials&client_id={dynamic_cnf.client_id}&client_secret={dynamic_cnf.client_secret}&resource={quote_plus(dynamic_cnf.dynamic_resource_url)}'
 
         response=None
+        
         try:
             response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
-            frappe.log_error(message=e, title="Exception: get_dynamic_accesstoken")
-            return e 
+            frappe.log_error(title="Exception en get_dynamic_accesstoken", message=f'get_dynamic_accesstoken() - Error obteniedo token {e}')
+            raise e
         else:
             return response.get("access_token")
       
@@ -172,10 +173,12 @@ def update_dynamics(**args):
         response=None
         try:
             response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
-            send_address = requests.request("PATCH", endpoint, data=json.dumps(data_address), headers=headers)
 
-            if send_address:
-                pass
+
+            try:
+                send_address = requests.request("PATCH", endpoint, data=json.dumps(data_address), headers=headers)
+            except Exception as exe:
+                frappe.log_error(title='Excepcion en send_address', message=f'send_address - Error guardando direccion: {exe}')
             
             if response:
                 saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", True)
@@ -192,7 +195,7 @@ def update_dynamics(**args):
             frappe.log_error(message=e, title="Exception: update_dynamics")
             return e
         else:
-            saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", True)
+            print(f'Envio exitoso a dynamics: {response}')
             return response
 
 

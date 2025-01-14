@@ -81,7 +81,7 @@ $( document ).ready(function() {
                     }
         
                 } else {
-                    alert("Sistema en mantenimiento, disculpe las molestias ocasionadas.");
+                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
                 } 
             });
 
@@ -281,6 +281,9 @@ $( document ).ready(function() {
                 }
 
 
+          })
+          .fail(function(e){
+            alert("Error en el sistema, por favor contactar al Administrador. Error 10004");
           });  
     });
 
@@ -356,9 +359,12 @@ function callJumio(beneficiary) {
                 $('#messageBox').removeClass('hidden')
                 checkStatus()
             }else{
-                alert("Error de comunicación con Jumio");
+                alert("Error en el sistema, por favor contactar al Administrador. Error 10000");
             }
            
+      }).fail(function(e){
+        alert("Error en el sistema, por favor contactar al Administrador. Error 10006");
+        console.log("Error en el sistema, por favor contactar al Administrador. Error 10006", e);
       });
 }
 
@@ -391,6 +397,9 @@ function checkStatus(){
                     $('#back').removeAttr('disabled');
                     $('#messageBox').addClass('hidden')
                 }
+          }).fail(function(ex){
+            alert("Error en el sistema, por favor contactar al Administrador. Error 10007");
+            console.log(ex);
           })
 
     }, 20000);
@@ -404,8 +413,9 @@ function getRetrieval(){
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
         sendDynamics();
-    }).fail(function(r){
-        console.log(r);
+    }).fail(function(ex){
+        alert("Error en el sistema, por favor contactar al Administrador. Error 10001");
+        console.log(ex);
     });
 }
 
@@ -413,11 +423,14 @@ function sendDynamics(){
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         async: false
-      }).done(function(r) {
-
-      }).fail(function(r){
-        console.log(r);
-      }); 
+     
+    }).done(function(r) {
+        console.log('Enviado data a Dynamics', r);
+   
+    }).fail(function(ex){
+        alert("Error en el sistema, por favor contactar al Administrador. Error 10002");
+        console.log(ex);
+    }); 
 }
 
 $('.nav-tabs').on('click', 'li', function() {
@@ -461,7 +474,7 @@ function getCities(value, field, isCity) {
             }
 
         } else {
-            alert("Sistema en mantenimiento, disculpe las molestias ocasionadas.");
+            alert("Error en el sistema, por favor contactar al Administrador. Error 10003");
         } 
     });
 }
