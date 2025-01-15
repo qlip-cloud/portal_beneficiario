@@ -14,10 +14,6 @@
   {
    "fieldname": "co_code",
    "fieldtype": "Data",
-   "in_global_search": 1,
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
    "label": "Code ISO",
    "unique": 1
   },
@@ -31,14 +27,13 @@
    "fieldtype": "Data",
    "in_global_search": 1,
    "in_list_view": 1,
-   "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Code Guid Country"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-01 11:20:07.494268",
+ "modified": "2024-10-28 18:13:57.726041",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Country",
