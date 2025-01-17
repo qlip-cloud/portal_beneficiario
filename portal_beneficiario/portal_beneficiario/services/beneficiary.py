@@ -16,6 +16,8 @@ def save_beneficiary(**args):
 
         if b:
             try:
+                print(echo)
+
                 b.phone = args.get('phone')
                 b.nationality = args.get('nationality').upper()
                 b.address = args.get('address').upper()
@@ -75,7 +77,7 @@ def save_beneficiary(**args):
                 
                 b.save()
                 frappe.db.commit()
-                
+
                 frappe.log_error(title='Commit de save_beneficiary: save:user', message=f'{b}')
                 
                 return b
