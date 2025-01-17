@@ -10,6 +10,7 @@ from . import constantes
 @frappe.whitelist()
 def save_beneficiary(**args):
     #Se procede a guardar el beneficiario
+    frappe.log_error(title='Inicio de proceso en save_beneficiary()', message='')
     try:
         b = frappe.get_doc('qp_PO_Beneficiario', args.get('name'))
 
@@ -76,13 +77,14 @@ def save_beneficiary(**args):
         else:
             frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error Beneficiario no coincide con el registrado: {b}')
             return False
-    
+
     except Exception as exe:
         frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error al intentar ingresar a saveBeneficiary: {exe}')
-    else:
-        frappe.log_error(title='Excepcion en save_beneficiary()', message='save_beneficiary() - Error al intentar ingresar a saveBeneficiary')
+    finally:
+        frappe.log_error(title='Finally save_beneficiary()', message='')
 
-
+    frappe.log_error(title='Fin de proceso en save_beneficiary()', message='')
+        
 @frappe.whitelist()
 def get_status():
     user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
