@@ -16,8 +16,6 @@ def save_beneficiary(**args):
 
         if b:
             try:
-                print(echo)
-
                 b.phone = args.get('phone')
                 b.nationality = args.get('nationality').upper()
                 b.address = args.get('address').upper()
