@@ -10,72 +10,84 @@ from . import constantes
 @frappe.whitelist()
 def save_beneficiary(**args):
     #Se procede a guardar el beneficiario
-    b = frappe.get_doc('qp_PO_Beneficiario', args.get('name'))
+    frappe.log_error(title='Inicio de proceso en save_beneficiary()', message='')
+    try:
+        b = frappe.get_doc('qp_PO_Beneficiario', args.get('name'))
 
-    if b:
-        try:
-            b.phone = args.get('phone')
-            b.nationality = args.get('nationality').upper()
-            b.address = args.get('address').upper()
-            b.country = args.get('country')
-            b.city = args.get('city').upper()
-            b.department = args.get('department')
-            b.country_of_birth = args.get('country_birth')
-            b.city_of_birth = args.get('city_birth').upper()
-            b.business_activity = args.get('business_type')
+        if b:
+            try:
+                b.phone = args.get('phone')
+                b.nationality = args.get('nationality').upper()
+                b.address = args.get('address').upper()
+                b.country = args.get('country')
+                b.city = args.get('city').upper()
+                b.department = args.get('department')
+                b.country_of_birth = args.get('country_birth')
+                b.city_of_birth = args.get('city_birth').upper()
+                b.business_activity = args.get('business_type')
 
-            # Economic validations
-            if args.get('business_type') == constantes.CODIGO_INDEPENDIENTE:
-                b.economic_activity = args.get('business') 
-            elif args.get('business_type') == constantes.CODIGO_EMPLEADO:
-                b.economic_activity = constantes.CODIGO_ASALARIADO
+                # Economic validations
+                if args.get('business_type') == constantes.CODIGO_INDEPENDIENTE:
+                    b.economic_activity = args.get('business') 
+                elif args.get('business_type') == constantes.CODIGO_EMPLEADO:
+                    b.economic_activity = constantes.CODIGO_ASALARIADO
+                else:
+                    b.economic_activity = ""
+
+                if args.get('document_send') == "true":
+                    b.document_attach = 1
+
+                b.peps = args.get('pep')
+                # Peps validations
+                if int(args.get('pep')) == 1:
+                    b.position = args.get('pep_position').upper() if args.get('pep_position') else ""
+                    b.link_date = getdate(args.get('link_date')) if args.get('link_date') else ""
+                    b.link_undate = getdate(args.get('link_undate')) if args.get('link_undate') else ""
+                else:
+                    b.position = ""
+                    b.link_date = ""
+                    b.link_undate = ""
+                
+                b.peps_parent = args.get('fpep')
+                # Peps Family
+                if int(args.get('fpep')) == 1:
+                    b.parent_name = args.get('fpep_name').upper() if args.get('fpep_name') else ""
+                    b.parent_type = args.get('parent_type') if args.get('parent_type') else ""
+                else:
+                    b.parent_name = ""
+                    b.parent_type = ""
+
+                b.income =  args.get('in')
+                b.egress =  args.get('out')
+                b.assets = args.get('assets')
+                b.passive = args.get('passive')
+                b.data_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
+                b.authorization_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
+                b.email = args.get('email').upper()
+                b.source_fund = args.get('source_fund').upper()
+                b.account_type = args.get('type_account').upper()
+
+            except Exception as e:
+                frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error en datos del beneficiario: {e}')
+                return e
             else:
-                b.economic_activity = ""
+                frappe.log_error(title='Inicio de save_beneficiary: save:user', message='')
+                
+                b.save()
+                frappe.db.commit()
 
-            if args.get('document_send') == "true":
-                b.document_attach = 1
-
-            b.peps = args.get('pep')
-            # Peps validations
-            if int(args.get('pep')) == 1:
-                b.position = args.get('pep_position').upper() if args.get('pep_position') else ""
-                b.link_date = getdate(args.get('link_date')) if args.get('link_date') else ""
-                b.link_undate = getdate(args.get('link_undate')) if args.get('link_undate') else ""
-            else:
-                b.position = ""
-                b.link_date = ""
-                b.link_undate = ""
-            
-            b.peps_parent = args.get('fpep')
-            # Peps Family
-            if int(args.get('fpep')) == 1:
-                b.parent_name = args.get('fpep_name').upper() if args.get('fpep_name') else ""
-                b.parent_type = args.get('parent_type') if args.get('parent_type') else ""
-            else:
-                b.parent_name = ""
-                b.parent_type = ""
-
-            b.income =  args.get('in')
-            b.egress =  args.get('out')
-            b.assets = args.get('assets')
-            b.passive = args.get('passive')
-            b.data_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
-            b.authorization_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
-            b.email = args.get('email').upper()
-            b.source_fund = args.get('source_fund').upper()
-            b.account_type = args.get('type_account').upper()
-
-        except Exception as e:
-            frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error en datos del beneficiario: {e}')
-            return e
+                frappe.log_error(title='Commit de save_beneficiary: save:user', message=f'{b}')
+                
+                return b
         else:
-            b.save()
-            frappe.db.commit()
-            return b
-    else:
-        frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error Beneficiario no coincide con el registrado: {b}')
-        return False
+            frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error Beneficiario no coincide con el registrado: {b}')
+            return False
 
+    except Exception as exe:
+        frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error al intentar ingresar a saveBeneficiary: {exe}')
+    finally:
+        frappe.log_error(title='Finally save_beneficiary()', message='')
+        
 @frappe.whitelist()
 def get_status():
     user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
