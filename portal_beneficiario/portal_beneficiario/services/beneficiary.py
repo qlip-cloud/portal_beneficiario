@@ -73,7 +73,7 @@ def save_beneficiary(**args):
             else:
 
                 try:
-                    b.save(ignore_permissions=True)
+                    b.save()
                     frappe.db.commit()
                 except Exception as e:
                     frappe.log_error(title='Commit de save_beneficiary: save:user', message=f'{b}')
