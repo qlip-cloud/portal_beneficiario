@@ -71,8 +71,13 @@ def save_beneficiary(**args):
                 frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error en datos del beneficiario: {e}')
                 return e
             else:
+                frappe.log_error(title='Inicio de save_beneficiary: save:user', message='')
+                
                 b.save()
                 frappe.db.commit()
+                
+                frappe.log_error(title='Commit de save_beneficiary: save:user', message=f'{b}')
+                
                 return b
         else:
             frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error Beneficiario no coincide con el registrado: {b}')
@@ -82,8 +87,6 @@ def save_beneficiary(**args):
         frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error al intentar ingresar a saveBeneficiary: {exe}')
     finally:
         frappe.log_error(title='Finally save_beneficiary()', message='')
-
-    frappe.log_error(title='Fin de proceso en save_beneficiary()', message='')
         
 @frappe.whitelist()
 def get_status():
