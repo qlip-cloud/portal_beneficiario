@@ -255,14 +255,9 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
         response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
         if response:
             saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
-            return 1
     except Exception as e:
         frappe.log_error(message=e, title="Exception: update_banking_dato")
         return e
-    else:
-        saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
-        return response
-
 
 def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 
