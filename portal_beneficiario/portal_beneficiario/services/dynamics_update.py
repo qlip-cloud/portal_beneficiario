@@ -195,7 +195,6 @@ def update_dynamics(**args):
             frappe.log_error(message=e, title="Exception: update_dynamics")
             return e
         else:
-            print(f'Envio exitoso a dynamics: {response}')
             return response
 
 

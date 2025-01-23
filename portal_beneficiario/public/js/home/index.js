@@ -65,7 +65,7 @@ $( document ).ready(function() {
     // Set COL by Default
     if ($("#country").val() != ''){
         let code = $("#country").val();
-        console.log($('#department').val());
+        
         if($('#department').val() == '' || $('#department').val() == null){
             $('#department').removeAttr('disabled');
 

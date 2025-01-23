@@ -199,7 +199,6 @@ def call_dynamic():
             frappe.log_error(title='Excepcion en call_dynamic()', message=f'call_dynamic() - Error guardando en servicio dynamics: {e}')
             return e
         else:
-            print(f'Envio exitoso a dynamics: {response}')
             return response
 
 
