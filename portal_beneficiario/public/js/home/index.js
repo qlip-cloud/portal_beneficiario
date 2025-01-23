@@ -64,30 +64,32 @@ $( document ).ready(function() {
 
     // Set COL by Default
     if ($("#country").val() != ''){
-        
-        let code = $("#country").val()
-        $('#department').removeAttr('disabled');
+        let code = $("#country").val();
+        console.log($('#department').val());
+        if($('#department').val() == '' || $('#department').val() == null){
+            $('#department').removeAttr('disabled');
 
-        $.ajax({
-            url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
-            data: {"code":code},
-            dataType: 'json',
-            async: false
-        }).done(function(r) {
-            if(r.message){          
-                data = r.message;
-                
-                $("#department").empty();
-                $("#department").append("<option></option>");
-                
-                for (var key in data){
-                    $("#department").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
-                }
-    
-            } else {
-                alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
-            } 
-        });
+            $.ajax({
+                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
+                data: {"code":code},
+                dataType: 'json',
+                async: false
+            }).done(function(r) {
+                if(r.message){          
+                    data = r.message;
+                    
+                    $("#department").empty();
+                    $("#department").append("<option></option>");
+                    
+                    for (var key in data){
+                        $("#department").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
+                    }
+        
+                } else {
+                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
+                } 
+            });
+        }
     }
     //End Set COL by Default
 
