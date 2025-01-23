@@ -416,7 +416,7 @@ function checkStatus(){
                 if(r.message == "PROCESSED")
                 {
                     clearInterval(refreshIntervalId);
-                    $("#finish").removeAttr('disabled');
+                    $('#finish').removeAttr('disabled');
                     $('#basic_btn').removeClass('hidden');
                     $('#back').removeAttr('disabled');
                     $('#messageBox').addClass('hidden')
@@ -453,8 +453,8 @@ function getRetrieval(){
 function sendDynamics(){
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
-        async: false
-     
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
         console.log('Enviado data a Dynamics', r);
    
