@@ -60,9 +60,10 @@ $( document ).ready(function() {
         }
     });
 
+    // Cut the Options select to 30 characters
     setMaxOption();
 
-    // Set COL by Default
+    // Set COL id:country by Default
     if ($("#country").val() != ''){
         let code = $("#country").val();
         
@@ -91,6 +92,22 @@ $( document ).ready(function() {
             });
         }
     }
+
+    // Set COL id:country_birth by Default
+    if ($("#country_birth").val() != ''){
+        let code = $("#country_birth").val();
+        if($('#city_birth').val() == '' || $('#city_birth').val() == null){
+            $('#city_birth').removeAttr('disabled');
+            getCities(code, $('#city_birth'), 1);
+        }
+    }
+
+    // Set COL id:nationality by Default
+    if ($("#nationality").val() == ''){  
+        $('#nationality').removeAttr('disabled');
+        $('#nationality').val('colombiano');
+    }
+
     //End Set COL by Default
 
     $("#country").change(function (e) {
@@ -458,7 +475,7 @@ function sendDynamics(){
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
-        console.log('Enviado data a Dynamics', r);
+        console.log(r);
    
     }).fail(function(ex){
         alert("Error en el sistema, por favor contactar al Administrador. Error 10002");

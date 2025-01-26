@@ -92,7 +92,7 @@
                             <option></option>
                             {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_name asc') %}
                             {% for c in co %}
-                                <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country_of_birth %} selected {% endif %}>{{ c.co_name.upper() }}</option>                              
+                                <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country_of_birth %} selected {% endif %} {% if c.co_code == "46" %} selected {% endif %}>{{ c.co_name.upper() }}</option>                              
                             {% endfor %}
 
                         </select>
@@ -241,7 +241,7 @@
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
-                        <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number[-4:]}} es:</label>
+                        <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number}} es:</label>
                         <select id="type_account" name="type_account" class="form-control">
                             <option selected></option>
                             {% set act = frappe.get_all('qp_PO_AccountType', fields=['at_code', 'at_name'], order_by='at_code asc') %}
@@ -264,7 +264,7 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modal-finish">Stonex</h5>
+                            <h5 class="modal-title" id="modal-finish">StoneX</h5>
                             </button>
                         </div>
                         <div class="modal-body">
