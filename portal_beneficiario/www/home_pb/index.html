@@ -241,7 +241,7 @@
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
-                        <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} terminada en {{beneficiary_data.account_number}} es:</label>
+                        <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} número {{beneficiary_data.account_number}} es:</label>
                         <select id="type_account" name="type_account" class="form-control">
                             <option selected></option>
                             {% set act = frappe.get_all('qp_PO_AccountType', fields=['at_code', 'at_name'], order_by='at_code asc') %}
