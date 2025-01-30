@@ -10,6 +10,7 @@ import base64
 import requests
 from six import string_types, text_type
 from . import constantes
+from . import dynamics
 
 def get_jumio_accesstoken(jumio_cnf):
 
@@ -85,15 +86,18 @@ def get_jumio_iframe():
         raise e
         
 @frappe.whitelist()
-def get_jumio_retrieval():
+def get_jumio_retrieval(beneficiary_id):
+
+    # Asynchronous process will be handled
+    # user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
+    user = beneficiary_id # args.get('id') 
 
     try:
-    
         jumio_cnf = frappe.db.get_list("qp_PO_JumioConfig", fields=["*"])[0]
 
-        user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
-
-        beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+        # Asynchronous process will be handled
+        # beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+        beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', user, '*', as_dict=1)
 
         rejects_list = []
         rejects_string = ""
@@ -184,7 +188,7 @@ def get_jumio_retrieval():
                             "parent": beneficiary_data.name, 
                             "parentfield":"jumio_attemps",
                             "parenttype":"qp_PO_Beneficiario", 
-                            "attemps_num":0,
+                            "attemps_num":1,
                             "query":endpoint if endpoint else json.dumps(data, default=json_handler),
                             "response":json.dumps(response, default=json_handler),
                             "jumio_file_status": response_file.status_code,
@@ -197,26 +201,30 @@ def get_jumio_retrieval():
                     frappe.db.commit()
             
             except Exception as e:
-                frappe.log_error(title='Excepcion en get_jumio_retrieval()', message=f'get_jumio_retrieval() - Error guardando datos de retrieval del beneficiario {user.email}: {e}')
+                frappe.log_error(title='Excepcion en get_jumio_retrieval()', message=f'get_jumio_retrieval() - Error guardando datos de retrieval del beneficiario {beneficiary_data.email}: {e}')
                 raise e 
             else:
+                # Send Dynamics
+                dynamics.call_dynamic(user)
                 return response
     
     except Exception as ex:
-        frappe.log_error(title='Excepcion en get_jumio_retrieval()', message=f'get_jumio_retrieval() - Excepcion en metodo: {e}')
+        frappe.log_error(title='Excepcion en get_jumio_retrieval()', message=f'get_jumio_retrieval() - Excepcion en metodo: {ex}')
         raise ex
 
 
 @frappe.whitelist(allow_guest=True)
 def callback(**args):
-	#pack your parameters back into a dictionary
-
     beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'jumio_workflowExecution': args.get("workflowExecution").get("id"), "jumio_account":args.get("account").get("id")}, '*', as_dict=1)
     
     if beneficiary_data:
         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", args.get("workflowExecution").get("status"))
         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 1)
         frappe.db.commit()
+
+        # Retrieval Jumio - Asynchronous process
+        get_jumio_retrieval(beneficiary_data.name)
+
         return 0
     else:
         return 1
