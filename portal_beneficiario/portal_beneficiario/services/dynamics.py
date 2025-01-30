@@ -39,7 +39,7 @@ def call_dynamic(beneficiary_id):
 
     frappe.log_error(title='Inicio de proceso en call_dynamic()', message='')
     
-    dynamic_cnf = frappe.db.get_list("qp_PO_DynamicConfigs", fields=["*"])[0]
+    dynamic_cnf = frappe.db.get_all("qp_PO_DynamicConfigs", fields=["*"])[0]
 
     # Asynchronous process will be handled
     # user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
