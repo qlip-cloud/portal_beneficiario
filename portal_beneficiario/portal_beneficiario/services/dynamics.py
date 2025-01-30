@@ -188,7 +188,6 @@ def call_dynamic(beneficiary_id):
         response=None
         try:
             response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
-            print(response)
             
             try:
                 requests.request("PATCH", endpoint, data=json.dumps(data_address), headers=headers)
