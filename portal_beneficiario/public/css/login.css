@@ -228,6 +228,10 @@ body {
 
 }
 
+.tooltip-login, svg {
+    vertical-align: sub !important;
+}
+
 @media (max-width: 576px) {
 
     .principal-login {
