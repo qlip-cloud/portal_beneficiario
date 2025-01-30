@@ -432,14 +432,16 @@ function checkStatus(){
             contentType: 'application/json;charset=UTF-8',
           }).done(function(r) {
 
-                if(r.message == "PROCESSED")
+                if(r.message['status'] == "PROCESSED")
                 {
                     clearInterval(refreshIntervalId);
                     $('#finish').removeAttr('disabled');
                     $('#basic_btn').removeClass('hidden');
                     $('#back').removeAttr('disabled');
                     $('#messageBox').addClass('hidden')
-                    getRetrieval()
+                    
+                    // Asynchronous process will be handled
+                    // getRetrieval()
 
                 } else if(min >= 30){
                     clearInterval(refreshIntervalId);
@@ -455,28 +457,27 @@ function checkStatus(){
     }, 20000);
 }
 
-function getRetrieval(){
+function getRetrieval(beneficiary_id){
     
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.jumio.get_jumio_retrieval",
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
-        sendDynamics();
+        sendDynamics(beneficiary_id);
     }).fail(function(ex){
         alert("Error en el sistema, por favor contactar al Administrador. Error 10001");
         console.log(ex);
     });
 }
 
-function sendDynamics(){
+function sendDynamics(beneficiary_id){
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
         console.log(r);
-   
     }).fail(function(ex){
         alert("Error en el sistema, por favor contactar al Administrador. Error 10002");
         console.log(ex);
