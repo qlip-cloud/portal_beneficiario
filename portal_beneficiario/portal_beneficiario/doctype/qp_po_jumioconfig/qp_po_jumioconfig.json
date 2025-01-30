@@ -46,7 +46,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 20:31:24.329410",
+ "modified": "2025-01-29 20:48:44.998151",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_JumioConfig",
@@ -85,18 +85,6 @@
    "read": 1,
    "report": 1,
    "role": "Guest",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "All",
    "share": 1,
    "write": 1
   }

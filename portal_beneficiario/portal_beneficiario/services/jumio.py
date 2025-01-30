@@ -93,7 +93,7 @@ def get_jumio_retrieval(beneficiary_id):
     user = beneficiary_id # args.get('id') 
 
     try:
-        jumio_cnf = frappe.db.get_list("qp_PO_JumioConfig", fields=["*"])[0]
+        jumio_cnf = frappe.db.get_all("qp_PO_JumioConfig", fields=["*"])[0]
 
         # Asynchronous process will be handled
         # beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
