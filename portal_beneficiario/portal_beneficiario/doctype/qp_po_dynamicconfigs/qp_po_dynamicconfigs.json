@@ -58,7 +58,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 15:25:03.894435",
+ "modified": "2025-01-29 20:31:49.034483",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicConfigs",
@@ -94,7 +94,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Guest",
+   "role": "All",
    "share": 1,
    "write": 1
   }
