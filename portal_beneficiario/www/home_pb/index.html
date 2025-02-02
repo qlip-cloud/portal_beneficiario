@@ -146,7 +146,12 @@
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-8">
                         <div class="form-group form-check">
-                        <p data-toggle="tooltip" data-placement="bottom" title="Es una persona que desempeña o ha desempeñado funciones públicas a nivel nacional o en el extranjero o ejerce funciones directivas en una Organización Internacional.">¿Es usted una Persona Expuesta Políticamente (PEP)?</p>
+                        <p data-toggle="tooltip" data-placement="bottom" title="Es una persona que desempeña o ha desempeñado funciones públicas a nivel nacional o en el extranjero o ejerce funciones directivas en una Organización Internacional.">¿Es usted una Persona Expuesta Políticamente (PEP)?
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                            </svg>
+                        </p>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label" for="pepSi">Sí</label>
                             <input class="form-check-input ml-3" type="radio" name="pep" id="pepSi" value="1" {% if beneficiary_data.peps %} checked {% endif%}>
@@ -175,7 +180,12 @@
                 <div class="form-row right_menu">
                     <div class="col-md-8">
                         <div class="form-group form-check mt-3">
-                            <p data-toggle="tooltip" data-placement="bottom" title="(i) Personas con las que tengan sociedad conyugal, de hecho, o de derecho; (ii) Familiares hasta segundo grado de consanguinidad, primero afinidad y primero civil.">¿Posee vinculos familiares con una Persona Expuesta Políticamente?</p>
+                            <p data-toggle="tooltip" data-placement="bottom" title="(i) Personas con las que tengan sociedad conyugal, de hecho, o de derecho; (ii) Familiares hasta segundo grado de consanguinidad, primero afinidad y primero civil.">¿Posee vinculos familiares con una Persona Expuesta Políticamente?
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                </svg>
+                            </p>
                             <div class="form-check form-check-inline">
                                 <label class="form-check-label" for="fpepSi">Sí</label>
                                 <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepSi" value="1" {% if beneficiary_data.peps_parent %} checked {% endif%}>
@@ -241,7 +251,15 @@
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-4">
+                        <small id="tooltip-login" class="form-text text-start text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                            </svg>
+                            Estimado cliente, si la cuenta está errada, Favor Contactarse Con La Entidad (Gestion.Colombia@Stonex.Com ó al número +57 601 745 1351)
+                        </small>
                         <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} número {{beneficiary_data.account_number}} es:</label>
+
                         <select id="type_account" name="type_account" class="form-control">
                             <option selected></option>
                             {% set act = frappe.get_all('qp_PO_AccountType', fields=['at_code', 'at_name'], order_by='at_code asc') %}
