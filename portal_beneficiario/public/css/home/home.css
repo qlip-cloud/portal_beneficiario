@@ -13,7 +13,7 @@
 }
 
 body {
-    text-transform: capitalize;
+    text-transform: none;
     font-family: stonexFont !important;
     font-size: 15px;
 }
@@ -135,4 +135,8 @@ input[type="number"] {
     padding: 5px;
     display: inline-block;
     margin-left: 5px;
+}
+
+p, svg {
+    vertical-align: top !important;
 }
