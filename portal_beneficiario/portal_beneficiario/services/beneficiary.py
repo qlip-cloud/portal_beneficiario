@@ -94,8 +94,14 @@ def get_status():
     user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
 
     if user: 
-        beneficiary_status = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, 'jumio_status', as_dict=1)
-        return beneficiary_status.jumio_status
+        beneficiary_dict = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, ['jumio_status', 'name'], as_dict=1)
+
+        data_client = {
+            'mail': user.email,
+            'status': beneficiary_dict.jumio_status
+        }
+
+        return data_client
     else:
         frappe.log_error(title='Excepcion en get_status()', message=f"get_status()- Error accediendo al usuario logueado {frappe.session.user}:{user}")
         return False

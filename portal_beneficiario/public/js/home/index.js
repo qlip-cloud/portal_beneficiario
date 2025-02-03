@@ -60,6 +60,56 @@ $( document ).ready(function() {
         }
     });
 
+    // Cut the Options select to 30 characters
+    setMaxOption();
+
+    // Set COL id:country by Default
+    if ($("#country").val() != ''){
+        let code = $("#country").val();
+        
+        if($('#department').val() == '' || $('#department').val() == null){
+            $('#department').removeAttr('disabled');
+
+            $.ajax({
+                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
+                data: {"code":code},
+                dataType: 'json',
+                async: false
+            }).done(function(r) {
+                if(r.message){          
+                    data = r.message;
+                    
+                    $("#department").empty();
+                    $("#department").append("<option></option>");
+                    
+                    for (var key in data){
+                        $("#department").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
+                    }
+        
+                } else {
+                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
+                } 
+            });
+        }
+    }
+
+    // Set COL id:country_birth by Default
+    if ($("#country_birth").val() != ''){
+        let code = $("#country_birth").val();
+        if($('#city_birth').val() == '' || $('#city_birth').val() == null){
+            $('#city_birth').removeAttr('disabled');
+            getCities(code, $('#city_birth'), 1);
+        }
+    }
+
+    // Set COL id:nationality by Default
+    if ($("#nationality").val() == ''){  
+        $('#nationality').removeAttr('disabled');
+        $('#nationality').val('colombiano');
+    }
+
+    //End Set COL by Default
+
     $("#country").change(function (e) {
         if(this.value != '') {
             $('#department').removeAttr('disabled');
@@ -382,14 +432,16 @@ function checkStatus(){
             contentType: 'application/json;charset=UTF-8',
           }).done(function(r) {
 
-                if(r.message == "PROCESSED")
+                if(r.message['status'] == "PROCESSED")
                 {
                     clearInterval(refreshIntervalId);
-                    $("#finish").removeAttr('disabled');
+                    $('#finish').removeAttr('disabled');
                     $('#basic_btn').removeClass('hidden');
                     $('#back').removeAttr('disabled');
                     $('#messageBox').addClass('hidden')
-                    getRetrieval()
+                    
+                    // Asynchronous process will be handled
+                    // getRetrieval()
 
                 } else if(min >= 30){
                     clearInterval(refreshIntervalId);
@@ -405,28 +457,27 @@ function checkStatus(){
     }, 20000);
 }
 
-function getRetrieval(){
+function getRetrieval(beneficiary_id){
     
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.jumio.get_jumio_retrieval",
         dataType: 'json',
         contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
-        sendDynamics();
+        sendDynamics(beneficiary_id);
     }).fail(function(ex){
         alert("Error en el sistema, por favor contactar al Administrador. Error 10001");
         console.log(ex);
     });
 }
 
-function sendDynamics(){
+function sendDynamics(beneficiary_id){
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
-        async: false
-     
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8',
     }).done(function(r) {
-        console.log('Enviado data a Dynamics', r);
-   
+        console.log(r);
     }).fail(function(ex){
         alert("Error en el sistema, por favor contactar al Administrador. Error 10002");
         console.log(ex);
@@ -477,4 +528,14 @@ function getCities(value, field, isCity) {
             alert("Error en el sistema, por favor contactar al Administrador. Error 10003");
         } 
     });
+}
+
+function setMaxOption() {
+    var options = document.getElementsByTagName("option");
+    var limite = 30;
+    
+    for(var i = 0; i < options.length; i++){
+      options[i].setAttribute('title', options[i].innerText);
+      options[i].innerText = options[i].innerText.slice(0, limite);
+    }
 }

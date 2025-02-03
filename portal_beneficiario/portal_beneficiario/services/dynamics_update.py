@@ -99,8 +99,8 @@ def update_dynamics(**args):
 
         data_parent_name = beneficiary_data.parent_name[0:100] if beneficiary_data.peps_parent and beneficiary_data.parent_name is not None else ''
         data_position = beneficiary_data.position[0:100]
-        data_date = beneficiary_data.link_date.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_date is not None else ''    
-        data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d %H:%M:%S") if beneficiary_data.link_undate is not None else ''
+        data_date = beneficiary_data.link_date.strftime("%Y-%m-%d") if beneficiary_data.link_date is not None else ''    
+        data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d") if beneficiary_data.link_undate is not None else ''
         data_date_now = datetime.now()
 
         data = {
@@ -127,7 +127,7 @@ def update_dynamics(**args):
             "bit_notas_jumio": notas_jumio,
             "bit_nada": data_business,
             "bit_sectorindustrial": data_industrial_sector,
-            "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d %H:%M:%S"),
+            "bit_fechacorteinformacionfinanciera": data_date_now.strftime("%Y-%m-%d"),
             "bit_canal": 913610001,
             "bit_documento_identificacion": beneficiary_data.jumio_file,
             "bit_formulario_vinculacion": beneficiary_data.jumio_file
@@ -135,11 +135,11 @@ def update_dynamics(**args):
 
         # Data Empty
         if beneficiary_data.birthday:
-            data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d %H:%M:%S")
+            data_birthday = beneficiary_data.birthday.strftime("%Y-%m-%d")
             data["bit_fecha_nacimiento"] = data_birthday
 
         if beneficiary_data.document_expedition_date:
-            data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d %H:%M:%S")
+            data_document_expedition_date = beneficiary_data.document_expedition_date.strftime("%Y-%m-%d")
             data["bit_fecha_expedicion_documento"] = data_document_expedition_date
 
         if data_position:
@@ -178,7 +178,7 @@ def update_dynamics(**args):
             try:
                 send_address = requests.request("PATCH", endpoint, data=json.dumps(data_address), headers=headers)
             except Exception as exe:
-                frappe.log_error(title='Excepcion en send_address', message=f'send_address - Error guardando direccion: {exe}')
+                frappe.log_error(title='Excepcion en actualiza cuenta', message=f'call_dynamics() - Error actualizando cuenta: {exe}')
             
             if response:
                 saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", True)
@@ -188,14 +188,15 @@ def update_dynamics(**args):
                 
                 # Send Attach
                 if beneficiary_data.document_attach:
-                    sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)   
+                    sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)
+            else:
+                saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
                 
                 return 1
         except Exception as e:
             frappe.log_error(message=e, title="Exception: update_dynamics")
             return e
         else:
-            print(f'Envio exitoso a dynamics: {response}')
             return response
 
 
@@ -255,14 +256,9 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
         response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
         if response:
             saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
-            return 1
     except Exception as e:
         frappe.log_error(message=e, title="Exception: update_banking_dato")
         return e
-    else:
-        saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", False)
-        return response
-
 
 def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 
