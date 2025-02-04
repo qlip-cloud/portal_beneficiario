@@ -85,6 +85,7 @@ def call_dynamic(beneficiary_id):
                     "Content-Type": "application/json"
                 }
         
+        data_document_type = ""
         if beneficiary_data.document_type:
             document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
             data_document_type = document_type.do_code
