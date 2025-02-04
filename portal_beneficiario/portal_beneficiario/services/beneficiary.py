@@ -17,13 +17,13 @@ def save_beneficiary(**args):
         if b:
             try:
                 b.phone = args.get('phone')
-                b.nationality = args.get('nationality').upper()
-                b.address = args.get('address').upper()
+                b.nationality = args.get('nationality').upper() if args.get('nationality') else ""
+                b.address = args.get('address').upper() if args.get('address') else ""
                 b.country = args.get('country')
-                b.city = args.get('city').upper()
+                b.city = args.get('city').upper() if args.get('city') else ""
                 b.department = args.get('department')
                 b.country_of_birth = args.get('country_birth')
-                b.city_of_birth = args.get('city_birth').upper()
+                b.city_of_birth = args.get('city_birth').upper() if args.get('city_birth') else ""
                 b.business_activity = args.get('business_type')
 
                 # Economic validations
@@ -63,9 +63,9 @@ def save_beneficiary(**args):
                 b.passive = args.get('passive')
                 b.data_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
                 b.authorization_declaration = args.get('term_conditions') if args.get('term_conditions') else 1
-                b.email = args.get('email').upper()
-                b.source_fund = args.get('source_fund').upper()
-                b.account_type = args.get('type_account').upper()
+                b.email = args.get('email').upper() if args.get('email') else ""
+                b.source_fund = args.get('source_fund').upper() if args.get('source_fund') else ""
+                b.account_type = args.get('type_account').upper() if args.get('type_account') else ""
 
             except Exception as e:
                 frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error en datos del beneficiario: {e}')
