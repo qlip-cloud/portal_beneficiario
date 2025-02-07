@@ -72,10 +72,6 @@
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-3">
-                        <label for="phone" class="form-label">* Celular</label>
-                        <input type="tel" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
-                    </div>
-                    <div class="col-md-3">
                         <label for="nationality" class="form-label">* Nacionalidad</label>
                         <select id="nationality" name="nationality" class="form-control">
                             
@@ -98,6 +94,17 @@
                         </select>
                     </div>
                     <div class="col-md-3">
+                        <label for="department_birth" class="form-label">* Departamento de Nacimiento</label>
+                        <select id="department_birth" class="form-control" name="department_birth">
+                            {% set tu = frappe.get_all('qp_PO_TerritorialUnit',fields=['tu_code', 'tu_name']) %}
+                            {% for t in tu %}
+                                {% if t.tu_code == beneficiary_data.department %}
+                                    <option value="{{ t.tu_code }}">{{ t.tu_name.upper() }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
                         <label for="city_birth" class="form-label">* Ciudad de Nacimiento</label>
                         <select id="city_birth" class="form-control" name="city_birth" disabled>
                             {% set cb = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
@@ -110,6 +117,10 @@
                     </div>
                 </div>          
                 <div class="form-row right_menu mt-3">
+                    <div class="col-md-3">
+                        <label for="phone" class="form-label">* Celular</label>
+                        <input type="tel" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
+                    </div>
                     <div class="col-md-3">
                         <label for="business_type" class="form-label">* Actividad Laboral</label>
                         <select id="business_type" name="business_type"  class="form-control">

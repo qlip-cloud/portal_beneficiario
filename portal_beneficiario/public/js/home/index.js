@@ -6,6 +6,7 @@ $( document ).ready(function() {
             phone: {required: true,number: true, maxlength: 20},
             nationality:'required',
             country_birth: 'required',
+            department_birth: 'required',
             city_birth: 'required',
             address:'required',
             country: 'required',
@@ -63,6 +64,13 @@ $( document ).ready(function() {
     // Cut the Options select to 30 characters
     setMaxOption();
 
+    // Set COL id:nationality by Default
+    if ($("#nationality").val() == ''){  
+        $('#nationality').removeAttr('disabled');
+        $('#nationality').val('colombiano');
+    }
+
+
     // Set COL id:country by Default
     if ($("#country").val() != ''){
         let code = $("#country").val();
@@ -91,21 +99,6 @@ $( document ).ready(function() {
                 } 
             });
         }
-    }
-
-    // Set COL id:country_birth by Default
-    if ($("#country_birth").val() != ''){
-        let code = $("#country_birth").val();
-        if($('#city_birth').val() == '' || $('#city_birth').val() == null){
-            $('#city_birth').removeAttr('disabled');
-            getCities(code, $('#city_birth'), 1);
-        }
-    }
-
-    // Set COL id:nationality by Default
-    if ($("#nationality").val() == ''){  
-        $('#nationality').removeAttr('disabled');
-        $('#nationality').val('colombiano');
     }
 
     //End Set COL by Default
@@ -152,10 +145,71 @@ $( document ).ready(function() {
         }
     });
 
+    // Set COL id:country_birth by Default
+    if ($("#country_birth").val() != ''){
+        let code = $("#country_birth").val();
+        
+        if($('#department_birth').val() == '' || $('#department_birth').val() == null){
+            $('#department_birth').removeAttr('disabled');
+
+            $.ajax({
+                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
+                data: {"code":code},
+                dataType: 'json',
+                async: false
+            }).done(function(r) {
+                if(r.message){          
+                    data = r.message;
+                    
+                    $("#department_birth").empty();
+                    $("#department_birth").append("<option></option>");
+                    
+                    for (var key in data){
+                        $("#department_birth").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
+                    }
+        
+                } else {
+                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
+                } 
+            });
+        }
+    }
+
     $("#country_birth").change(function (e) {
         if(this.value != '') {
+            $('#department_birth').removeAttr('disabled');
+
+            $.ajax({
+                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
+                data: {"code": this.value},
+                dataType: 'json',
+                async: false
+            }).done(function(r) {
+                if(r.message){          
+                    data = r.message;
+                    
+                    $("#department_birth").empty();
+                    $("#department_birth").append("<option></option>");
+                    
+                    for (var key in data){
+                        $("#department_birth").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
+                    }
+        
+                } else {
+                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
+                } 
+            });
+
+        } else {
+            $('#department').val('');
+            $('#department').attr('disabled', true);
+        }
+    });
+
+    $("#department_birth").change(function (e) {
+        if(this.value != '') {
             $('#city_birth').removeAttr('disabled');
-            getCities(this.value, $('#city_birth'), 1);
+            getCities(this.value, $('#city_birth'), 0);
 
         } else {
             $('#city_birth').val('');

@@ -23,6 +23,7 @@ def save_beneficiary(**args):
                 b.city = args.get('city').upper() if args.get('city') else ""
                 b.department = args.get('department')
                 b.country_of_birth = args.get('country_birth')
+                b.department_of_birth = args.get('department_birth')
                 b.city_of_birth = args.get('city_birth').upper() if args.get('city_birth') else ""
                 b.business_activity = args.get('business_type')
 

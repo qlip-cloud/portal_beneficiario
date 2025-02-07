@@ -117,7 +117,7 @@ def get_jumio_retrieval(beneficiary_id):
             try:
                 response = make_get_request(endpoint, data=data, headers=headers)
                 response_file = requests.get(endpoint_file, data=data, headers=headers)
-                
+
                 # File Jumio
                 data_file = ""
                 if response_file:
@@ -166,8 +166,15 @@ def get_jumio_retrieval(beneficiary_id):
                     
                     if response.get("capabilities").get("extraction")[0].get("data").get("type") == constantes.TYPE_DOCUMENT:
                         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_type", response.get("capabilities").get("extraction")[0].get("data").get("subType"))
+
+                    # Handle ID Versions
+                    jumio_document = ""
+                    if response.get("capabilities").get("extraction")[0].get("data").get("optionalMrzField2") is not None:
+                        jumio_document = response.get("capabilities").get("extraction")[0].get("data").get("optionalMrzField2")
+                    else:
+                        jumio_document = response.get("capabilities").get("extraction")[0].get("data").get("documentNumber")
                     
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_number", response.get("capabilities").get("extraction")[0].get("data").get("documentNumber"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_number", jumio_document)
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "gender", response.get("capabilities").get("extraction")[0].get("data").get("gender"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "birthday", response.get("capabilities").get("extraction")[0].get("data").get("dateOfBirth"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
