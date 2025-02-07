@@ -8,12 +8,12 @@ from frappe.utils import getdate, now
 
 
 def get_context(context):
+  
+    if frappe.session.user == "Guest":
+        frappe.throw(_("Log in to access this page."), frappe.PermissionError)
 
     try:
         context.no_cache = 1
-        
-        if frappe.session.user == "Guest":
-            frappe.throw(_("Log in to access this page."), frappe.PermissionError)
 
         try:
             boot = frappe.sessions.get()
