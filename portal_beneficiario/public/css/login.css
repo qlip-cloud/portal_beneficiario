@@ -228,8 +228,13 @@ body {
 
 }
 
-.tooltip-login, svg {
+#tooltip-login, svg {
+    color: #0D1775;
     vertical-align: sub !important;
+}
+
+small#tooltip-login {
+    color: #0D1775;
 }
 
 @media (max-width: 576px) {
