@@ -32,7 +32,7 @@
 }
 
 .principal-login {
-    background-image: url("/assets/portal_beneficiario/img/land-background.png");
+    background-image: url("/assets/portal_beneficiario/img/stonex_white.webp");
     background-position-x: right;
     background-repeat: no-repeat;
 }
@@ -228,8 +228,13 @@ body {
 
 }
 
-.tooltip-login, svg {
+#tooltip-login, svg {
+    color: #0D1775;
     vertical-align: sub !important;
+}
+
+small#tooltip-login {
+    color: #0D1775;
 }
 
 @media (max-width: 576px) {

@@ -29,7 +29,7 @@ def get_dynamic_accesstoken(dynamic_cnf):
         try:
             response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
-            frappe.log_error(title="Exception en get_dynamic_accesstoken", message=f'get_dynamic_accesstoken() - Error obteniedo token {e}')
+            frappe.log_error(title="Exception en get_dynamic_accesstoken", message=f'get_dynamic_accesstoken() - Error obteniendo token {e}')
             raise e
         else:
             return response.get("access_token")
@@ -75,19 +75,26 @@ def update_dynamics(**args):
                     "Authorization": f"Bearer {api_token}",
                     "Content-Type": "application/json"
                 }
-        
+        data_document_type = ""
         if beneficiary_data.document_type:
             document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
             data_document_type = document_type.do_code
 
+        data_city = ""
         if beneficiary_data.city:
             get_city = frappe.db.get_value('qp_PO_City', {'ci_code': beneficiary_data.city}, '*', as_dict=1)
             data_city = get_city.ci_guid_code
 
+        data_place_birth = ""
         if beneficiary_data.country_of_birth:
             get_country = frappe.db.get_value('qp_PO_Country', {'co_code': beneficiary_data.country_of_birth}, '*', as_dict=1)
             data_place_birth = get_country.co_guid_code
         
+        data_deparment_birth = ""
+        if beneficiary_data.department_of_birth:
+            data_deparment_birth =  beneficiary_data.department_of_birth
+
+        data_city_birth = ""
         if beneficiary_data.city_of_birth:
             get_city = frappe.db.get_value('qp_PO_City', {'ci_code': beneficiary_data.city_of_birth}, '*', as_dict=1)
             data_city_birth = get_city.ci_guid_code
@@ -113,6 +120,7 @@ def update_dynamics(**args):
             "bit_Ciudad@odata.bind": f'/bit_ciudads({data_city})',
             "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',
             "bit_Lugar_Nacimiento@odata.bind": f'/bit_ciudads({data_city_birth})',
+            "bit_Estado_Nacimiento@odata.bind": f'/bit_departamentos({data_deparment_birth})',
             "bit_nacionalidad": beneficiary_data.nationality.upper(),
             "telephone3": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),

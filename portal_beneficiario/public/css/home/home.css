@@ -140,3 +140,8 @@ input[type="number"] {
 p, svg {
     vertical-align: top !important;
 }
+
+small#tooltip-login {
+    color: #000 !important;
+    margin-bottom: 15px;
+}

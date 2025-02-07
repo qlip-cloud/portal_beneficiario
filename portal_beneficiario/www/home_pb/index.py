@@ -8,58 +8,75 @@ from frappe.utils import getdate, now
 
 
 def get_context(context):
-
-    context.no_cache = 1
-    
+  
     if frappe.session.user == "Guest":
         frappe.throw(_("Log in to access this page."), frappe.PermissionError)
 
     try:
-        boot = frappe.sessions.get()
-    except Exception as e:
-        boot = frappe._dict(status='failed', error = str(e))
-        print(frappe.get_traceback())
+        context.no_cache = 1
 
-	# this needs commit
-    csrf_token = frappe.sessions.get_csrf_token()
-    frappe.db.commit()
+        try:
+            boot = frappe.sessions.get()
+        except Exception as e:
+            boot = frappe._dict(status='failed', error = str(e))
+            print(frappe.get_traceback())
 
-    boot_json = frappe.as_json(boot)
+        # this needs commit
+        csrf_token = frappe.sessions.get_csrf_token()
+        frappe.db.commit()
 
-    # remove script tags from boot
-    boot_json = re.sub(r"\<script[^<]*\</script\>", "", boot_json)
+        boot_json = frappe.as_json(boot)
 
-    # TODO: Find better fix
-    boot_json = re.sub(r"</script\>", "", boot_json)
+        # remove script tags from boot
+        boot_json = re.sub(r"\<script[^<]*\</script\>", "", boot_json)
 
-    # print(f"{now()} - frappe.session Stonex-Qlip: {frappe.session.user}")
+        # TODO: Find better fix
+        boot_json = re.sub(r"</script\>", "", boot_json)
 
-    user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
+        try:
+            user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
+        except Exception as e:
+            frappe.log_error(title='Excepcion en getUser()', message=f'Error en datos del beneficiario: {frappe.session.user}{e}')
+            return e
 
-    # print(f"{now()} - user Stonex-Qlip: {user}")
+        try:
+            beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+            
+            if beneficiary_data is None:
+                frappe.throw("Beneficiario aun no ha sido registrado. Por favor comunique al Administrador.", frappe.PermissionError)
 
-    beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+        except Exception as e:
+            frappe.log_error(title='Excepcion en beneficiary_data()', message=f'Error en datos del beneficiario: {e}')
+            return e
 
-    # print(f"{now()} - beneficiary_data Stonex-Qlip: {beneficiary_data}")
-
-    id_contact = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
-    if id_contact:
-        id_contact = id_contact.name.split("-")[-1]
-        name_beneficiary = frappe.db.get_value('Supplier', {'supplier_name': id_contact}, '*', as_dict=1)
-        name_beneficiary = name_beneficiary.first_name
-    else:
-        name_beneficiary = ""
-
-
-    if not beneficiary_data:
-        frappe.throw("Beneficiario aun no ha sido registrado. Por favor comunique al Administrador.", frappe.PermissionError)
-
-    context.update({
-        "is_navbar_custom": True,
-        "csrf_token": csrf_token,
-        "beneficiary_data":beneficiary_data,
-        "beneficiary_name": name_beneficiary,
-        "no_cache":1
-    })
+        try:
+            id_contact = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
+            name_beneficiary = ""
+            
+            if id_contact:
+                id_contact = id_contact.name.split("-")[-1]
+                
+                if id_contact:
+                    name_beneficiary = frappe.db.get_value('Supplier', {'supplier_name': id_contact}, '*', as_dict=1)
+                    name_beneficiary = name_beneficiary.first_name
         
-    return context
+        except Exception as e:
+            frappe.log_error(title='Excepcion en id_contact()', message=f'Error en datos del beneficiario: {e}')
+            return e
+
+        context.update({
+            "is_navbar_custom": True,
+            "csrf_token": csrf_token,
+            "beneficiary_data":beneficiary_data,
+            "beneficiary_name": name_beneficiary,
+            "no_cache":1
+        })
+            
+        return context
+    
+    except Exception as exc:
+        traceback = frappe.get_traceback()
+        frappe.log_error(title='Error en context', message=traceback)
+        print(traceback)
+        context.has_error = True
+        return exc

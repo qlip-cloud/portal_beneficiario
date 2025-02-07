@@ -72,10 +72,6 @@
                 </div>
                 <div class="form-row right_menu mt-3">
                     <div class="col-md-3">
-                        <label for="phone" class="form-label">* Celular</label>
-                        <input type="tel" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
-                    </div>
-                    <div class="col-md-3">
                         <label for="nationality" class="form-label">* Nacionalidad</label>
                         <select id="nationality" name="nationality" class="form-control">
                             
@@ -98,6 +94,17 @@
                         </select>
                     </div>
                     <div class="col-md-3">
+                        <label for="department_birth" class="form-label">* Departamento de Nacimiento</label>
+                        <select id="department_birth" class="form-control" name="department_birth">
+                            {% set tu = frappe.get_all('qp_PO_TerritorialUnit',fields=['tu_code', 'tu_name']) %}
+                            {% for t in tu %}
+                                {% if t.tu_code == beneficiary_data.department %}
+                                    <option value="{{ t.tu_code }}">{{ t.tu_name.upper() }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
                         <label for="city_birth" class="form-label">* Ciudad de Nacimiento</label>
                         <select id="city_birth" class="form-control" name="city_birth" disabled>
                             {% set cb = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
@@ -110,6 +117,10 @@
                     </div>
                 </div>          
                 <div class="form-row right_menu mt-3">
+                    <div class="col-md-3">
+                        <label for="phone" class="form-label">* Celular</label>
+                        <input type="tel" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
+                    </div>
                     <div class="col-md-3">
                         <label for="business_type" class="form-label">* Actividad Laboral</label>
                         <select id="business_type" name="business_type"  class="form-control">
@@ -256,7 +267,7 @@
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                             </svg>
-                            Estimado cliente, si la cuenta está errada, Favor Contactarse Con La Entidad (Gestion.Colombia@Stonex.Com ó al número +57 601 745 1351)
+                            Estimado beneficiario, si la cuenta está errada, favor contactarse con la entidad (gestion.colombia@stonex.com ó al número +57 601 745 1351)
                         </small>
                         <label for="type_account" class="form-label">* Favor indicar, el tipo de cuenta del banco {{beneficiary_data.bank}} número {{beneficiary_data.account_number}} es:</label>
 
@@ -286,7 +297,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            Proceso de Verificación Finalizado.
+                            Proceso de verificación finalizado.
                         </div>
                         <div class="modal-footer">
                             <button id="modal-buttom" name="modal-buttom" type="button" class="rounded btn btn-dark btn-lg mt-5 ml-3">Aceptar</button>

@@ -85,6 +85,7 @@ def call_dynamic(beneficiary_id):
                     "Content-Type": "application/json"
                 }
         
+        data_document_type = ""
         if beneficiary_data.document_type:
             document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
             data_document_type = document_type.do_code
@@ -99,6 +100,11 @@ def call_dynamic(beneficiary_id):
             get_country = frappe.db.get_value('qp_PO_Country', {'co_code': beneficiary_data.country_of_birth}, '*', as_dict=1)
             data_place_birth = get_country.co_guid_code
         
+        data_deparment_birth = ""
+        if beneficiary_data.department_of_birth:
+            get_department_birth = frappe.db.get_value('qp_PO_TerritorialUnit', {'tu_code': beneficiary_data.department_of_birth}, '*', as_dict=1)
+            data_deparment_birth =  get_department_birth.tu_guid_code
+
         data_city_birth = ""
         if beneficiary_data.city_of_birth:
             get_city = frappe.db.get_value('qp_PO_City', {'ci_code': beneficiary_data.city_of_birth}, '*', as_dict=1)
@@ -125,6 +131,7 @@ def call_dynamic(beneficiary_id):
             "bit_Ciudad@odata.bind": f'/bit_ciudads({data_city})',
             "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',
             "bit_Lugar_Nacimiento@odata.bind": f'/bit_ciudads({data_city_birth})',
+            "bit_Estado_Nacimiento@odata.bind": f'/bit_departamentos({data_deparment_birth})',
             "bit_nacionalidad": beneficiary_data.nationality.upper(),
             "telephone3": beneficiary_data.phone,
             "bit_persona_politicamente_expuesta": isBoolean(beneficiary_data.peps),
