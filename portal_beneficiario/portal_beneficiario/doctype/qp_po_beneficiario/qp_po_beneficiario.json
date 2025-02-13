@@ -5,25 +5,31 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "be_name",
-  "surname",
-  "document_type",
-  "document_number",
-  "gender",
+  "form_sec_beneficiario",
+  "sal_col_benei",
   "email",
-  "birthday",
-  "document_expedition_date",
-  "document_expedition_city",
-  "document_expedition_country",
-  "phone",
-  "nationality",
-  "country_of_birth",
-  "department_of_birth",
-  "city_of_birth",
+  "enable",
+  "authorization_declaration",
+  "data_declaration",
+  "sal_col_beneii",
+  "id_dynamics",
+  "bank",
+  "account_number",
+  "form_sec_personales",
+  "sal_col_personales",
+  "document_attach",
   "address",
   "country",
   "department",
   "city",
+  "nationality",
+  "country_of_birth",
+  "department_of_birth",
+  "city_of_birth",
+  "phone",
+  "business_activity",
+  "economic_activity",
+  "sal_col_pep",
   "peps",
   "position",
   "link_date",
@@ -31,31 +37,38 @@
   "peps_parent",
   "parent_name",
   "parent_type",
-  "business_activity",
-  "economic_activity",
-  "document_attach",
+  "sal_col_financiera",
   "income",
   "egress",
   "assets",
   "passive",
-  "patrimony",
-  "data_declaration",
-  "authorization_declaration",
   "source_fund",
-  "account_number",
-  "bank",
   "account_type",
-  "form_section",
-  "enable",
+  "patrimony",
+  "form_sec_jumio",
+  "sal_col_jumioi",
+  "be_name",
+  "surname",
+  "birthday",
+  "jumio_place_birth",
+  "gender",
+  "sal_col_jumioii",
+  "document_number",
+  "document_type",
+  "document_expedition_date",
+  "document_expedition_city",
+  "document_expedition_country",
   "jumio_section",
-  "id_dynamics",
+  "jumio_iframe",
+  "sal_col_rjumioi",
   "jumio_status",
   "jumio_workflowexecution",
   "jumio_account",
   "jumio_points",
   "jumio_rejects",
+  "sal_col_rjumioii",
   "jumio_file",
-  "jumio_iframe",
+  "form_sec_jumio_att",
   "jumio_attemps",
   "dynamics_section",
   "dynamics_attemps"
@@ -250,7 +263,7 @@
    "default": "1",
    "fieldname": "enable",
    "fieldtype": "Check",
-   "label": "Enable Data Form"
+   "label": "Formulario Habilitado"
   },
   {
    "fieldname": "jumio_iframe",
@@ -267,11 +280,6 @@
    "fieldname": "jumio_section",
    "fieldtype": "Section Break",
    "label": "Jumio Section"
-  },
-  {
-   "fieldname": "form_section",
-   "fieldtype": "Section Break",
-   "label": "Form"
   },
   {
    "fieldname": "link_undate",
@@ -297,7 +305,7 @@
   {
    "fieldname": "dynamics_section",
    "fieldtype": "Section Break",
-   "label": "Dynamics Section"
+   "label": "Estatus envio a Dynamics"
   },
   {
    "fieldname": "dynamics_attemps",
@@ -355,11 +363,75 @@
    "fieldtype": "Link",
    "label": "Departamento de Nacimiento",
    "options": "qp_PO_TerritorialUnit"
+  },
+  {
+   "fieldname": "sal_col_pep",
+   "fieldtype": "Column Break",
+   "label": "PEP"
+  },
+  {
+   "fieldname": "sal_col_personales",
+   "fieldtype": "Column Break",
+   "label": "Datos Personales"
+  },
+  {
+   "fieldname": "sal_col_financiera",
+   "fieldtype": "Column Break",
+   "label": "Informacion Financiera"
+  },
+  {
+   "fieldname": "form_sec_beneficiario",
+   "fieldtype": "Section Break",
+   "label": "Beneficiario"
+  },
+  {
+   "fieldname": "form_sec_personales",
+   "fieldtype": "Section Break",
+   "label": "Datos Basicos"
+  },
+  {
+   "fieldname": "sal_col_benei",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sal_col_beneii",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "form_sec_jumio",
+   "fieldtype": "Section Break",
+   "label": "Datos Jumio"
+  },
+  {
+   "fieldname": "sal_col_jumioi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sal_col_jumioii",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sal_col_rjumioi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sal_col_rjumioii",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "form_sec_jumio_att",
+   "fieldtype": "Section Break",
+   "label": "Estatus Jumio Retrieval"
+  },
+  {
+   "fieldname": "jumio_place_birth",
+   "fieldtype": "Data",
+   "label": "Lugar de Nacimiento Jumio"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-02-06 09:37:36.872095",
+ "modified": "2025-02-13 17:57:55.264972",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_Beneficiario",

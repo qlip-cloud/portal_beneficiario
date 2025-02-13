@@ -37,7 +37,7 @@
                         <input id="email" name="email" type="hidden" value="{{beneficiary_data.email}}">
                         <div class="tab-content" id="main_form">
                             {% if beneficiary_data.enable == 1%}
-                                {% if beneficiary_data.data_declaration == false and  beneficiary_data.authorization_declaration == false%}
+                                {% if beneficiary_data.data_declaration == false and beneficiary_data.authorization_declaration == false%}
                                 <div class="tab-pane active" role="tabpanel" id="step1">
                                     {% block term_and_conditions %}
                                     {% endblock %}
@@ -62,7 +62,7 @@
                                 </div>
                             {% endif %}
                             {% if beneficiary_data.jumio_status != "PROCESSED"%}
-                                <div class="tab-pane {% if beneficiary_data.enable == 0%}active{% endif %}" role="tabpanel" id="step3">
+                                <div class="tab-pane {% if beneficiary_data.enable == 0%}active{% endif %}" role="tabpanel" id="step3" hidden>
                                     {% block verificacion %}
                                     {% endblock %}
                                     <ul class="list-inline">

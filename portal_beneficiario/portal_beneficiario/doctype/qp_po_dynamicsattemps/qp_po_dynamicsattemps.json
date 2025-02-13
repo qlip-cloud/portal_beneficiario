@@ -29,7 +29,7 @@
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Numero intentos"
+   "label": "Envios a Dynamics"
   },
   {
    "fieldname": "send_status",
@@ -47,7 +47,7 @@
   },
   {
    "fieldname": "response",
-   "fieldtype": "Small Text",
+   "fieldtype": "Text",
    "label": "Respuesta"
   },
   {
@@ -126,7 +126,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-10-07 17:16:56.668033",
+ "modified": "2025-02-13 10:37:46.548343",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicsAttemps",
