@@ -133,14 +133,17 @@ def get_jumio_retrieval(beneficiary_id):
                     dataChecks = response.get("capabilities").get("dataChecks")[0].get("decision").get("type")
                     imageChecks = response.get("capabilities").get("imageChecks")[0].get("decision").get("type")
                     usability = response.get("capabilities").get("usability")
-                    watchList = response.get("capabilities").get("watchlistScreening")[0].get("decision").get("type")
 
                     data_notes["extraction"] = extraction
                     data_notes["similarity"] = similarity
                     data_notes["liveness"] = liveness
                     data_notes["dataChecks"] = dataChecks
                     data_notes["imageChecks"] = imageChecks
-                    data_notes["watchList"] = watchList
+
+                    # Lista de Accesos
+                    if response.get("capabilities").get("watchlistScreening"):
+                        watchList = response.get("capabilities").get("watchlistScreening")[0].get("decision").get("type")
+                        data_notes["watchList"] = watchList
 
                     for item in data_notes:
                         reject_string = get_validation_rejected(item, constantes.VALUE_REJECTS, data_notes)
