@@ -263,6 +263,24 @@ $( document ).ready(function() {
         }
     });
 
+
+    if($("#business_type").val() != ''){
+        value = $("#business_type").val();
+        value = value.trim()
+
+        if(['913610001','913610003','913610004'].includes(value)) {
+            if(['913610003','913610004'].includes(value)){
+                $('.activity_fields').removeAttr('hidden');
+                $('.business_field').attr('hidden', true);
+            } else {
+                $('.business_field').removeAttr('hidden');
+                $('.activity_fields').removeAttr('hidden');
+            }   
+        }else{
+            $('.activity_fields').attr('hidden', true);
+        }
+    };
+
     $("#business_type").change(function() {
         if(['913610001','913610003','913610004'].includes(this.value)) {
             
