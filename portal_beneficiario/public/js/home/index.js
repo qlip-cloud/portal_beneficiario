@@ -265,7 +265,7 @@ $( document ).ready(function() {
 
 
     if($("#business_type").val() != ''){
-        value = $("#business_type").val();
+        let value = $("#business_type").val();
         value = value.trim()
 
         if(['913610001','913610003','913610004'].includes(value)) {
