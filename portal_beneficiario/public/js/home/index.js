@@ -263,6 +263,24 @@ $( document ).ready(function() {
         }
     });
 
+
+    if($("#business_type").val() != ''){
+        let value = $("#business_type").val();
+        value = value.trim()
+
+        if(['913610001','913610003','913610004'].includes(value)) {
+            if(['913610003','913610004'].includes(value)){
+                $('.activity_fields').removeAttr('hidden');
+                $('.business_field').attr('hidden', true);
+            } else {
+                $('.business_field').removeAttr('hidden');
+                $('.activity_fields').removeAttr('hidden');
+            }   
+        }else{
+            $('.activity_fields').attr('hidden', true);
+        }
+    };
+
     $("#business_type").change(function() {
         if(['913610001','913610003','913610004'].includes(this.value)) {
             
@@ -308,6 +326,7 @@ $( document ).ready(function() {
     $("form #step2").ready(function (e) {
         if($("#pb_form").valid()){
             $("form #step2").find('button').removeAttr('disabled');
+            $("#step3").removeAttr('hidden');
         }
     });
 
@@ -331,64 +350,67 @@ $( document ).ready(function() {
 
     $("#save_beneficiary").click(function (e) {
 
-        var unindexed_array = $('#pb_form').serializeArray()
-        var indexed_array = {};
+        if($('#pb_form').valid()){
+            
+            var unindexed_array = $('#pb_form').serializeArray()
+            var indexed_array = {};
+    
+            $.map(unindexed_array, function(n, i){
+                indexed_array[n['name']] = n['value'];
+            });
+    
+            fileToUpload = $('#fileToUpload').prop('files');
+    
+            if (fileToUpload.length != 0){
+                indexed_array.document_send = true
+            }
 
-        $.map(unindexed_array, function(n, i){
-            indexed_array[n['name']] = n['value'];
-        });
-
-        fileToUpload = $('#fileToUpload').prop('files');
-
-        if (fileToUpload.length != 0){
-            indexed_array.document_send = true
-        }
-
-        $.ajax({
-            url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.save_beneficiary",
-            data:indexed_array,
-            dataType: 'json',
-            contentType: 'application/json;charset=UTF-8',
-            async: false
-          }).done(function(r) {
-
-                let response = r.message;
-
-                // Upload File        
-                if (fileToUpload.length != 0){
+            $.ajax({
+                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.save_beneficiary",
+                data:indexed_array,
+                dataType: 'json',
+                contentType: 'application/json;charset=UTF-8',
+                async: false
+              }).done(function(r) {
                     
-                    var formData = new FormData();
-
-                    url_file = "/api/method/upload_file";
-
-                    formData.append("file", fileToUpload[0], fileToUpload[0].name);
-                    formData.append("is_private", 0);
-                    formData.append("doctype", "qp_PO_Beneficiario");
-                    formData.append("docname", response.name);
-                    formData.append("fieldname", "document_attach");
-
-                    call_back = (data) => {
-
-                        if(data) {
-                            if(r.message.jumio_status != "PROCESSED"){
-                                callJumio(r.message)
+                    let response = r.message;
+    
+                    // Upload File        
+                    if (fileToUpload.length != 0){
+                        
+                        var formData = new FormData();
+    
+                        url_file = "/api/method/upload_file";
+    
+                        formData.append("file", fileToUpload[0], fileToUpload[0].name);
+                        formData.append("is_private", 0);
+                        formData.append("doctype", "qp_PO_Beneficiario");
+                        formData.append("docname", response.name);
+                        formData.append("fieldname", "document_attach");
+    
+                        call_back = (data) => {
+    
+                            if(data) {
+                                if(r.message.jumio_status != "PROCESSED"){
+                                    callJumio(r.message)
+                                }
                             }
                         }
+    
+                        send_petition_upload("", "", formData, call_back, url_file);
+                    
+                    } else {
+                        if(r.message.jumio_status != "PROCESSED"){
+                            callJumio(r.message)
+                        }
                     }
-
-                    send_petition_upload("", "", formData, call_back, url_file);
-                
-                } else {
-                    if(r.message.jumio_status != "PROCESSED"){
-                        callJumio(r.message)
-                    }
-                }
-
-
-          })
-          .fail(function(e){
-            alert("Error en el sistema, por favor contactar al Administrador. Error 10004");
-          });  
+    
+    
+              })
+              .fail(function(e){
+                alert("Error en el sistema, por favor contactar al Administrador. Error 10004");
+              });  
+        }
     });
 
     $("input.number").on('blur', function() {

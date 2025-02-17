@@ -131,18 +131,25 @@ def get_jumio_retrieval(beneficiary_id):
                     similarity = response.get("capabilities").get("similarity")[0].get("decision").get("type")
                     liveness = response.get("capabilities").get("liveness")[0].get("decision").get("type")
                     dataChecks = response.get("capabilities").get("dataChecks")[0].get("decision").get("type")
+                    imageChecks = response.get("capabilities").get("imageChecks")[0].get("decision").get("type")
                     usability = response.get("capabilities").get("usability")
 
                     data_notes["extraction"] = extraction
                     data_notes["similarity"] = similarity
                     data_notes["liveness"] = liveness
                     data_notes["dataChecks"] = dataChecks
+                    data_notes["imageChecks"] = imageChecks
+
+                    # Lista de Accesos
+                    if response.get("capabilities").get("watchlistScreening"):
+                        watchList = response.get("capabilities").get("watchlistScreening")[0].get("decision").get("type")
+                        data_notes["watchList"] = watchList
 
                     for item in data_notes:
-                        reject_string = get_validation_rejected(item, constantes.VALUE_REJECTS, data_notes)                    
+                        reject_string = get_validation_rejected(item, constantes.VALUE_REJECTS, data_notes)
+            
                         if reject_string:
-                            rejects_list.append(reject_string)
-
+                            rejects_list.append(f'{reject_string}')
 
                     # Usability
                     for item in usability:
@@ -177,8 +184,9 @@ def get_jumio_retrieval(beneficiary_id):
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_number", jumio_document)
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "gender", response.get("capabilities").get("extraction")[0].get("data").get("gender"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "birthday", response.get("capabilities").get("extraction")[0].get("data").get("dateOfBirth"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_place_birth", response.get("capabilities").get("extraction")[0].get("data").get("placeOfBirth"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
-                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_city", response.get("capabilities").get("extraction")[0].get("data").get("placeOfBirth"))
+                    frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_city", response.get("capabilities").get("extraction")[0].get("data").get("issuingPlace"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_country", response.get("capabilities").get("extraction")[0].get("data").get("issuingCountry"))
                     
                     if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
@@ -240,7 +248,8 @@ def json_handler(obj):
 	if isinstance(obj, (datetime.date, datetime.timedelta, datetime.datetime)):
 		return text_type(obj)
 
-def get_validation_rejected(key,value,dictionary):
-    if key in dictionary and value in dictionary[key]:
-        return key
-        
+def get_validation_rejected(key,values,dictionary):
+    for i in range(len(values)):
+        if key in dictionary and values[i] in dictionary[key]:
+            return key, values[i]
+            

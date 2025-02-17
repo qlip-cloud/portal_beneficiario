@@ -126,8 +126,8 @@ def call_dynamic(beneficiary_id):
             "bit_genero": gender_switch(beneficiary_data.gender),
             "bit_tipo_de_documento": data_document_type,
             "bit_numero_documento_jumio": beneficiary_data.document_number,
-            "bit_lugarexpedicion": beneficiary_data.document_expedition_country,
-            "bit_lugar_de_nacimiento_jumio": beneficiary_data.document_expedition_city,
+            "bit_lugarexpedicion": beneficiary_data.document_expedition_city,
+            "bit_lugar_de_nacimiento_jumio": beneficiary_data.jumio_place_birth,
             "bit_Ciudad@odata.bind": f'/bit_ciudads({data_city})',
             "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',
             "bit_Lugar_Nacimiento@odata.bind": f'/bit_ciudads({data_city_birth})',
@@ -177,8 +177,10 @@ def call_dynamic(beneficiary_id):
             data["bit_tipoparentezco"] = beneficiary_data.parent_type
 
         # Send Attach
+        sum_attemp = True
         if beneficiary_data.document_attach:
             sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)
+            sum_attemp = False
  
         if beneficiary_data.economic_activity:
             economic_data = frappe.db.get_value('qp_PO_EconomicActivity', {'ea_code': beneficiary_data.economic_activity}, '*', as_dict=1)
@@ -202,13 +204,13 @@ def call_dynamic(beneficiary_id):
                 frappe.log_error(title='Excepcion en actualiza cuenta', message=f'call_dynamics() - Error actualizando cuenta: {exe}')
 
             if response:
-                saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
+                saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", sum_attemp)
 
                 # Update cuenta bancaria
                 get_bank_account(beneficiary_data, dynamic_cnf, api_token, beneficiary_data.id_dynamics, beneficiary_data.account_number)
                 return True
             else:
-                saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", doc_attemps=True)
+                saveRequestResponseDynamics(beneficiary_data, all_data, response, "send_status", "query", "response", sum_attemp)
         
         except Exception as e:
             frappe.log_error(title='Excepcion en call_dynamic()', message=f'call_dynamic() - Error guardando en servicio dynamics: {e}')
@@ -235,13 +237,13 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
 
             # Data
             if len(data.get('value')) > 0:
-                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", doc_attemps=False)
+                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", False)
 
                 # Send code type account
                 id_bancario = data.get('value')[0].get('bit_datos_bancariosid')
                 update_banking_dato(beneficiary, dynamics_conf, token, id_bancario)
             else:
-                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", doc_attemps=False)   
+                saveRequestResponseDynamics(beneficiary, endpoint, response, "send_status_account_bank", "query_account_bank", "response_account_bank", False)   
 
             return True
     except Exception as e:
@@ -309,13 +311,13 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
         try:
             response = requests.request("POST", endpoint, data=all_data, headers=headers)
             if response:
-                saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach", doc_attemps=False)
+                saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach", False)
         
         except Exception as e:
             frappe.log_error(title="Exception: sendDocumentDynamics()", message=f"Error al enviar documento a Dynamics {e}")
 
 
-def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code, doc_request, doc_response, doc_attemps=False):
+def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code, doc_request, doc_response, doc_attemps):
     
     try:
         if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
