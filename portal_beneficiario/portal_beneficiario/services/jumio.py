@@ -57,7 +57,14 @@ def get_jumio_iframe():
                 data = json.dumps({
                     "customerInternalReference":beneficiary_data.id_dynamics,
                     "workflowDefinition":{
-                        "key": jumio_cnf.id_jumio
+                        "key": jumio_cnf.id_jumio,
+                        "capabilities":{
+                        "ruleset":{
+                            "ids":[
+                                "ad18e992-b89a-456d-8dd1-f79622554e15"
+                                ]
+                            }
+                        }  
                     }
                 })
 
