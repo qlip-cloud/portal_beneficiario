@@ -24,7 +24,7 @@ def save_beneficiary(**args):
                 b.department = args.get('department')
                 b.country_of_birth = args.get('country_birth')
                 b.department_of_birth = args.get('department_birth')
-                b.city_of_birth = args.get('city_birth').upper() if args.get('city_birth') else ""
+                b.city_of_birth = args.get('city_birth')
                 b.business_activity = args.get('business_type')
 
                 # Economic validations

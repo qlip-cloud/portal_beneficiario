@@ -121,12 +121,18 @@ def call_dynamic(beneficiary_id):
         data_undate = beneficiary_data.link_undate.strftime("%Y-%m-%d") if beneficiary_data.link_undate is not None else ''
         data_date_now = datetime.now()
 
+        # Solicitud de Stonex
+        if beneficiary_data.document_expedition_city and beneficiary_data.document_expedition_country:
+            place_expedition_id = f'{beneficiary_data.document_expedition_city}, {beneficiary_data.document_expedition_country}'
+        else:
+            place_expedition_id = beneficiary_data.document_expedition_city
+
         data = {
             "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
             "bit_genero": gender_switch(beneficiary_data.gender),
             "bit_tipo_de_documento": data_document_type,
             "bit_numero_documento_jumio": beneficiary_data.document_number,
-            "bit_lugarexpedicion": beneficiary_data.document_expedition_city,
+            "bit_lugarexpedicion": place_expedition_id,
             "bit_lugar_de_nacimiento_jumio": beneficiary_data.jumio_place_birth,
             "bit_Ciudad@odata.bind": f'/bit_ciudads({data_city})',
             "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',

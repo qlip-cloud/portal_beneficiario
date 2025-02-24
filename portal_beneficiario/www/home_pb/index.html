@@ -26,7 +26,6 @@
 
 {% block basic_data%}
         <div id='basic_data_sect' class="right_menu">
-            
             <div id="container_personal" class="section-header"><span class="bold-section-header">Datos Personales</span>
 
                 <a id="client_name" name="client_name" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab"> - Sr(a). {{ beneficiary_name.upper() }}</span></a>
@@ -61,8 +60,8 @@
                     <div class="col-md-3">
                         <label for="city" class="form-label">* Ciudad de Residencia</label>
                         <select id="city" class="form-control" name="city">
-                            {% set cb = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_name asc') %}
-                            {% for ci in cb %}
+                            {% set cr = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_name asc') %}
+                            {% for ci in cr %}
                                 {% if ci.ci_code == beneficiary_data.city %}
                                     <option value="{{ ci.ci_code }}">{{ ci.ci_name.upper() }}</option>
                                 {% endif %}
@@ -98,7 +97,7 @@
                         <select id="department_birth" class="form-control" name="department_birth">
                             {% set tu = frappe.get_all('qp_PO_TerritorialUnit',fields=['tu_code', 'tu_name']) %}
                             {% for t in tu %}
-                                {% if t.tu_code == beneficiary_data.department %}
+                                {% if t.tu_code == beneficiary_data.department_of_birth %}
                                     <option value="{{ t.tu_code }}">{{ t.tu_name.upper() }}</option>
                                 {% endif %}
                             {% endfor %}
@@ -106,11 +105,11 @@
                     </div>
                     <div class="col-md-3">
                         <label for="city_birth" class="form-label">* Ciudad de Nacimiento</label>
-                        <select id="city_birth" class="form-control" name="city_birth" disabled>
-                            {% set cb = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_code asc') %}
+                        <select id="city_birth" class="form-control" name="city_birth">
+                            {% set cb = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_name asc') %}
                             {% for ci in cb %}
                                 {% if ci.ci_code == beneficiary_data.city_of_birth %}
-                                    <option value="{{ ci.ci_code }}">{{ ci.ci_name.upper() }}</option>
+                                    <option value="{{ ci.ci_code }}">{{ ci.ci_name|upper }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
