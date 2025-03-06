@@ -56,10 +56,13 @@ def get_jumio_iframe():
                     
                 flag_update = False
                 endpoint = jumio_cnf.account_url
-                if beneficiary_data.jumio_status == "SESSION_EXPIRED" and beneficiary_data.jumio_account:
+                if beneficiary_data.jumio_status in ["SESSION_EXPIRED", "TOKEN_EXPIRED"] and beneficiary_data.jumio_account:
                     endpoint = f'{jumio_cnf.account_url}/{beneficiary_data.jumio_account}'
                     flag_update = True
 
+                print(f'Flag Update: {flag_update}')
+                print(f'Endpoint: {endpoint}')
+                
                 data = json.dumps({
                     "customerInternalReference": beneficiary_data.id_dynamics,
                     "workflowDefinition": {
@@ -111,7 +114,6 @@ def get_jumio_retrieval(beneficiary_id, status_callback, json_callback):
         jumio_cnf = frappe.db.get_all("qp_PO_JumioConfig", fields=["*"])[0]
 
         # Asynchronous process will be handled
-        # beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
         beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', user, '*', as_dict=1)
 
         rejects_list = []
@@ -203,17 +205,7 @@ def get_jumio_retrieval(beneficiary_id, status_callback, json_callback):
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_date", response.get("capabilities").get("extraction")[0].get("data").get("issuingDate"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_city", response.get("capabilities").get("extraction")[0].get("data").get("issuingPlace"))
                     frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "document_expedition_country", response.get("capabilities").get("extraction")[0].get("data").get("issuingCountry"))
-                    
-                    # if frappe.db.exists("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}):
-                    #     jumio_attemps = frappe.db.get_value("qp_PO_JumioAttemps", {"parent": beneficiary_data.name}, '*', as_dict=1)
-                    #     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "attemps_num", jumio_attemps.attemps_num + 1)
-                    #     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "query", endpoint if endpoint else json.dumps(data, default=json_handler))
-                    #     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "response", json.dumps(response, default=json_handler))
-                    #     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_status", response_file.status_code)
-                    #     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_request", endpoint_file)
-                    #     frappe.db.set_value('qp_PO_JumioAttemps', jumio_attemps.name, "jumio_file_response", response_file.content)
-                    # else:
-                    
+                                        
                     ja = frappe.get_doc({
                         "doctype":"qp_PO_JumioAttemps", 
                         "parent": beneficiary_data.name, 
