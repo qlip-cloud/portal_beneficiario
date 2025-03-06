@@ -56,12 +56,6 @@ def get_jumio_iframe():
                     
                 flag_update = False
                 endpoint = jumio_cnf.account_url
-                if beneficiary_data.jumio_account and beneficiary_data.jumio_workflowexecution:
-                    endpoint = f'{jumio_cnf.account_url}/{beneficiary_data.jumio_account}'
-                    flag_update = True
-
-                print(f'Flag Update: {flag_update}')
-                print(f'Endpoint: {endpoint}')
 
                 data = json.dumps({
                     "customerInternalReference": beneficiary_data.id_dynamics,
@@ -75,22 +69,45 @@ def get_jumio_iframe():
                     }
                 })
 
+                if beneficiary_data.jumio_account and beneficiary_data.jumio_workflowexecution:
+                    endpoint = f'{jumio_cnf.account_url}/{beneficiary_data.jumio_account}'
+
+                    data = json.dumps({
+                        "customerInternalReference": beneficiary_data.id_dynamics,
+                        "workflowDefinition": {
+                            "key": jumio_cnf.id_jumio,
+                        }
+                    })
+                
+                    flag_update = True
+
                 response=None
 
                 try:
 
                     if flag_update:
-                        response = requests.request("PATCH", endpoint, data=data, headers=headers) 
+                        response = requests.put(endpoint, data=data, headers=headers) 
                     else:
                         response = make_post_request(endpoint, data=data, headers=headers)
+
+
+                    # Different response formats
+                    if flag_update and response:
+                        response = response.json()
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", response["workflowExecution"]["id"])
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_account", response["account"]["id"])
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_iframe", response["web"]["href"])
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 0)
+                        frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
                           
-                    if response:
+                    elif response:
                         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_workflowExecution", response.get("workflowExecution").get("id"))
                         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_account", response.get("account").get("id"))
                         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_iframe", response.get("web").get("href"))
                         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 0)
                         frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", "PENDING")
-                        frappe.db.commit()
+                        
+                    frappe.db.commit()
                 except Exception as e:
                     frappe.log_error(title='Excepcion: get_jumio_iframe()', message=f'Error en peticion a iframe Jumio {user.email}: {e}')
                     raise e 
