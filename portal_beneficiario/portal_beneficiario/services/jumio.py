@@ -56,13 +56,13 @@ def get_jumio_iframe():
                     
                 flag_update = False
                 endpoint = jumio_cnf.account_url
-                if beneficiary_data.jumio_status in ["SESSION_EXPIRED", "TOKEN_EXPIRED"] and beneficiary_data.jumio_account:
+                if beneficiary_data.jumio_account and beneficiary_data.jumio_workflowexecution:
                     endpoint = f'{jumio_cnf.account_url}/{beneficiary_data.jumio_account}'
                     flag_update = True
 
                 print(f'Flag Update: {flag_update}')
                 print(f'Endpoint: {endpoint}')
-                
+
                 data = json.dumps({
                     "customerInternalReference": beneficiary_data.id_dynamics,
                     "workflowDefinition": {
