@@ -286,7 +286,8 @@
 
 {% block verificacion%}
     <div id='verificacion_sect' class="right_menu">
-        <div class="form-row right_menu mt-3">
+        <div class="form-row right_menu mt-3" id="id-row-section-iframe">
+            <iframe id="jumio_iframe" class="embed-responsive-item" width="100%" height="100%" src="{% if beneficiary_data.jumio_iframe %}{{beneficiary_data.jumio_iframe}}{%endif%}" allow="camera;autoplay;fullscreen;clipboard-read;clipboard-write;accelerometer;gyroscope;magnetometer" allowfullscreen></iframe>
             <div class="col-8">
                 <div class="modal fade" id="modal-id" tabindex="-1" role="dialog" aria-labelledby="modal-finish" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -304,10 +305,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe id="jumio_iframe" class="embed-responsive-item" width="70%" height="80%" src="{% if beneficiary_data.jumio_iframe %}{{beneficiary_data.jumio_iframe}}{%endif%}" allow="camera;autoplay;fullscreen;clipboard-read;clipboard-write;accelerometer;gyroscope;magnetometer" allowfullscreen></iframe>
-                </div>
             </div>
+            <!-- <div class="embed-responsive embed-responsive-16by9">
+               <iframe id="jumio_iframe" class="embed-responsive-item" width="100%" height="100%" src="{% if beneficiary_data.jumio_iframe %}{{beneficiary_data.jumio_iframe}}{%endif%}" allow="camera;autoplay;fullscreen;clipboard-read;clipboard-write;accelerometer;gyroscope;magnetometer" allowfullscreen></iframe>
+            </div> -->
         </div>
     </div>
 {% endblock %}

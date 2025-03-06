@@ -266,7 +266,7 @@ $( document ).ready(function() {
 
     if($("#business_type").val() != ''){
         let value = $("#business_type").val();
-        value = value.trim()
+        // value = value.trim()
 
         if(['913610001','913610003','913610004'].includes(value)) {
             if(['913610003','913610004'].includes(value)){
@@ -615,3 +615,14 @@ function setMaxOption() {
       options[i].innerText = options[i].innerText.slice(0, limite);
     }
 }
+
+// Manejo de screen
+$(window).on('resize', function() {
+    var win = $(this);
+    var sectionWizard = $('#section-wizard');
+    if (win.width() < 660) {
+        sectionWizard.removeClass('col-10').addClass('col-12');
+    } else {
+        sectionWizard.removeClass('col-12').addClass('col-10');
+    }
+}).trigger('resize');
