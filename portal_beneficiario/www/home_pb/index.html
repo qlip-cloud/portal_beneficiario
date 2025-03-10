@@ -39,8 +39,8 @@
                     <div class="col-md-3">
                         <label for="country" class="form-label">* País de Residencia</label>
                         <select id="country" class="form-control" name="country">
-                            <option></option>
-                            {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_name asc') %}
+                            <option value="46" title="COLOMBIA">COLOMBIA</option selected>
+                            {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_name asc', page_length=5) %}
                             {% for c in co %}
                                 <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country %} selected {% endif %}  {% if c.co_code == "46" %} selected {% endif %}>{{ c.co_name.upper() }}</option>
                             {% endfor %}
@@ -84,8 +84,8 @@
                     <div class="col-md-3">
                         <label for="country_birth" class="form-label">* País de Nacimiento</label>
                         <select id="country_birth" class="form-control" name="country_birth">
-                            <option></option>
-                            {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_name asc') %}
+                            <option value="46" title="COLOMBIA">COLOMBIA</option selected>
+                            {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_name asc', page_length=5) %}
                             {% for c in co %}
                                 <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country_of_birth %} selected {% endif %} {% if c.co_code == "46" %} selected {% endif %}>{{ c.co_name.upper() }}</option>                              
                             {% endfor %}
