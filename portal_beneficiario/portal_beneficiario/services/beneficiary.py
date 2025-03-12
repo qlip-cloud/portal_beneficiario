@@ -12,6 +12,7 @@ def save_beneficiary(**args):
     #Se procede a guardar el beneficiario
     frappe.log_error(title='Inicio de proceso en save_beneficiary()', message='')
     try:
+        print("args", args)
         b = frappe.get_doc('qp_PO_Beneficiario', args.get('name'))
 
         if b:
@@ -131,3 +132,15 @@ def get_cities(**args):
 def get_deparments(**args):
     deparments = frappe.db.get_values("qp_PO_TerritorialUnit", filters={"tu_country": args.get('code')}, fieldname=['tu_code', 'tu_name'], as_dict=1)
     return deparments
+
+
+@frappe.whitelist()
+def get_countries(**args):
+    str_filter = f'%{args.get("term")}%'
+    filter = {"country": str_filter} 
+    countries = frappe.db.sql("""
+                                SELECT co_code, UPPER(co_name) as co_name
+                                FROM `tabqp_PO_Country` co
+                                WHERE co.co_name like %(country)s
+                              """, values=filter, as_dict=1)
+    return countries
