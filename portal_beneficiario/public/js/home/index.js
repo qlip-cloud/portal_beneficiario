@@ -1,15 +1,18 @@
 $( document ).ready(function() {
+
+    getDataCountries('#country', '#department', '#city', '#country_hidden');
+    getDataCountries('#country_birth', '#department_birth', '#city_birth', '#country_birth_hidden');
    
     $("form#pb_form").validate({
         debug: false,
         rules:{
             phone: {required: true,number: true, maxlength: 20},
             nationality:'required',
-            country_birth: 'required',
+            country_birth:  {required:true, maxlength: 12},
             department_birth: 'required',
             city_birth: 'required',
             address:'required',
-            country: 'required',
+            country:  {required:true, maxlength: 12},
             city:'required',
             department: 'required',
             business:'required',
@@ -64,16 +67,19 @@ $( document ).ready(function() {
     // Cut the Options select to 30 characters
     setMaxOption();
 
+    // Set COL id:country by Default
+    setDefaultCol('#country', '#country_hidden');
+    setDefaultCol('#country_birth', '#country_birth_hidden');
+
     // Set COL id:nationality by Default
     if ($("#nationality").val() == ''){  
         $('#nationality').removeAttr('disabled');
         $('#nationality').val('colombiano');
     }
-
-
+    
     // Set COL id:country by Default
     if ($("#country").val() != ''){
-        let code = $("#country").val();
+        let code = $("#country_hidden").val();
         
         if($('#department').val() == '' || $('#department').val() == null){
             $('#department').removeAttr('disabled');
@@ -104,12 +110,16 @@ $( document ).ready(function() {
     //End Set COL by Default
 
     $("#country").change(function (e) {
-        if(this.value != '') {
+        let code = $("#country_hidden").val();
+
+        if(code) {
             $('#department').removeAttr('disabled');
+            $('#city').val('');
+            $('#city').attr('disabled', true);
 
             $.ajax({
                 url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
-                data: {"code": this.value},
+                data: {"code": code},
                 dataType: 'json',
                 async: false
             }).done(function(r) {
@@ -129,13 +139,12 @@ $( document ).ready(function() {
             });
 
         } else {
-            $('#department').val('');
-            $('#department').attr('disabled', true);
+            cleanFields('#country', '#department', '#city');
         }
     });
 
     $("#department").change(function (e) {
-        if(this.value != '') {
+        if(this.value) {
             $('#city').removeAttr('disabled');
             getCities(this.value, $('#city'), 0);
 
@@ -147,10 +156,12 @@ $( document ).ready(function() {
 
     // Set COL id:country_birth by Default
     if ($("#country_birth").val() != ''){
-        let code = $("#country_birth").val();
+        let code = $("#country_birth_hidden").val();
         
         if($('#department_birth').val() == '' || $('#department_birth').val() == null){
             $('#department_birth').removeAttr('disabled');
+            $('#city_birth').val('');
+            $('#city_birth').attr('disabled', true);
 
             $.ajax({
                 url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
@@ -176,12 +187,16 @@ $( document ).ready(function() {
     }
 
     $("#country_birth").change(function (e) {
-        if(this.value != '') {
+        let code = $("#country_birth_hidden").val();
+        $('#city_birth').val('');
+        $('#city_birth').attr('disabled', true);
+
+        if(code) {
             $('#department_birth').removeAttr('disabled');
 
             $.ajax({
                 url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
-                data: {"code": this.value},
+                data: {"code": code},
                 dataType: 'json',
                 async: false
             }).done(function(r) {
@@ -201,8 +216,7 @@ $( document ).ready(function() {
             });
 
         } else {
-            $('#department').val('');
-            $('#department').attr('disabled', true);
+            cleanFields('#country_birth', '#department_birth', '#city_birth', "#country_birth_hidden");
         }
     });
 
@@ -626,3 +640,63 @@ $(window).on('resize', function() {
         sectionWizard.removeClass('col-12').addClass('col-10');
     }
 }).trigger('resize');
+
+function getDataCountries(fieldCountry, fieldDepartment, fieldCity, fieldHidden = null) {   
+
+    $(fieldCountry).autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_countries",
+                data: {"term": request.term},
+                dataType: 'json',
+                async: false
+            }).done(function(r) {     
+                if(r.message && r.message.length > 0){  
+                    response($.map(r.message, function(item) {
+                            return {
+                                label: item.co_name,
+                                value: item.co_code
+                            };
+                        }
+                    ));
+                } else {
+                    cleanFields(fieldCountry, fieldDepartment, fieldCity, fieldHidden);
+                }    
+            });
+        },
+        search: function(event, ui) {
+           // getBeforeAfter
+        },
+        focus: function(event, ui) {
+            $(fieldCountry).val(ui.item.label);
+            return false;
+        },
+        select: function(event, ui) {
+            $(fieldHidden).val(ui.item.value);
+            return false;
+        },
+        change: function(event, ui) {
+            if(!ui.item){   
+                cleanFields(fieldCountry, fieldDepartment, fieldCity, fieldHidden);
+            }
+        },
+        minLength: 2
+    });
+}
+
+function cleanFields(fieldCountry, fieldDepartment, fieldCity, fieldHidden = null) {
+    if(fieldHidden){
+        $(fieldHidden).val(null);
+    }
+
+    $(fieldCountry).val(null);
+    $(fieldDepartment).val(null);
+    $(fieldCity).val(null);
+    $(fieldDepartment).attr('disabled', true);
+    $('#save_beneficiary').attr('disabled', true);
+}
+
+function setDefaultCol(field, fieldHidden) {
+    $(field).val("COLOMBIA");
+    $(fieldHidden).val("46");
+}

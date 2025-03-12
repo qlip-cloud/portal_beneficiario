@@ -38,13 +38,8 @@
                     </div>
                     <div class="col-md-3">
                         <label for="country" class="form-label">* País de Residencia</label>
-                        <select id="country" class="form-control" name="country">
-                            <option value="46" title="COLOMBIA">COLOMBIA</option selected>
-                            {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_name asc', page_length=5) %}
-                            {% for c in co %}
-                                <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country %} selected {% endif %}  {% if c.co_code == "46" %} selected {% endif %}>{{ c.co_name.upper() }}</option>
-                            {% endfor %}
-                        </select>
+                        <input type="text" class="form-control" id="country" name="country" value="" maxlength="12"/>
+                        <input type="hidden" class="form-control" id="country_hidden" name="country" value="" />
                     </div>
                     <div class="col-md-3">
                         <label for="department" class="form-label">* Departamento de Residencia</label>
@@ -83,14 +78,8 @@
                     </div>
                     <div class="col-md-3">
                         <label for="country_birth" class="form-label">* País de Nacimiento</label>
-                        <select id="country_birth" class="form-control" name="country_birth">
-                            <option value="46" title="COLOMBIA">COLOMBIA</option selected>
-                            {% set co = frappe.get_all('qp_PO_Country', fields=['co_name', 'co_code'], order_by='co_name asc', page_length=5) %}
-                            {% for c in co %}
-                                <option value="{{ c.co_code }}" {% if c.co_code == beneficiary_data.country_of_birth %} selected {% endif %} {% if c.co_code == "46" %} selected {% endif %}>{{ c.co_name.upper() }}</option>                              
-                            {% endfor %}
-
-                        </select>
+                        <input type="text" class="form-control" id="country_birth" name="country_birth" value="" />
+                        <input type="hidden" class="form-control" id="country_birth_hidden" name="country_birth" value="" maxlength="12" />
                     </div>
                     <div class="col-md-3">
                         <label for="department_birth" class="form-label">* Departamento de Nacimiento</label>
