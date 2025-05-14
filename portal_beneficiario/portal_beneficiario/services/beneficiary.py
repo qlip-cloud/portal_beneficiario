@@ -29,12 +29,14 @@ def save_beneficiary(**args):
                 b.business_activity = args.get('business_type')
 
                 # Economic validations
-                if args.get('business_type') == constantes.CODIGO_INDEPENDIENTE:
-                    b.economic_activity = args.get('business') 
-                elif args.get('business_type') == constantes.CODIGO_EMPLEADO:
-                    b.economic_activity = constantes.CODIGO_ASALARIADO
-                else:
-                    b.economic_activity = ""
+                business_map = {
+                    constantes.CODIGO_INDEPENDIENTE: args.get('business'),
+                    constantes.CODIGO_EMPLEADO: constantes.ECONOMIC_CODIGO_EMPLEADO,
+                    constantes.CODIGO_RENTISTA: constantes.ECONOMIC_CODIGO_RENTISTA,
+                    constantes.CODIGO_PENSIONADO: constantes.ECONOMIC_CODIGO_PENSIONADO
+                }
+
+                b.economic_activity = business_map.get(args.get('business_type'), "")
 
                 if args.get('document_send') == "true":
                     b.document_attach = 1
