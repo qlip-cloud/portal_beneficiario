@@ -2,17 +2,6 @@
  {
   "docstatus": 0,
   "doctype": "qp_PO_SourceFund",
-  "modified": "2024-08-06 11:09:50.517827",
-  "name": "AH",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "sf_code": "AH",
-  "sf_name": "Ahorro"
- },
- {
-  "docstatus": 0,
-  "doctype": "qp_PO_SourceFund",
   "modified": "2024-09-02 14:43:17.107927",
   "name": "913610000",
   "parent": null,
