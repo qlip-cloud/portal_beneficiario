@@ -35,7 +35,7 @@
     background-image: url("/assets/portal_beneficiario/img/stonex_white.webp");
     background-position-x: right;
     background-repeat: no-repeat;
-    padding-bottom: 12vh; /* Espacio para el footer en desktop */
+    padding-bottom: 12vh;
     box-sizing: border-box;
 }
 
@@ -244,7 +244,7 @@ small#tooltip-login {
 
     .principal-login {
         background-image: none;
-        padding-bottom: 20vh; /* Espacio para el footer en mobile */
+        padding-bottom: 20vh;
     }
 
     .welcome-height {
