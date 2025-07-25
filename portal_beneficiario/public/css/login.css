@@ -240,6 +240,12 @@ small#tooltip-login {
     color: #0D1775;
 }
 
+@media (max-width: 999px) {
+    .panel-login {
+        display: none;
+    }
+}
+
 @media (max-width: 576px) {
 
     .principal-login {
@@ -249,7 +255,7 @@ small#tooltip-login {
 
     .welcome-height {
         padding-top: 5em;
-        height: 60vh;
+        height: auto;
     }
 
     .footer-qlip {
