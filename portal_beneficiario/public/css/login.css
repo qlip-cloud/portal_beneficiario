@@ -35,6 +35,8 @@
     background-image: url("/assets/portal_beneficiario/img/stonex_white.webp");
     background-position-x: right;
     background-repeat: no-repeat;
+    padding-bottom: 12vh;
+    box-sizing: border-box;
 }
 
 .panel-bienvenida {
@@ -56,6 +58,7 @@
     margin-right: 0 !important;
     margin-left: 0 !important;
     width: 100vw;
+    z-index: 1000;
 }
 
 .img-class {
@@ -237,22 +240,27 @@ small#tooltip-login {
     color: #0D1775;
 }
 
+@media (max-width: 999px) {
+    .panel-login {
+        display: none;
+    }
+}
+
 @media (max-width: 576px) {
 
     .principal-login {
         background-image: none;
+        padding-bottom: 20vh;
     }
 
     .welcome-height {
         padding-top: 5em;
-        height: 60vh;
+        height: auto;
     }
 
     .footer-qlip {
         background-color: #000000;
         height: 20vh;
-
-
     }
 
     #img2 {
