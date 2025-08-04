@@ -28,7 +28,7 @@ def get_dynamic_accesstoken(dynamic_cnf):
         try:
             response = make_post_request(endpoint, data=data, headers=headers)
         except Exception as e:
-            frappe.log_error(message=e, title="Exception: get_dynamic_accesstoken")
+            frappe.log_error(title='Excepción en dynamics.py (get_dynamic_accesstoken)', message=f'Error al obtener access token, usuario {frappe.session.user}: {e}\n{frappe.get_traceback()}')
             raise e 
         else:
             return response.get("access_token")
@@ -36,8 +36,6 @@ def get_dynamic_accesstoken(dynamic_cnf):
 
 @frappe.whitelist()
 def call_dynamic(beneficiary_id):
-
-    frappe.log_error(title='Inicio de proceso en call_dynamic()', message='')
     
     dynamic_cnf = frappe.db.get_all("qp_PO_DynamicConfigs", fields=["*"])[0]
 
@@ -46,14 +44,14 @@ def call_dynamic(beneficiary_id):
     user = beneficiary_id # args.get('id') 
 
     if not user:
-        frappe.log_error(title='Excepcion en call_dynamic()', message=f'call_dynamic() - No existe el usuario {user}')
+        frappe.log_error(title='Excepción en dynamics.py (call_dynamic)', message=f'Error al obtener datos del usuario {frappe.session.user} para call_dynamic(): {user} no existe')
         return False
 
     # beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
     beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', user, '*', as_dict=1)
 
     if not beneficiary_data:
-        frappe.log_error(title='Excepcion en call_dynamic()', message=f'call_dynamic() - No existe el beneficiario {user}: {beneficiary_data}')
+        frappe.log_error(title='Excepción en dynamics.py (call_dynamic)', message=f'Error al obtener datos del usuario {user} para call_dynamic() - beneficiary_data: {beneficiary_data} no existe')
         return False
 
     contact_data = frappe.db.get_value("Contact", {'user': beneficiary_data.email}, '*', as_dict=1)
@@ -223,8 +221,6 @@ def call_dynamic(beneficiary_id):
             return e
         else:
             return response
-    
-    frappe.log_error(title='Fin de proceso call_dynamic()', message='')
 
 def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_last_numbers):
 

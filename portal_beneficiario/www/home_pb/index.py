@@ -12,6 +12,18 @@ def get_context(context):
         frappe.throw(_("Beneficiario aún no ha sido registrado. Por favor comunique al Administrador."), frappe.PermissionError)
 
     context.no_cache = 1
+    context.beneficiary_not_found = False
+    beneficiary_data = frappe._dict({}) 
+    name_beneficiary = ""
+
+    territorial_units = []
+    cities = []
+    nationalities = []
+    business_activities = []
+    economic_activities = []
+    parent_types = []
+    source_funds = []
+    account_types = []
 
     try:
         try:
@@ -27,7 +39,7 @@ def get_context(context):
         boot_json = re.sub(r"\<script[^<]*\</script\>", "", boot_json)
         boot_json = re.sub(r"</script\>", "", boot_json)
 
-        user = None
+        user = None 
         try:
             user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
             if not user:
@@ -36,43 +48,90 @@ def get_context(context):
             frappe.log_error(title='Excepción en get_context (getUser)', message=f'Error al obtener datos del usuario {frappe.session.user}: {e}\n{frappe.get_traceback()}')
             frappe.throw(_("Error al cargar datos de usuario. Por favor intente de nuevo o comunique al Administrador."), frappe.ValidationError)
 
-        beneficiary_data = None
+        if user.get("email"):
+            try:
+                temp_beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
+                if temp_beneficiary_data:
+                    beneficiary_data = temp_beneficiary_data
+                else:
+                    context.beneficiary_not_found = True
+                    frappe.log_error(title='Beneficiario no encontrado', message=f'No se encontró beneficiario para el email: {user.email}')
+            except Exception as e:
+                context.beneficiary_not_found = True
+                frappe.log_error(title='Excepción en get_context (beneficiary_data)', message=f'Error al obtener datos del beneficiario para el email {user.email}: {e}\n{frappe.get_traceback()}')
+        else:
+            context.beneficiary_not_found = True
+            frappe.log_error(title='Usuario sin email', message=f'El usuario {frappe.session.user} no tiene un email asociado para buscar al beneficiario.')
+
+        if not context.beneficiary_not_found:
+            try:
+                if user and user.email:
+                    id_contact = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
+                    if id_contact:
+                        contact_name_parts = id_contact.name.split("-")
+                        if contact_name_parts:
+                            contact_id = contact_name_parts[-1]
+                            if contact_id:
+                                supplier_data = frappe.db.get_value('Supplier', {'supplier_name': contact_id}, '*', as_dict=1)
+                                if supplier_data and supplier_data.first_name:
+                                    name_beneficiary = supplier_data.first_name
+            except Exception as e:
+                frappe.log_error(title='Excepción en get_context (id_contact/name_beneficiary)', message=f'Error al obtener nombre del beneficiario desde Contact/Supplier: {e}\n{frappe.get_traceback()}')
+
         try:
-            if user and user.email:
-                beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', {'email': user.email}, '*', as_dict=1)
-
-            if beneficiary_data is None:
-                frappe.throw(_("Beneficiario aún no ha sido registrado. Por favor comunique al Administrador."), frappe.PermissionError)
-
-        except frappe.DoesNotExistError:
-            frappe.log_error(title='Excepción en get_context (beneficiary_data)', message=f'Beneficiario no encontrado para el email {user.email if user else "N/A"}.\n{frappe.get_traceback()}')
-            frappe.throw(_("Beneficiario aún no ha sido registrado. Por favor comunique al Administrador."), frappe.PermissionError)
+            territorial_units = frappe.get_all('qp_PO_TerritorialUnit', fields=['tu_code', 'tu_name'], order_by='tu_name asc')
         except Exception as e:
-            frappe.log_error(title='Excepción en get_context (beneficiary_data)', message=f'Error al obtener datos del beneficiario para el email {user.email if user else "N/A"}: {e}\n{frappe.get_traceback()}')
-            frappe.throw(_("Error al cargar datos del beneficiario. Por favor intente de nuevo o comunique al Administrador."), frappe.ValidationError)
+            frappe.log_error(title='Error al obtener Unidades Territoriales', message=f'Error: {e}\n{frappe.get_traceback()}')
 
-        name_beneficiary = ""
         try:
-            if user and user.email:
-                id_contact = frappe.db.get_value("Contact", {'user': user.email}, '*', as_dict=1)
-
-                if id_contact:
-                    contact_name_parts = id_contact.name.split("-")
-                    if contact_name_parts:
-                        contact_id = contact_name_parts[-1]
-                        if contact_id:
-                            supplier_data = frappe.db.get_value('Supplier', {'supplier_name': contact_id}, '*', as_dict=1)
-                            if supplier_data and supplier_data.first_name:
-                                name_beneficiary = supplier_data.first_name
+            cities = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code'], order_by='ci_name asc')
         except Exception as e:
-            frappe.log_error(title='Excepción en get_context (id_contact/name_beneficiary)', message=f'Error al obtener nombre del beneficiario desde Contact/Supplier: {e}\n{frappe.get_traceback()}')
+            frappe.log_error(title='Error al obtener Ciudades', message=f'Error: {e}\n{frappe.get_traceback()}')
+
+        try:
+            nationalities = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_name asc')
+        except Exception as e:
+            frappe.log_error(title='Error al obtener Nacionalidades', message=f'Error: {e}\n{frappe.get_traceback()}')
+
+        try:
+            business_activities = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc')
+        except Exception as e:
+            frappe.log_error(title='Error al obtener Actividades de Negocio', message=f'Error: {e}\n{frappe.get_traceback()}')
+
+        try:
+            economic_activities = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc')
+        except Exception as e:
+            frappe.log_error(title='Error al obtener Actividades Económicas', message=f'Error: {e}\n{frappe.get_traceback()}')
+        
+        try:
+            parent_types = frappe.get_all('qp_PO_ParentType', fields=['pt_name', 'pt_code'], order_by='pt_code asc')
+        except Exception as e:
+            frappe.log_error(title='Error al obtener Tipos de Parentesco', message=f'Error: {e}\n{frappe.get_traceback()}')
+
+        try:
+            source_funds = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc')
+        except Exception as e:
+            frappe.log_error(title='Error al obtener Origen de Fondos', message=f'Error: {e}\n{frappe.get_traceback()}')
+
+        try:
+            account_types = frappe.get_all('qp_PO_AccountType', fields=['at_code', 'at_name'], order_by='at_code asc')
+        except Exception as e:
+            frappe.log_error(title='Error al obtener Tipos de Cuenta', message=f'Error: {e}\n{frappe.get_traceback()}')
 
         context.update({
             "is_navbar_custom": True,
             "csrf_token": csrf_token,
             "beneficiary_data": beneficiary_data,
             "beneficiary_name": name_beneficiary,
-            "no_cache": 1
+            "no_cache": 1,
+            "territorial_units": territorial_units,
+            "cities": cities,
+            "nationalities": nationalities,
+            "business_activities": business_activities,
+            "economic_activities": economic_activities,
+            "parent_types": parent_types,
+            "source_funds": source_funds,
+            "account_types": account_types
         })
 
         return context
