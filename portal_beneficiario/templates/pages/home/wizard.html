@@ -2,6 +2,22 @@
 
 {% block wizard %}
 <section class="signup-step-container col-10 pl-5 pt-5 right" id="section-wizard">
+    
+    {% if beneficiary_not_found %}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert" style="padding: 2rem; border-radius: 8px;">
+                    <h4 class="alert-heading" style="font-weight: bold;">Beneficiario no Encontrado</h4>
+                    <p>El correo <strong>{{ frappe.session.user }}</strong> con el cual creaste la cuenta, no es el mismo que esta registrado en el sistema.</p>
+                    <hr>
+                    <p class="mb-0">Por favor, póngase en contacto con el administrador en <a href="mailto:gestion.colombia@stonex.com" class="alert-link">gestion.colombia@stonex.com</a> para verificar sus datos.</p>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+    
         <div class="row">
             <div class="col-12">
                 <div class="wizard">
@@ -77,5 +93,12 @@
                 </div>
             </div>
         </div>
+    {% endif %}
 </section>
+{% endblock %}
+
+{% block script %}
+    {% if not beneficiary_not_found %}
+        {{ super() }}
+    {% endif %}
 {% endblock %}
