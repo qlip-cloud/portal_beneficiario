@@ -16,15 +16,6 @@ def get_context(context):
     beneficiary_data = frappe._dict({}) 
     name_beneficiary = ""
 
-    territorial_units = []
-    cities = []
-    nationalities = []
-    business_activities = []
-    economic_activities = []
-    parent_types = []
-    source_funds = []
-    account_types = []
-
     try:
         try:
             boot = frappe.sessions.get()
@@ -78,60 +69,13 @@ def get_context(context):
             except Exception as e:
                 frappe.log_error(title='Excepción en get_context (id_contact/name_beneficiary)', message=f'Error al obtener nombre del beneficiario desde Contact/Supplier: {e}\n{frappe.get_traceback()}')
 
-        try:
-            territorial_units = frappe.get_all('qp_PO_TerritorialUnit', fields=['tu_code', 'tu_name'], order_by='tu_name asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Unidades Territoriales', message=f'Error: {e}\n{frappe.get_traceback()}')
-
-        try:
-            cities = frappe.get_all('qp_PO_City', fields=['ci_name', 'ci_code'], order_by='ci_name asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Ciudades', message=f'Error: {e}\n{frappe.get_traceback()}')
-
-        try:
-            nationalities = frappe.get_all('qp_PO_Nationality', fields=['na_name', 'na_code'], order_by='na_name asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Nacionalidades', message=f'Error: {e}\n{frappe.get_traceback()}')
-
-        try:
-            business_activities = frappe.get_all('qp_PO_BusinessActivity', fields=['ba_name', 'ba_code'], order_by='ba_code asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Actividades de Negocio', message=f'Error: {e}\n{frappe.get_traceback()}')
-
-        try:
-            economic_activities = frappe.get_all('qp_PO_EconomicActivity', fields=['ea_name', 'ea_code'], order_by='ea_code asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Actividades Económicas', message=f'Error: {e}\n{frappe.get_traceback()}')
-        
-        try:
-            parent_types = frappe.get_all('qp_PO_ParentType', fields=['pt_name', 'pt_code'], order_by='pt_code asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Tipos de Parentesco', message=f'Error: {e}\n{frappe.get_traceback()}')
-
-        try:
-            source_funds = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Origen de Fondos', message=f'Error: {e}\n{frappe.get_traceback()}')
-
-        try:
-            account_types = frappe.get_all('qp_PO_AccountType', fields=['at_code', 'at_name'], order_by='at_code asc')
-        except Exception as e:
-            frappe.log_error(title='Error al obtener Tipos de Cuenta', message=f'Error: {e}\n{frappe.get_traceback()}')
 
         context.update({
             "is_navbar_custom": True,
             "csrf_token": csrf_token,
             "beneficiary_data": beneficiary_data,
             "beneficiary_name": name_beneficiary,
-            "no_cache": 1,
-            "territorial_units": territorial_units,
-            "cities": cities,
-            "nationalities": nationalities,
-            "business_activities": business_activities,
-            "economic_activities": economic_activities,
-            "parent_types": parent_types,
-            "source_funds": source_funds,
-            "account_types": account_types
+            "no_cache": 1
         })
 
         return context
