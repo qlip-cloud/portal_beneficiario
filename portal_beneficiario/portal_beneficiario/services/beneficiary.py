@@ -10,7 +10,6 @@ from . import constantes
 @frappe.whitelist()
 def save_beneficiary(**args):
     #Se procede a guardar el beneficiario
-    frappe.log_error(title='Inicio de proceso en save_beneficiary()', message='')
     try:
         print("args", args)
         b = frappe.get_doc('qp_PO_Beneficiario', args.get('name'))
@@ -91,7 +90,7 @@ def save_beneficiary(**args):
     except Exception as exe:
         frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error al intentar ingresar a saveBeneficiary: {exe}')
     finally:
-        frappe.log_error(title='Finally save_beneficiary()', message='')
+        pass
         
 @frappe.whitelist()
 def get_status():
