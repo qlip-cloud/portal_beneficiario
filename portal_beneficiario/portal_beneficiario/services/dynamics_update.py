@@ -78,7 +78,14 @@ def update_dynamics(**args):
             data_document_type = ""
             if beneficiary_data.document_type:
                 document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
-                data_document_type = document_type.do_code
+                if document_type:
+                    data_document_type = document_type.do_code
+
+            # Validación: Si no viene el tipo de documento o es nulo, buscar y asignar OTHER_ID
+            if not data_document_type:
+                document_type_other = frappe.db.get_value('qp_PO_DocumentType', {'do_name': 'OTHER_ID'}, '*', as_dict=1)
+                if document_type_other:
+                    data_document_type = document_type_other.do_code
 
             data_city = ""
             if beneficiary_data.city:
@@ -114,10 +121,10 @@ def update_dynamics(**args):
             data = {
                 "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
                 "bit_genero": gender_switch(beneficiary_data.gender),
-                "bit_tipo_de_documento": data_document_type,
-                "bit_numero_documento_jumio": beneficiary_data.document_number,
-                "bit_lugarexpedicion": beneficiary_data.document_expedition_city,
-                "bit_lugar_de_nacimiento_jumio": beneficiary_data.jumio_place_birth,
+                "bit_tipo_de_documento": data_document_type if data_document_type != "" else None,
+                "bit_numero_documento_jumio": beneficiary_data.document_number if beneficiary_data.document_number is not None else "",
+                "bit_lugarexpedicion": beneficiary_data.document_expedition_city if beneficiary_data.document_expedition_city is not None else "",
+                "bit_lugar_de_nacimiento_jumio": beneficiary_data.jumio_place_birth if beneficiary_data.jumio_place_birth is not None else "",
                 "bit_Ciudad@odata.bind": f'/bit_ciudads({data_city})',
                 "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',
                 "bit_Lugar_Nacimiento@odata.bind": f'/bit_ciudads({data_city_birth})',
