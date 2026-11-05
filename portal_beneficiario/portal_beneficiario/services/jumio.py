@@ -12,6 +12,24 @@ from six import string_types, text_type
 from . import constantes
 from . import dynamics
 
+
+def get_jumio_config():
+    configs = frappe.db.get_all("qp_PO_JumioConfig", fields=["name"])
+    if not configs:
+        return None
+
+    doc = frappe.get_doc("qp_PO_JumioConfig", configs[0].name)
+    return frappe._dict({
+        "name": doc.name,
+        "access_token_url": doc.get_password("access_token_url", raise_exception=False),
+        "client_id": doc.get_password("client_id", raise_exception=False),
+        "client_secret": doc.get_password("client_secret", raise_exception=False),
+        "account_url": doc.get_password("account_url", raise_exception=False),
+        "retrieval_url": doc.get_password("retrieval_url", raise_exception=False),
+        "id_jumio": doc.get_password("id_jumio", raise_exception=False),
+    })
+
+
 def get_jumio_accesstoken(jumio_cnf):
 
     if jumio_cnf:
@@ -38,7 +56,7 @@ def get_jumio_iframe():
 
     try:
     
-        jumio_cnf = frappe.db.get_list("qp_PO_JumioConfig", fields=["*"])[0]
+        jumio_cnf = get_jumio_config()
 
         user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
 
@@ -128,7 +146,7 @@ def get_jumio_retrieval(beneficiary_id, status_callback, json_callback):
     user = beneficiary_id # args.get('id') 
 
     try:
-        jumio_cnf = frappe.db.get_all("qp_PO_JumioConfig", fields=["*"])[0]
+        jumio_cnf = get_jumio_config()
 
         # Asynchronous process will be handled
         beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', user, '*', as_dict=1)

@@ -6,20 +6,27 @@
  "engine": "InnoDB",
  "field_order": [
   "attemps_num",
+  "column_break_2",
+  "send_date",
+  "section_break_4",
   "send_status",
   "query",
+  "column_break_7",
   "response",
   "sep_status_account_bank_group",
   "send_status_account_bank",
   "query_account_bank",
+  "column_break_12",
   "response_account_bank",
   "sep_status_dato",
   "send_status_dato",
   "query_dato",
+  "column_break_17",
   "response_dato",
   "sep_status_adjunto",
   "send_status_attach",
   "query_attach",
+  "column_break_22",
   "response_attach"
  ],
  "fields": [
@@ -121,12 +128,41 @@
    "fieldname": "response_attach",
    "fieldtype": "Small Text",
    "label": "Repuesta Servicio Adjunto"
+  },
+  {
+   "fieldname": "send_date",
+   "fieldtype": "Datetime",
+   "label": "Fecha Ultimo Envio"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_22",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-02-13 10:37:46.548343",
+ "modified": "2026-11-05 09:57:19.654405",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicsAttemps",

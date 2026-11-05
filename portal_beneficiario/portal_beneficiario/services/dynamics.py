@@ -13,6 +13,25 @@ from six import string_types, text_type
 from urllib.parse import quote_plus
 
 
+def get_dynamic_config():
+    configs = frappe.db.get_all("qp_PO_DynamicConfigs", fields=["name"])
+    if not configs:
+        return None
+
+    doc = frappe.get_doc("qp_PO_DynamicConfigs", configs[0].name)
+    return frappe._dict({
+        "name": doc.name,
+        "dynamic_url": doc.get_password("dynamic_url", raise_exception=False),
+        "access_token_url": doc.get_password("access_token_url", raise_exception=False),
+        "client_id": doc.get_password("client_id", raise_exception=False),
+        "client_secret": doc.get_password("client_secret", raise_exception=False),
+        "dynamic_resource_url": doc.get_password("dynamic_resource_url", raise_exception=False),
+        "dynamic_account_url": doc.get_password("dynamic_account_url", raise_exception=False),
+        "dynamic_update_account_url": doc.get_password("dynamic_update_account_url", raise_exception=False),
+        "dynamic_document_url": doc.get_password("dynamic_document_url", raise_exception=False),
+    })
+
+
 def get_dynamic_accesstoken(dynamic_cnf):
 
     if dynamic_cnf:
@@ -37,7 +56,7 @@ def get_dynamic_accesstoken(dynamic_cnf):
 @frappe.whitelist()
 def call_dynamic(beneficiary_id):
     
-    dynamic_cnf = frappe.db.get_all("qp_PO_DynamicConfigs", fields=["*"])[0]
+    dynamic_cnf = get_dynamic_config()
 
     # Asynchronous process will be handled
     # user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
@@ -329,6 +348,7 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code, doc_request, doc_response, doc_attemps):
     
     try:
+        send_date = datetime.now()
         if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
             dynamics_attemps = frappe.db.get_value("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}, '*', as_dict=1)
 
@@ -336,6 +356,7 @@ def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code,
             if doc_attemps:
                 frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "attemps_num", dynamics_attemps.attemps_num + 1)
 
+            frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "send_date", send_date)
             frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_status_code, response.status_code)
             frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_request, request)
             frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_response, response.content)
@@ -346,6 +367,7 @@ def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code,
                 "parentfield":"dynamics_attemps",
                 "parenttype":"qp_PO_Beneficiario",
                 "attemps_num": 1,
+                "send_date": send_date,
                 doc_status_code: response.status_code,
                 doc_request: request,
                 doc_response: response.content

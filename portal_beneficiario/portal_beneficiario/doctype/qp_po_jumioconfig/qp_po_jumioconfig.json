@@ -15,38 +15,38 @@
  "fields": [
   {
    "fieldname": "access_token_url",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Access Token URL"
   },
   {
    "fieldname": "client_id",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Client ID"
   },
   {
    "fieldname": "client_secret",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Client Secret"
   },
   {
    "fieldname": "account_url",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Account URL"
   },
   {
    "fieldname": "retrieval_url",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Retrieval URL"
   },
   {
    "fieldname": "id_jumio",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Id Jumio"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 20:48:44.998151",
+ "modified": "2026-11-05 09:22:36.480789",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_JumioConfig",
