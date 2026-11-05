@@ -208,7 +208,7 @@ def call_dynamic(beneficiary_id):
 
         # Send Attach
         sum_attemp = True
-        if beneficiary_data.document_attach:
+        if beneficiary_data.document_attach or frappe.db.exists('File', {'attached_to_name': beneficiary_data.name}):
             sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)
             sum_attemp = False
  
@@ -302,7 +302,7 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
     response=None
     try:
         response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
-        if response:
+        if response is not None:
             saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", doc_attemps=False)
     except Exception as e:
         frappe.log_error(title="Exception: update_banking_dato()", message=f'Error actualizando dato bancario: {e}')
@@ -312,10 +312,12 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
     doc_attach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
 
     if doc_attach:
-        doc_extension = extFile(doc_attach.file_name.split(".")[-1])
+        doc_extension = extFile(doc_attach.file_name.split(".")[-1].lower())
         
-        doc_name =  frappe.db.get("File", {"attached_to_name": beneficiary.name}).name
-        doc_content = base64.b64encode(frappe.get_doc("File", doc_name).get_content())
+        raw_content = frappe.get_doc("File", doc_attach.name).get_content()
+        if isinstance(raw_content, string_types):
+            raw_content = raw_content.encode("utf-8")
+        doc_content = base64.b64encode(raw_content)
 
         endpoint = dynamics_conf.dynamic_document_url
 
@@ -338,7 +340,7 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
         response=None
         try:
             response = requests.request("POST", endpoint, data=all_data, headers=headers)
-            if response:
+            if response is not None:
                 saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach", False)
         
         except Exception as e:
@@ -396,9 +398,13 @@ def isBoolean(field):
         return True
     
 def extFile(extension):
+    if not extension:
+        return "application/octet-stream"
+    extension = extension.lower()
     if extension == "png":
         return "image/png"
     elif extension == "jpeg" or extension == "jpg":
         return "image/jpeg"
     elif extension == "pdf":
         return "application/pdf"
+    return "application/octet-stream"

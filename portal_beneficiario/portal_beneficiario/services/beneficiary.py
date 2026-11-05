@@ -37,7 +37,7 @@ def save_beneficiary(**args):
 
                 b.economic_activity = business_map.get(args.get('business_type'), "")
 
-                if args.get('document_send') == "true":
+                if str(args.get('document_send')).lower() in ("true", "1") or frappe.db.exists("File", {"attached_to_name": b.name}):
                     b.document_attach = 1
 
                 b.peps = args.get('pep')
