@@ -5,10 +5,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "dynamic_url",
-  "access_token_url",
   "client_id",
   "client_secret",
+  "column_break_3",
+  "dynamic_url",
+  "access_token_url",
   "dynamic_resource_url",
   "dynamic_account_url",
   "dynamic_update_account_url",
@@ -54,11 +55,15 @@
    "fieldname": "dynamic_document_url",
    "fieldtype": "Password",
    "label": "Dynamic Send Document URL"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-05 14:22:10.982190",
+ "modified": "2026-11-05 14:34:26.646498",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicConfigs",

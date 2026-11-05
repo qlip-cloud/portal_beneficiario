@@ -7,10 +7,11 @@
  "field_order": [
   "access_token_url",
   "account_url",
-  "client_id",
-  "client_secret",
   "retrieval_url",
-  "id_jumio"
+  "id_jumio",
+  "column_break_3",
+  "client_id",
+  "client_secret"
  ],
  "fields": [
   {
@@ -42,11 +43,15 @@
    "fieldname": "id_jumio",
    "fieldtype": "Password",
    "label": "Id Jumio"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-05 14:22:23.568706",
+ "modified": "2026-11-05 14:31:04.627440",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_JumioConfig",
