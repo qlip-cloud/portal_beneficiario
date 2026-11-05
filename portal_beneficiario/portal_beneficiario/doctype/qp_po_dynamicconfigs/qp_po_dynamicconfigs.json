@@ -5,10 +5,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "dynamic_url",
-  "access_token_url",
   "client_id",
   "client_secret",
+  "column_break_3",
+  "dynamic_url",
+  "access_token_url",
   "dynamic_resource_url",
   "dynamic_account_url",
   "dynamic_update_account_url",
@@ -17,48 +18,52 @@
  "fields": [
   {
    "fieldname": "dynamic_url",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Dynamic Url"
   },
   {
    "fieldname": "access_token_url",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Access Token Url"
   },
   {
    "fieldname": "client_id",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Client Id"
   },
   {
    "fieldname": "client_secret",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Client Secret"
   },
   {
    "fieldname": "dynamic_resource_url",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Dynamic Resource URL"
   },
   {
    "fieldname": "dynamic_account_url",
-   "fieldtype": "Long Text",
+   "fieldtype": "Password",
    "label": "Dynamic Account Bank URL"
   },
   {
    "fieldname": "dynamic_update_account_url",
-   "fieldtype": "Long Text",
+   "fieldtype": "Password",
    "label": "Dynamic Update Account Bank URL"
   },
   {
    "fieldname": "dynamic_document_url",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "Dynamic Send Document URL"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-29 20:49:01.165965",
+ "modified": "2026-11-05 14:34:26.646498",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicConfigs",
@@ -71,30 +76,6 @@
    "print": 1,
    "read": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Supplier",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Guest",
    "share": 1,
    "write": 1
   }

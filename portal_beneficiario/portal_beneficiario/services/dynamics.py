@@ -13,6 +13,25 @@ from six import string_types, text_type
 from urllib.parse import quote_plus
 
 
+def get_dynamic_config():
+    configs = frappe.db.get_all("qp_PO_DynamicConfigs", fields=["name"])
+    if not configs:
+        return None
+
+    doc = frappe.get_doc("qp_PO_DynamicConfigs", configs[0].name)
+    return frappe._dict({
+        "name": doc.name,
+        "dynamic_url": doc.get_password("dynamic_url", raise_exception=False),
+        "access_token_url": doc.get_password("access_token_url", raise_exception=False),
+        "client_id": doc.get_password("client_id", raise_exception=False),
+        "client_secret": doc.get_password("client_secret", raise_exception=False),
+        "dynamic_resource_url": doc.get_password("dynamic_resource_url", raise_exception=False),
+        "dynamic_account_url": doc.get_password("dynamic_account_url", raise_exception=False),
+        "dynamic_update_account_url": doc.get_password("dynamic_update_account_url", raise_exception=False),
+        "dynamic_document_url": doc.get_password("dynamic_document_url", raise_exception=False),
+    })
+
+
 def get_dynamic_accesstoken(dynamic_cnf):
 
     if dynamic_cnf:
@@ -37,7 +56,7 @@ def get_dynamic_accesstoken(dynamic_cnf):
 @frappe.whitelist()
 def call_dynamic(beneficiary_id):
     
-    dynamic_cnf = frappe.db.get_all("qp_PO_DynamicConfigs", fields=["*"])[0]
+    dynamic_cnf = get_dynamic_config()
 
     # Asynchronous process will be handled
     # user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
@@ -86,7 +105,14 @@ def call_dynamic(beneficiary_id):
         data_document_type = ""
         if beneficiary_data.document_type:
             document_type = frappe.db.get_value('qp_PO_DocumentType', {'do_name': beneficiary_data.document_type}, '*', as_dict=1)
-            data_document_type = document_type.do_code
+            if document_type:
+                data_document_type = document_type.do_code
+                
+        # Validación: Si no viene el tipo de documento o es nulo, buscar y asignar OTHER_ID
+        if not data_document_type:
+            document_type_other = frappe.db.get_value('qp_PO_DocumentType', {'do_name': 'OTHER_ID'}, '*', as_dict=1)
+            if document_type_other:
+                data_document_type = document_type_other.do_code
 
         data_city = ""
         if beneficiary_data.city:
@@ -128,10 +154,10 @@ def call_dynamic(beneficiary_id):
         data = {
             "name": f'{beneficiary_data.be_name} {beneficiary_data.surname}',
             "bit_genero": gender_switch(beneficiary_data.gender),
-            "bit_tipo_de_documento": data_document_type,
-            "bit_numero_documento_jumio": beneficiary_data.document_number,
-            "bit_lugarexpedicion": place_expedition_id,
-            "bit_lugar_de_nacimiento_jumio": beneficiary_data.jumio_place_birth,
+            "bit_tipo_de_documento": data_document_type if data_document_type != "" else None,
+            "bit_numero_documento_jumio": beneficiary_data.document_number if beneficiary_data.document_number is not None else "",
+            "bit_lugarexpedicion": place_expedition_id if place_expedition_id is not None else "",
+            "bit_lugar_de_nacimiento_jumio": beneficiary_data.jumio_place_birth if beneficiary_data.jumio_place_birth is not None else "",
             "bit_Ciudad@odata.bind": f'/bit_ciudads({data_city})',
             "bit_Pais_Nacimiento@odata.bind":  f'/bit_pases({data_place_birth})',
             "bit_Lugar_Nacimiento@odata.bind": f'/bit_ciudads({data_city_birth})',
@@ -182,7 +208,7 @@ def call_dynamic(beneficiary_id):
 
         # Send Attach
         sum_attemp = True
-        if beneficiary_data.document_attach:
+        if beneficiary_data.document_attach or frappe.db.exists('File', {'attached_to_name': beneficiary_data.name}):
             sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)
             sum_attemp = False
  
@@ -276,7 +302,7 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
     response=None
     try:
         response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
-        if response:
+        if response is not None:
             saveRequestResponseDynamics(beneficiary, parse_data, response, "send_status_dato", "query_dato", "response_dato", doc_attemps=False)
     except Exception as e:
         frappe.log_error(title="Exception: update_banking_dato()", message=f'Error actualizando dato bancario: {e}')
@@ -286,10 +312,12 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
     doc_attach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
 
     if doc_attach:
-        doc_extension = extFile(doc_attach.file_name.split(".")[-1])
+        doc_extension = extFile(doc_attach.file_name.split(".")[-1].lower())
         
-        doc_name =  frappe.db.get("File", {"attached_to_name": beneficiary.name}).name
-        doc_content = base64.b64encode(frappe.get_doc("File", doc_name).get_content())
+        raw_content = frappe.get_doc("File", doc_attach.name).get_content()
+        if isinstance(raw_content, string_types):
+            raw_content = raw_content.encode("utf-8")
+        doc_content = base64.b64encode(raw_content)
 
         endpoint = dynamics_conf.dynamic_document_url
 
@@ -312,7 +340,7 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
         response=None
         try:
             response = requests.request("POST", endpoint, data=all_data, headers=headers)
-            if response:
+            if response is not None:
                 saveRequestResponseDynamics(beneficiary, all_data, response, "send_status_attach", "query_attach", "response_attach", False)
         
         except Exception as e:
@@ -322,6 +350,7 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code, doc_request, doc_response, doc_attemps):
     
     try:
+        send_date = datetime.now()
         if frappe.db.exists("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}):
             dynamics_attemps = frappe.db.get_value("qp_PO_DynamicsAttemps", {"parent": beneficiary.name}, '*', as_dict=1)
 
@@ -329,6 +358,7 @@ def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code,
             if doc_attemps:
                 frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "attemps_num", dynamics_attemps.attemps_num + 1)
 
+            frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, "send_date", send_date)
             frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_status_code, response.status_code)
             frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_request, request)
             frappe.db.set_value('qp_PO_DynamicsAttemps', dynamics_attemps.name, doc_response, response.content)
@@ -339,6 +369,7 @@ def saveRequestResponseDynamics(beneficiary, request, response, doc_status_code,
                 "parentfield":"dynamics_attemps",
                 "parenttype":"qp_PO_Beneficiario",
                 "attemps_num": 1,
+                "send_date": send_date,
                 doc_status_code: response.status_code,
                 doc_request: request,
                 doc_response: response.content
@@ -367,9 +398,13 @@ def isBoolean(field):
         return True
     
 def extFile(extension):
+    if not extension:
+        return "application/octet-stream"
+    extension = extension.lower()
     if extension == "png":
         return "image/png"
     elif extension == "jpeg" or extension == "jpg":
         return "image/jpeg"
     elif extension == "pdf":
         return "application/pdf"
+    return "application/octet-stream"
