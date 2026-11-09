@@ -194,7 +194,7 @@ def update_dynamics(**args):
 
             # Send Attach
             sum_attemp = True
-            if beneficiary_data.document_attach or frappe.db.exists('File', {'attached_to_name': beneficiary_data.name}):
+            if beneficiary_data.document_attach or beneficiary_data.get("document_file") or frappe.db.exists('File', {'attached_to_name': beneficiary_data.name}):
                 sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)
                 sum_attemp = False
 
@@ -301,8 +301,18 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
 
 def sendDocumentDynamics(beneficiary, dynamics_conf, token):
 
-    # docAttach = frappe.db.get_value("File", {"attached_to_name": beneficiary.name})
-    doc_attach = frappe.db.get_value('File', {'attached_to_name': beneficiary.name}, '*', as_dict=1)
+    doc_attach = None
+    if beneficiary.get("document_file"):
+        doc_attach = frappe.db.get_value('File', {'file_url': beneficiary.document_file, 'attached_to_name': beneficiary.name}, '*', as_dict=1)
+        if not doc_attach:
+            doc_attach = frappe.db.get_value('File', {'file_url': beneficiary.document_file}, '*', as_dict=1)
+
+    if not doc_attach:
+        files = frappe.db.get_all('File', filters={'attached_to_name': beneficiary.name}, fields=['*'], order_by='creation desc', limit=1)
+        if files:
+            doc_attach = files[0]
+            if not beneficiary.get("document_file") and doc_attach.get("file_url"):
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary.name, 'document_file', doc_attach.file_url)
 
     if doc_attach:
         doc_extension = extFile(doc_attach.file_name.split(".")[-1].lower())

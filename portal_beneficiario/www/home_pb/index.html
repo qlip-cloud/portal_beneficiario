@@ -1,19 +1,18 @@
-
 {% extends "portal_beneficiario/templates/pages/home/wizard.html" %}
 
 {% if beneficiary_data.data_declaration == false and  beneficiary_data.authorization_declaration == false%}
     {% block term_and_conditions%}
         <div id='term_and_conditions_sect' class="right_menu">
             <div class="form-row right_menu mt-3">
-                <div class="row">
-                    <div class="col-sm-6">
+                <div class="row w-100 m-0">
+                    <div class="col-12 col-md-8 col-lg-6">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Términos y Condiciones</h5>
-                                <p class="card-text text-justify">Al acceder y utilizar nuestros servicios, acepta que está sujeto <a href="files/2024.08. AUTORIZACIONES Y DECLARACIONES ESPECIALES.pdf" target="_blank" style="text-decoration: underline;">las políticas, autorizaciones, términos y condiciones de StoneX</a>, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano.</p>
-                                <div class="form-check">
-                                        <label class="form-check-label" for="term_conditions">Acepto</label>
-                                        <input type="checkbox" class="form-check-input ml-3" id="term_conditions" name="term_conditions" value="1" {% if beneficiary_data.data_declaration == true and  beneficiary_data.data_declaration == true %} checked {% endif %}/>
+                                <p class="card-text text-justify">Al acceder y utilizar nuestros servicios, acepta que está sujeto a <a href="files/2024.08. AUTORIZACIONES Y DECLARACIONES ESPECIALES.pdf" target="_blank" style="text-decoration: underline;">las políticas, autorizaciones, términos y condiciones de StoneX</a>, y todas las leyes aplicables regirán y se interpretarán de conformidad con el ordenamiento jurídico Colombiano.</p>
+                                <div class="form-check d-flex align-items-center mt-3 pl-0">
+                                    <label class="form-check-label mb-0" for="term_conditions">Acepto</label>
+                                    <input type="checkbox" class="form-check-input position-static ml-3" id="term_conditions" name="term_conditions" value="1" {% if beneficiary_data.data_declaration == true and  beneficiary_data.data_declaration == true %} checked {% endif %}/>
                                 </div>
                             </div>
                         </div>
@@ -26,22 +25,24 @@
 
 {% block basic_data%}
         <div id='basic_data_sect' class="right_menu">
-            <div id="container_personal" class="section-header"><span class="bold-section-header">Datos Personales</span>
-
-                <a id="client_name" name="client_name" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab"> - Sr(a). {{ beneficiary_name.upper() }}</span></a>
+            <div id="container_personal" class="section-header">
+                <div class="section-title-bar">
+                    <span class="bold-section-header">Datos Personales</span>
+                    <a id="client_name" name="client_name" data-toggle="tab" aria-controls="step2" role="tab" aria-expanded="false"><span class="round-tab"> - Sr(a). {{ beneficiary_name.upper() }}</span></a>
+                </div>
                 <hr class="separator-id" />
                 
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="address" class="form-label">* Dirección Residencia</label>
                         <input type="input" class="form-control" id="address" name="address" value="{% if beneficiary_data.address %}{{ beneficiary_data.address.upper() }}{%endif%}" maxlength="150"/>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="country" class="form-label">* País de Residencia</label>
                         <input type="text" class="form-control" id="country" name="country" value="" maxlength="12"/>
                         <input type="hidden" class="form-control" id="country_hidden" name="country" value="" />
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="department" class="form-label">* Departamento de Residencia</label>
                         <select id="department" class="form-control" name="department">
                             {% set tu = frappe.get_all('qp_PO_TerritorialUnit',fields=['tu_code', 'tu_name'], order_by='tu_name asc') %}
@@ -52,7 +53,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="city" class="form-label">* Ciudad de Residencia</label>
                         <select id="city" class="form-control" name="city">
                             {% set cr = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_name asc') %}
@@ -65,7 +66,7 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="nationality" class="form-label">* Nacionalidad</label>
                         <select id="nationality" name="nationality" class="form-control">
                             
@@ -76,12 +77,12 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="country_birth" class="form-label">* País de Nacimiento</label>
                         <input type="text" class="form-control" id="country_birth" name="country_birth" value="" />
                         <input type="hidden" class="form-control" id="country_birth_hidden" name="country_birth" value="" maxlength="12" />
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="department_birth" class="form-label">* Departamento de Nacimiento</label>
                         <select id="department_birth" class="form-control" name="department_birth">
                             {% set tu = frappe.get_all('qp_PO_TerritorialUnit',fields=['tu_code', 'tu_name']) %}
@@ -92,7 +93,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="city_birth" class="form-label">* Ciudad de Nacimiento</label>
                         <select id="city_birth" class="form-control" name="city_birth">
                             {% set cb = frappe.get_all('qp_PO_City',fields=['ci_name', 'ci_code'], order_by='ci_name asc') %}
@@ -105,11 +106,11 @@
                     </div>
                 </div>          
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="phone" class="form-label">* Celular</label>
                         <input type="tel" maxlength="20" class="form-control" id="phone" name="phone" value="{% if beneficiary_data.phone %}{{ beneficiary_data.phone }}{%endif%}"/>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="business_type" class="form-label">* Actividad Laboral</label>
                         <select id="business_type" name="business_type"  class="form-control">
                             <option></option>
@@ -121,7 +122,7 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3 activity_fields" {% if beneficiary_data.business_activity != "913610001" %} hidden {% endif %}>
-                    <div class="col-md-3 business_field">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0 business_field">
                         <label for="business" class="form-label">* Actividad Económica</label>
                         <select id="business" name="business" class="form-control">
                             <option></option>
@@ -132,7 +133,7 @@
                         </select>
                     </div>
                    
-                    <div class="col-md-4"  {% if beneficiary_data.document_attach == 1 %} hidden {% endif %}>
+                    <div class="col-12 col-sm-6 col-md-4 mb-2 mb-md-0"  {% if beneficiary_data.document_attach == 1 %} hidden {% endif %}>
                         <label for="fileToUpload" class="form-label" data-toggle="tooltip" data-placement="bottom" title="Adjunte alguno de los siguientes soportes financieros según le aplique: Declaración de renta, certificado de ingresos o estados financieros certificados por contador público.">* Adjuntar soporte financiero</label>
                         <input type="file" class="form-control" id="fileToUpload" name="fileToUpload" accept="image/jpeg,image/png,application/pdf"/>
                     </div>
@@ -143,44 +144,44 @@
             <div id="container_pep" class="section-header"><span class="bold-section-header">Información PEP</span>
                 <hr class="separator-id" />
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-8">
-                        <div class="form-group form-check">
+                    <div class="col-12 col-md-10">
+                        <div class="form-group form-check pl-0">
                         <p data-toggle="tooltip" data-placement="bottom" title="Es una persona que desempeña o ha desempeñado funciones públicas a nivel nacional o en el extranjero o ejerce funciones directivas en una Organización Internacional.">¿Es usted una Persona Expuesta Políticamente (PEP)?
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                             </svg>
                         </p>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label" for="pepSi">Sí</label>
-                            <input class="form-check-input ml-3" type="radio" name="pep" id="pepSi" value="1" {% if beneficiary_data.peps %} checked {% endif%}>
+                            <input class="form-check-input ml-2" type="radio" name="pep" id="pepSi" value="1" {% if beneficiary_data.peps %} checked {% endif%}>
                         </div>
-                        <div class="form-check form-check-inline">
+                        <div class="form-check form-check-inline ml-3">
                             <label class="form-check-label" for="pepNo">No</label>
-                            <input class="form-check-input ml-3" type="radio" name="pep" id="pepNo" value="0" {% if not beneficiary_data.peps %} checked {% endif%}>
+                            <input class="form-check-input ml-2" type="radio" name="pep" id="pepNo" value="0" {% if not beneficiary_data.peps %} checked {% endif%}>
                         </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-row right_menu mt-3 ml-5 pep_fields" {% if not beneficiary_data.peps %} hidden {% endif%}>
-                    <div class="col-md-2">
+                <div class="form-row right_menu mt-3 pep_fields" {% if not beneficiary_data.peps %} hidden {% endif%}>
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="pep_position" class="form-label">* Cargo</label>
                         <input type="text" class="form-control" id="pep_position" name="pep_position" value="{% if beneficiary_data.position %}{{ beneficiary_data.position }}{%endif%}" maxlength="200">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="link_date" class="form-label">* Fecha de Vinculación</label>
                         <input type="text" class="form-control rq_cond" id="link_date" name="link_date" value="{% if beneficiary_data.link_date %}{{ frappe.format( beneficiary_data.link_date , {'fieldtype': 'Date'}) }}{% endif %}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="link_undate" class="form-label">Fecha de Desvinculación</label>
                         <input type="text" class="form-control rq_cond" id="link_undate" name="link_undate" value="{% if beneficiary_data.link_undate %}{{ frappe.format( beneficiary_data.link_undate , {'fieldtype': 'Date'}) }}{% endif %}">
                     </div>
                 </div>
                 <div class="form-row right_menu">
-                    <div class="col-md-8">
-                        <div class="form-group form-check mt-3">
-                            <p data-toggle="tooltip" data-placement="bottom" title="(i) Personas con las que tengan sociedad conyugal, de hecho, o de derecho; (ii) Familiares hasta segundo grado de consanguinidad, primero afinidad y primero civil.">¿Posee vinculos familiares con una Persona Expuesta Políticamente?
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <div class="col-12 col-md-10">
+                        <div class="form-group form-check mt-3 pl-0">
+                            <p data-toggle="tooltip" data-placement="bottom" title="(i) Personas con las que tengan sociedad conyugal, de hecho, o de derecho; (ii) Familiares hasta segundo grado de consanguinidad, primero afinidad y primero civil.">¿Posee vínculos familiares con una Persona Expuesta Políticamente?
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                                 </svg>
@@ -189,7 +190,7 @@
                                 <label class="form-check-label" for="fpepSi">Sí</label>
                                 <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepSi" value="1" {% if beneficiary_data.peps_parent %} checked {% endif%}>
                             </div>
-                            <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline ml-3">
                                 <label class="form-check-label" for="fpepNo">No</label>
                                 <input class="form-check-input ml-2" type="radio" name="fpep" id="fpepNo" value="0" {% if not beneficiary_data.peps_parent %} checked {% endif%}>
                             </div>
@@ -197,11 +198,11 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3 fpep_fields" {% if not beneficiary_data.peps_parent %} hidden {% endif%}>
-                    <div class="col-md-4">
+                    <div class="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
                         <label for="fpep_name" class="form-label">* Nombre del Familiar</label>
                         <input type="text" class="form-control rq_cond" id="fpep_name" name="fpep_name" value="{% if beneficiary_data.parent_name %}{{beneficiary_data.parent_name}}{%endif%}">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
                         <label for="parent_type" class="form-label">* Tipo de Parentesco</label>
                         <select id="parent_type" name="parent_type" class="form-control rq_cond">
                             <option selected></option>
@@ -217,28 +218,28 @@
             <div id="container_finance" class="section-header"><span class="bold-section-header">Información Financiera</span>
                 <hr class="separator-id"/>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="in" class="form-label">* Ingresos Mensuales</label>
                         <input type="text" class="form-control number" id="in" name="in" value="{% if beneficiary_data.income %}{{beneficiary_data.income}}{%endif%}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="out" class="form-label">* Egresos Mensuales</label>
                         <input type="text" class="form-control number" id="out" name="out" value="{% if beneficiary_data.egress %}{{beneficiary_data.egress}}{%endif%}">
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="assets" class="form-label">* Activos</label>
                         <input type="text" class="form-control number" id="assets" name="assets" value="{% if beneficiary_data.assets %}{{beneficiary_data.assets}}{%endif%}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
                         <label for="passive" class="form-label">* Pasivos</label>
                         <input type="text" class="form-control number" id="passive" name="passive" value="{% if beneficiary_data.passive %}{{beneficiary_data.passive}}{%endif%}">
                     </div>
                 </div> 
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-3">
-                        <label for="source_fund" class="form-label">* Origen de los dinero a recibir</label>
+                    <div class="col-12 col-sm-6 col-md-3 mb-2 mb-md-0">
+                        <label for="source_fund" class="form-label">* Origen de los recursos a recibir</label>
                         <select id="source_fund" name="source_fund" class="form-control">
                             <option selected></option>
                             {% set sf = frappe.get_all('qp_PO_SourceFund', fields=['sf_name', 'sf_code'], order_by='sf_code asc') %}
@@ -249,9 +250,9 @@
                     </div>
                 </div>
                 <div class="form-row right_menu mt-3">
-                    <div class="col-md-4">
-                        <small id="tooltip-login" class="form-text text-start text-muted">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <div class="col-12 col-md-6 col-lg-5">
+                        <small id="tooltip-login" class="form-text text-start text-muted d-block mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
                                 <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
                             </svg>
@@ -275,29 +276,27 @@
 
 {% block verificacion%}
     <div id='verificacion_sect' class="right_menu">
-        <div class="form-row right_menu mt-3" id="id-row-section-iframe">
-            <iframe id="jumio_iframe" class="embed-responsive-item" width="100%" height="100%" src="{% if beneficiary_data.jumio_iframe %}{{beneficiary_data.jumio_iframe}}{%endif%}" allow="camera;autoplay;fullscreen;clipboard-read;clipboard-write;accelerometer;gyroscope;magnetometer" allowfullscreen></iframe>
-            <div class="col-8">
+        <div class="form-row right_menu mt-2" id="id-row-section-iframe">
+            <div class="iframe-container w-100">
+                <iframe id="jumio_iframe" width="100%" height="420" src="{% if beneficiary_data.jumio_iframe %}{{beneficiary_data.jumio_iframe}}{%endif%}" allow="camera;autoplay;fullscreen;clipboard-read;clipboard-write;accelerometer;gyroscope;magnetometer" allowfullscreen></iframe>
+            </div>
+            <div class="col-12">
                 <div class="modal fade" id="modal-id" tabindex="-1" role="dialog" aria-labelledby="modal-finish" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modal-finish">StoneX</h5>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Proceso de verificación finalizado.
-                        </div>
-                        <div class="modal-footer">
-                            <button id="modal-buttom" name="modal-buttom" type="button" class="rounded btn btn-dark btn-lg mt-5 ml-3">Aceptar</button>
-                        </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-finish">StoneX</h5>
+                            </div>
+                            <div class="modal-body">
+                                Proceso de verificación finalizado.
+                            </div>
+                            <div class="modal-footer">
+                                <button id="modal-buttom" name="modal-buttom" type="button" class="btn btn-dark btn-lg">Aceptar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="embed-responsive embed-responsive-16by9">
-               <iframe id="jumio_iframe" class="embed-responsive-item" width="100%" height="100%" src="{% if beneficiary_data.jumio_iframe %}{{beneficiary_data.jumio_iframe}}{%endif%}" allow="camera;autoplay;fullscreen;clipboard-read;clipboard-write;accelerometer;gyroscope;magnetometer" allowfullscreen></iframe>
-            </div> -->
         </div>
     </div>
 {% endblock %}
