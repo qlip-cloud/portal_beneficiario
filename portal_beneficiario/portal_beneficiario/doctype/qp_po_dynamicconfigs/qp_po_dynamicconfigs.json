@@ -19,42 +19,50 @@
   {
    "fieldname": "dynamic_url",
    "fieldtype": "Password",
-   "label": "Dynamic Url"
+   "label": "Dynamic Url",
+   "length": 500
   },
   {
    "fieldname": "access_token_url",
    "fieldtype": "Password",
-   "label": "Access Token Url"
+   "label": "Access Token Url",
+   "length": 500
   },
   {
    "fieldname": "client_id",
    "fieldtype": "Password",
-   "label": "Client Id"
+   "label": "Client Id",
+   "length": 250
   },
   {
    "fieldname": "client_secret",
    "fieldtype": "Password",
-   "label": "Client Secret"
+   "label": "Client Secret",
+   "length": 250
   },
   {
    "fieldname": "dynamic_resource_url",
    "fieldtype": "Password",
-   "label": "Dynamic Resource URL"
+   "label": "Dynamic Resource URL",
+   "length": 500
   },
   {
    "fieldname": "dynamic_account_url",
    "fieldtype": "Password",
-   "label": "Dynamic Account Bank URL"
+   "label": "Dynamic Account Bank URL",
+   "length": 500
   },
   {
    "fieldname": "dynamic_update_account_url",
    "fieldtype": "Password",
-   "label": "Dynamic Update Account Bank URL"
+   "label": "Dynamic Update Account Bank URL",
+   "length": 500
   },
   {
    "fieldname": "dynamic_document_url",
    "fieldtype": "Password",
-   "label": "Dynamic Send Document URL"
+   "label": "Dynamic Send Document URL",
+   "length": 500
   },
   {
    "fieldname": "column_break_3",
@@ -63,7 +71,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-05 14:34:26.646498",
+ "modified": "2026-11-10 21:20:50.340155",
  "modified_by": "Administrator",
  "module": "Portal Beneficiario",
  "name": "qp_PO_DynamicConfigs",
