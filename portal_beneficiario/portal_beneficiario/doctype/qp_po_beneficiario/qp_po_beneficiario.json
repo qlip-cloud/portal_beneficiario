@@ -77,56 +77,56 @@
   {
    "fieldname": "id_dynamics",
    "fieldtype": "Data",
-   "label": "Id Dynamics"
+   "label": "ID de Dynamics"
   },
   {
    "fieldname": "surname",
    "fieldtype": "Data",
-   "label": "Apellido"
+   "label": "Apellidos"
   },
   {
    "fieldname": "document_type",
    "fieldtype": "Link",
-   "label": "Tipo Documento",
+   "label": "Tipo de Documento",
    "options": "qp_PO_DocumentType"
   },
   {
    "fieldname": "document_number",
    "fieldtype": "Data",
-   "label": "Numero Documento"
+   "label": "Número de Documento"
   },
   {
    "fieldname": "gender",
    "fieldtype": "Data",
-   "label": "Genero"
+   "label": "Género"
   },
   {
    "fieldname": "email",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Correo",
+   "label": "Correo Electrónico",
    "reqd": 1,
    "search_index": 1
   },
   {
    "fieldname": "birthday",
    "fieldtype": "Date",
-   "label": "Fecha Nacimiento"
+   "label": "Fecha de Nacimiento"
   },
   {
    "fieldname": "document_expedition_date",
    "fieldtype": "Date",
-   "label": "Fecha Expedicion Documento"
+   "label": "Fecha de Expedición del Documento"
   },
   {
    "fieldname": "document_expedition_city",
    "fieldtype": "Data",
-   "label": "Ciudad Expedicion Documento"
+   "label": "Ciudad de Expedición del Documento"
   },
   {
    "fieldname": "phone",
    "fieldtype": "Data",
-   "label": "Telefono"
+   "label": "Teléfono de Contacto"
   },
   {
    "fieldname": "nationality",
@@ -137,7 +137,7 @@
   {
    "fieldname": "address",
    "fieldtype": "Data",
-   "label": "Direccion"
+   "label": "Dirección de Residencia"
   },
   {
    "fieldname": "city",
@@ -149,38 +149,38 @@
    "default": "0",
    "fieldname": "peps",
    "fieldtype": "Check",
-   "label": "PEPS"
+   "label": "¿Es Persona Expuesta Políticamente (PEP)?"
   },
   {
    "fieldname": "position",
    "fieldtype": "Small Text",
-   "label": "Cargo"
+   "label": "Cargo que Desempeña"
   },
   {
    "fieldname": "link_date",
    "fieldtype": "Date",
-   "label": "Fecha Vinculacion"
+   "label": "Fecha de Vinculación al Cargo"
   },
   {
    "default": "0",
    "fieldname": "peps_parent",
    "fieldtype": "Check",
-   "label": "PEPS Parentesco"
+   "label": "¿Tiene Parentesco con un PEP?"
   },
   {
    "fieldname": "parent_name",
    "fieldtype": "Data",
-   "label": "Nombre Parentesco"
+   "label": "Nombre del Familiar PEP"
   },
   {
    "fieldname": "parent_type",
    "fieldtype": "Data",
-   "label": "Tipo Parentesco"
+   "label": "Tipo de Parentesco"
   },
   {
    "fieldname": "economic_activity",
    "fieldtype": "Link",
-   "label": "Actividad Economica",
+   "label": "Actividad Económica (CIIU)",
    "options": "qp_PO_EconomicActivity"
   },
   {
@@ -192,72 +192,72 @@
   {
    "fieldname": "income",
    "fieldtype": "Currency",
-   "label": "Ingresos"
+   "label": "Ingresos Mensuales"
   },
   {
    "fieldname": "egress",
    "fieldtype": "Currency",
-   "label": "Egresos"
+   "label": "Egresos Mensuales"
   },
   {
    "fieldname": "assets",
    "fieldtype": "Currency",
-   "label": "Activos"
+   "label": "Total Activos"
   },
   {
    "fieldname": "passive",
    "fieldtype": "Currency",
-   "label": "Pasivos"
+   "label": "Total Pasivos"
   },
   {
    "fieldname": "patrimony",
    "fieldtype": "Currency",
-   "label": "Patrimonio"
+   "label": "Total Patrimonio"
   },
   {
    "default": "0",
    "fieldname": "data_declaration",
    "fieldtype": "Check",
-   "label": "Declaracion Datos"
+   "label": "Declaración de Tratamiento de Datos"
   },
   {
    "default": "0",
    "fieldname": "authorization_declaration",
    "fieldtype": "Check",
-   "label": "Declaracion Autorizacion"
+   "label": "Declaración de Autorización"
   },
   {
    "fieldname": "jumio_points",
    "fieldtype": "Data",
-   "label": "Puntaje Jumio"
+   "label": "Puntaje de Riesgo Jumio"
   },
   {
    "fieldname": "be_name",
    "fieldtype": "Data",
-   "label": "Nombre"
+   "label": "Nombres"
   },
   {
    "fieldname": "source_fund",
    "fieldtype": "Link",
-   "label": "Source Fund",
+   "label": "Origen de los Fondos",
    "options": "qp_PO_SourceFund"
   },
   {
    "default": "PENDING",
    "fieldname": "jumio_status",
    "fieldtype": "Select",
-   "label": "Jumio Status",
+   "label": "Estado de Verificación Jumio",
    "options": "PENDING\nPROCESSED\nSESSION_EXPIRED\nTOKEN_EXPIRED"
   },
   {
    "fieldname": "jumio_workflowexecution",
    "fieldtype": "Data",
-   "label": "Jumio workflowExecution"
+   "label": "ID de Ejecución (Workflow Jumio)"
   },
   {
    "fieldname": "jumio_account",
    "fieldtype": "Data",
-   "label": "Jumio account"
+   "label": "ID de Cuenta Jumio"
   },
   {
    "default": "1",
@@ -268,71 +268,71 @@
   {
    "fieldname": "jumio_iframe",
    "fieldtype": "Long Text",
-   "label": "Jumio Iframe"
+   "label": "URL de Verificación (Iframe Jumio)"
   },
   {
    "fieldname": "jumio_attemps",
    "fieldtype": "Table",
-   "label": "Jumio Attemps",
+   "label": "Intentos de Verificación en Jumio",
    "options": "qp_PO_JumioAttemps"
   },
   {
    "fieldname": "jumio_section",
    "fieldtype": "Section Break",
-   "label": "Jumio Section"
+   "label": "Validación de Identidad (Jumio)"
   },
   {
    "fieldname": "link_undate",
    "fieldtype": "Date",
-   "label": "Fecha Desvinculacion"
+   "label": "Fecha de Desvinculación del Cargo"
   },
   {
    "fieldname": "account_number",
    "fieldtype": "Data",
-   "label": "Numero de Cuenta"
+   "label": "Número de Cuenta"
   },
   {
    "fieldname": "bank",
    "fieldtype": "Data",
-   "label": "Banco"
+   "label": "Entidad Bancaria"
   },
   {
    "fieldname": "account_type",
    "fieldtype": "Link",
-   "label": "Tipo de Cuenta",
+   "label": "Tipo de Cuenta Bancaria",
    "options": "qp_PO_AccountType"
   },
   {
    "fieldname": "dynamics_section",
    "fieldtype": "Section Break",
-   "label": "Estatus envio a Dynamics"
+   "label": "Historial de Envíos a Dynamics"
   },
   {
    "fieldname": "dynamics_attemps",
    "fieldtype": "Table",
-   "label": "Dynamics_Attemps",
+   "label": "Intentos de Envío a Dynamics",
    "options": "qp_PO_DynamicsAttemps"
   },
   {
    "fieldname": "document_expedition_country",
    "fieldtype": "Data",
-   "label": "Pais Expedicion Documento"
+   "label": "País de Expedición del Documento"
   },
   {
    "fieldname": "jumio_rejects",
    "fieldtype": "Small Text",
-   "label": "Jumio Rechazo Notas"
+   "label": "Notas y Causales de Rechazo (Jumio)"
   },
   {
    "fieldname": "country",
    "fieldtype": "Link",
-   "label": "Pais de Residencia",
+   "label": "País de Residencia",
    "options": "qp_PO_Country"
   },
   {
    "fieldname": "country_of_birth",
    "fieldtype": "Link",
-   "label": "Pais de Nacimiento",
+   "label": "País de Nacimiento",
    "options": "qp_PO_Country"
   },
   {
@@ -344,19 +344,19 @@
   {
    "fieldname": "department",
    "fieldtype": "Link",
-   "label": "Departamento Residencia",
+   "label": "Departamento de Residencia",
    "options": "qp_PO_TerritorialUnit"
   },
   {
    "default": "0",
    "fieldname": "document_attach",
    "fieldtype": "Check",
-   "label": "Documento Economico"
+   "label": "Soporte Económico Adjunto"
   },
   {
    "fieldname": "jumio_file",
    "fieldtype": "Long Text",
-   "label": "Jumio Documento"
+   "label": "URL del Expediente Jumio"
   },
   {
    "fieldname": "department_of_birth",
@@ -367,7 +367,7 @@
   {
    "fieldname": "sal_col_pep",
    "fieldtype": "Column Break",
-   "label": "PEP"
+   "label": "Persona Expuesta Políticamente (PEP)"
   },
   {
    "fieldname": "sal_col_personales",
@@ -377,17 +377,17 @@
   {
    "fieldname": "sal_col_financiera",
    "fieldtype": "Column Break",
-   "label": "Informacion Financiera"
+   "label": "Información Financiera"
   },
   {
    "fieldname": "form_sec_beneficiario",
    "fieldtype": "Section Break",
-   "label": "Beneficiario"
+   "label": "Datos del Beneficiario"
   },
   {
    "fieldname": "form_sec_personales",
    "fieldtype": "Section Break",
-   "label": "Datos Basicos"
+   "label": "Datos Básicos"
   },
   {
    "fieldname": "sal_col_benei",
@@ -400,7 +400,7 @@
   {
    "fieldname": "form_sec_jumio",
    "fieldtype": "Section Break",
-   "label": "Datos Jumio"
+   "label": "Datos Extraídos por Jumio"
   },
   {
    "fieldname": "sal_col_jumioi",
@@ -421,12 +421,12 @@
   {
    "fieldname": "form_sec_jumio_att",
    "fieldtype": "Section Break",
-   "label": "Estatus Jumio Retrieval"
+   "label": "Historial de Verificaciones en Jumio"
   },
   {
    "fieldname": "jumio_place_birth",
    "fieldtype": "Data",
-   "label": "Lugar de Nacimiento Jumio"
+   "label": "Lugar de Nacimiento (Jumio)"
   }
  ],
  "index_web_pages_for_search": 1,

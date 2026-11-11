@@ -37,7 +37,14 @@ def save_beneficiary(**args):
 
                 b.economic_activity = business_map.get(args.get('business_type'), "")
 
-                if str(args.get('document_send')).lower() in ("true", "1") or frappe.db.exists("File", {"attached_to_name": b.name}):
+                if args.get('document_file'):
+                    b.document_file = args.get('document_file')
+
+                existing_file_url = frappe.db.get_value("File", {"attached_to_name": b.name}, "file_url")
+                if not b.document_file and existing_file_url:
+                    b.document_file = existing_file_url
+
+                if str(args.get('document_send')).lower() in ("true", "1") or b.document_file or existing_file_url:
                     b.document_attach = 1
 
                 b.peps = args.get('pep')
@@ -91,7 +98,25 @@ def save_beneficiary(**args):
         frappe.log_error(title='Excepcion en save_beneficiary()', message=f'save_beneficiary() - Error al intentar ingresar a saveBeneficiary: {exe}')
     finally:
         pass
-        
+
+
+@frappe.whitelist()
+def set_document_file(name=None, file_url=None, **args):
+    try:
+        name = name or args.get("name")
+        file_url = file_url or args.get("file_url")
+        if name and file_url:
+            frappe.db.set_value("qp_PO_Beneficiario", name, {
+                "document_file": file_url,
+                "document_attach": 1
+            })
+            frappe.db.commit()
+            return True
+    except Exception as e:
+        frappe.log_error(title="Excepcion en set_document_file()", message=f"set_document_file() - Error guardando ruta de archivo en beneficiario {name}: {e}")
+    return False
+
+
 @frappe.whitelist()
 def get_status():
     user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)

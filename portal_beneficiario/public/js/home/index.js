@@ -400,11 +400,19 @@ $( document ).ready(function() {
                         formData.append("is_private", 0);
                         formData.append("doctype", "qp_PO_Beneficiario");
                         formData.append("docname", response.name);
-                        formData.append("fieldname", "document_attach");
+                        formData.append("fieldname", "document_file");
     
                         call_back = (data) => {
     
                             if(data) {
+                                if (data.file_url) {
+                                    $.ajax({
+                                        url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.set_document_file",
+                                        data: {"name": response.name, "file_url": data.file_url},
+                                        dataType: 'json',
+                                        async: false
+                                    });
+                                }
                                 if(r.message.jumio_status != "PROCESSED"){
                                     callJumio(r.message)
                                 }
