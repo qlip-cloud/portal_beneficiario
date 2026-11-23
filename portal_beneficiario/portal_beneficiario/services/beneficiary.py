@@ -225,6 +225,8 @@ def save_beneficiary(**args):
 
         b.economic_activity = business_map.get(args.get('business_type'), "")
 
+        # Validar adjunto contra el DocType File (qp_PO_Beneficiario solo tiene el check document_attach)
+        matched_file = None
         doc_file_arg = args.get('document_file')
         if doc_file_arg and isinstance(doc_file_arg, string_types) and doc_file_arg.startswith('/private/files/'):
             matched_file = frappe.db.get_value(
@@ -238,13 +240,17 @@ def save_beneficiary(**args):
             )
             if matched_file:
                 _validate_file_content(frappe.get_doc("File", matched_file))
-                b.document_file = doc_file_arg
 
-        existing_file_url = frappe.db.get_value("File", {"attached_to_name": b.name}, "file_url")
-        if not b.document_file and existing_file_url:
-            b.document_file = existing_file_url
+        existing_file_url = frappe.db.get_value(
+            "File",
+            {
+                "attached_to_doctype": "qp_PO_Beneficiario",
+                "attached_to_name": b.name,
+            },
+            "file_url",
+        )
 
-        if str(args.get('document_send')).lower() in ("true", "1") or b.document_file or existing_file_url:
+        if str(args.get('document_send')).lower() in ("true", "1") or matched_file or existing_file_url:
             b.document_attach = 1
 
         b.peps = args.get('pep')
@@ -331,7 +337,6 @@ def set_document_file(name=None, file_url=None, **args):
 
         _validate_file_content(frappe.get_doc("File", file_name))
 
-        b.document_file = file_url
         b.document_attach = 1
         b.save()
         frappe.db.commit()
@@ -341,7 +346,7 @@ def set_document_file(name=None, file_url=None, **args):
     except Exception as e:
         frappe.log_error(
             title="Excepcion en set_document_file()",
-            message=f"set_document_file() - Error guardando ruta de archivo en beneficiario ({frappe.session.user}): {e}",
+            message=f"set_document_file() - Error asociando archivo en beneficiario ({frappe.session.user}): {e}",
         )
         frappe.throw(_("No fue posible asociar el archivo al beneficiario."))
 
