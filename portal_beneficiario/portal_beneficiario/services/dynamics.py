@@ -506,7 +506,14 @@ def call_dynamic(beneficiary_id=None, name=None, id_dynamics=None):
 
         # Send Attach: si envía adjunto, sendDocumentDynamics incrementa el intento y sum_attemp pasa a False
         sum_attemp = True
-        if beneficiary_data.document_attach or frappe.db.exists('File', {'attached_to_name': beneficiary_data.name}):
+        has_attached_file = frappe.db.exists(
+            'File',
+            {
+                'attached_to_doctype': 'qp_PO_Beneficiario',
+                'attached_to_name': beneficiary_data.name,
+            },
+        )
+        if beneficiary_data.document_attach or has_attached_file:
             sendDocumentDynamics(beneficiary_data, dynamic_cnf, api_token)
             sum_attemp = False
 
@@ -694,8 +701,11 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
     doc_attach = None
     files = frappe.db.get_all(
         'File',
-        filters={'attached_to_name': beneficiary.name},
-        fields=['*'],
+        filters={
+            'attached_to_doctype': 'qp_PO_Beneficiario',
+            'attached_to_name': beneficiary.name,
+        },
+        fields=['name', 'file_name', 'file_url', 'is_private'],
         order_by='creation desc',
         limit=1
     )
