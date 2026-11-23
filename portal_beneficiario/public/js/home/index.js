@@ -259,6 +259,10 @@ $(document).ready(function() {
     });
 
     $(".next-step").click(function(e) {
+        // #save_beneficiary controla el avance manualmente solo tras guardar sin errores
+        if (this.id === 'save_beneficiary') {
+            return;
+        }
         if ($('#pb_form').valid()) {
             var active = $('.wizard .nav-tabs li.active');
             nextTab(active);
@@ -273,6 +277,9 @@ $(document).ready(function() {
     $("#save_beneficiary").click(function(e) {
 
         if ($('#pb_form').valid()) {
+
+            var $btn = $(this);
+            $btn.attr('disabled', true);
 
             var unindexed_array = $('#pb_form').serializeArray();
             var indexed_array = {};
@@ -298,6 +305,13 @@ $(document).ready(function() {
                 dataType: 'json'
             }).done(function(r) {
 
+                // Si el backend reportó una excepción o no devolvió el beneficiario guardado, no continuar a Jumio
+                if (!r || r.exc || !r.message || !r.message.name) {
+                    $btn.removeAttr('disabled');
+                    alert("Error en el sistema, por favor contactar al Administrador. Error 10004");
+                    return;
+                }
+
                 let response = r.message;
 
                 // Upload File como privado (is_private = 1) para proteger soportes financieros/identidad
@@ -312,21 +326,30 @@ $(document).ready(function() {
                     formData.append("docname", response.name);
 
                     var call_back = (data) => {
-                        if (data && r.message.jumio_status != "PROCESSED") {
+                        if (!data) {
+                            // Si falla la carga del archivo, mantener al usuario en Datos Básicos y bloquear paso a Jumio
+                            $btn.removeAttr('disabled');
+                            return;
+                        }
+                        if (response.jumio_status != "PROCESSED") {
                             callJumio();
                         }
                     };
 
-                    send_petition_upload("", "", formData, call_back, url_file);
+                    send_petition_upload("", "", formData, call_back, url_file).catch(function() {
+                        $btn.removeAttr('disabled');
+                    });
 
                 } else {
-                    if (r.message.jumio_status != "PROCESSED") {
+                    if (response.jumio_status != "PROCESSED") {
                         callJumio();
                     }
                 }
 
-            }).fail(function(e) {
-                alert("Error en el sistema, por favor contactar al Administrador. Error 10004");
+            }).fail(function(xhr) {
+                $btn.removeAttr('disabled');
+                var errorMsg = extractServerErrorMessage(xhr);
+                alert(errorMsg || "Error en el sistema, por favor contactar al Administrador. Error 10004");
             });
         }
     });
@@ -345,6 +368,24 @@ $(document).ready(function() {
         }
     });
 });
+
+function extractServerErrorMessage(xhr) {
+    try {
+        var resp = xhr && xhr.responseJSON ? xhr.responseJSON : JSON.parse(xhr.responseText);
+        if (resp && resp._server_messages) {
+            var messages = JSON.parse(resp._server_messages);
+            if (Array.isArray(messages) && messages.length > 0) {
+                var parsed = JSON.parse(messages[0]);
+                if (parsed && parsed.message) {
+                    return $('<div>').html(parsed.message).text();
+                }
+            }
+        }
+    } catch (err) {
+        return null;
+    }
+    return null;
+}
 
 function loadDepartments(code, selector) {
     $.ajax({
@@ -404,12 +445,13 @@ function send_petition_upload(module_root, method, formData, callback, url = nul
                     response = {message: {msg: "Error procesando respuesta del servidor"}};
                 }
 
-                if (xhr.status === 200) {
+                if (xhr.status === 200 && !response.exc) {
                     callback(response.message);
                     resolve(response.message);
                 } else {
                     callback(null);
-                    frappe.msgprint(__(`Error: ${(response.message && response.message.msg) || 'No se pudo cargar el archivo'}`));
+                    var serverMsg = extractServerErrorMessage({ responseJSON: response });
+                    frappe.msgprint(__(`Error: ${serverMsg || (response.message && response.message.msg) || 'No se pudo cargar el archivo'}`));
                     reject(response);
                 }
             }
@@ -442,16 +484,23 @@ function callJumio() {
 
         var href = r.message && r.message.web && r.message.web.href;
         if (href && isValidJumioUrl(href)) {
+            // Avanzar al paso de Verificación (Jumio) únicamente cuando los datos y la sesión de Jumio estén listos
+            var active = $('.wizard .nav-tabs li.active');
+            $('#step3').removeAttr('hidden');
+            nextTab(active);
+
             $('#jumio_iframe').attr('src', href);
             $('#basic_btn').addClass('hidden');
             $("#messageBox").text("Estamos verificando tu identidad. Este proceso es rápido y seguro. Por favor, sigue las instrucciones en pantalla.");
             $('#messageBox').removeClass('hidden');
             checkStatus();
         } else {
+            $('#save_beneficiary').removeAttr('disabled');
             alert("Error en el sistema, por favor contactar al Administrador. Error 10000");
         }
 
     }).fail(function(e) {
+        $('#save_beneficiary').removeAttr('disabled');
         alert("Error en el sistema, por favor contactar al Administrador. Error 10006");
     });
 }
