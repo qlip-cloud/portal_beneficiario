@@ -7,34 +7,27 @@ from six import string_types
 from frappe.utils import getdate, now
 import traceback
 
+
 def get_context(context):
     if frappe.session.user == "Guest":
         frappe.throw(_("Beneficiario aún no ha sido registrado. Por favor comunique al Administrador."), frappe.PermissionError)
 
     context.no_cache = 1
     context.beneficiary_not_found = False
-    beneficiary_data = frappe._dict({}) 
+    beneficiary_data = frappe._dict({})
     name_beneficiary = ""
 
     try:
-        try:
-            boot = frappe.sessions.get()
-        except Exception as e:
-            boot = frappe._dict(status='failed', error=str(e))
-            frappe.log_error(title='Excepción en get_context (boot)', message=f'Error al obtener boot de sesión: {e}\n{frappe.get_traceback()}')
-
         csrf_token = frappe.sessions.get_csrf_token()
         frappe.db.commit()
 
-        boot_json = frappe.as_json(boot)
-        boot_json = re.sub(r"\<script[^<]*\</script\>", "", boot_json)
-        boot_json = re.sub(r"</script\>", "", boot_json)
-
-        user = None 
+        user = None
         try:
             user = frappe.db.get_value("User", frappe.session.user, '*', as_dict=1)
             if not user:
                 frappe.throw(_("Usuario no encontrado. Por favor comunique al Administrador."), frappe.PermissionError)
+        except frappe.PermissionError:
+            raise
         except Exception as e:
             frappe.log_error(title='Excepción en get_context (getUser)', message=f'Error al obtener datos del usuario {frappe.session.user}: {e}\n{frappe.get_traceback()}')
             frappe.throw(_("Error al cargar datos de usuario. Por favor intente de nuevo o comunique al Administrador."), frappe.ValidationError)
@@ -69,7 +62,6 @@ def get_context(context):
             except Exception as e:
                 frappe.log_error(title='Excepción en get_context (id_contact/name_beneficiary)', message=f'Error al obtener nombre del beneficiario desde Contact/Supplier: {e}\n{frappe.get_traceback()}')
 
-
         context.update({
             "is_navbar_custom": True,
             "csrf_token": csrf_token,
@@ -82,11 +74,11 @@ def get_context(context):
 
     except frappe.ValidationError as ve:
         frappe.log_error(title='Error de Validación en get_context', message=f'Error de validación: {ve}\n{frappe.get_traceback()}')
-        pass
+        raise
 
     except frappe.PermissionError as pe:
         frappe.log_error(title='Error de Permiso en get_context', message=f'Error de permiso: {pe}\n{frappe.get_traceback()}')
-        pass
+        raise
 
     except Exception as exc:
         traceback_str = traceback.format_exc()
