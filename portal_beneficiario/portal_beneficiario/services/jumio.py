@@ -17,8 +17,6 @@ from . import dynamics
 
 JUMIO_ERROR_PREFIX = "[Jumio Error]"
 JUMIO_REQUEST_TIMEOUT = 30
-# Cambiar a True cuando se coordine con Jumio la validación de firma, estados e idempotencia del webhook
-ENABLE_CALLBACK_SECURITY_CHECKS = False
 VALID_CALLBACK_STATUSES = {
     "PROCESSED",
     "SESSION_EXPIRED",
@@ -585,8 +583,13 @@ def get_jumio_retrieval(beneficiary_id, status_callback, json_callback):
         ja.insert(ignore_permissions=True)
         frappe.db.commit()
 
-        # Enviar actualización a Dynamics CRM
-        dynamics.call_dynamic(user)
+        # Enviar actualización a Dynamics CRM (bandera server-side para permitir ejecución desde webhook)
+        frappe.flags.in_jumio_callback = True
+        try:
+            dynamics.call_dynamic(user)
+        finally:
+            frappe.flags.in_jumio_callback = False
+
         return True
 
     except Exception as e:
@@ -603,44 +606,33 @@ def get_jumio_retrieval(beneficiary_id, status_callback, json_callback):
 
 @frappe.whitelist(allow_guest=True)
 def callback(**args):
-    """Webhook de Jumio. Controles estrictos gobernados por ENABLE_CALLBACK_SECURITY_CHECKS."""
+    """Webhook de Jumio con controles compensatorios Zero-Trust (sin dependencia de firma HMAC)."""
     try:
-        workflow = args.get("workflowExecution") or {}
-        account = args.get("account") or {}
+        workflow = args.get("workflowExecution")
+        account = args.get("account")
 
-        if ENABLE_CALLBACK_SECURITY_CHECKS:
-            jumio_cnf = get_jumio_config()
-            if not _verify_jumio_callback_signature(jumio_cnf):
-                log_jumio_error(
-                    "callback",
-                    request_data=args,
-                    extra_info="Firma de webhook Jumio inválida o ausente",
-                )
-                frappe.local.response["http_status_code"] = 403
-                return 1
+        # 1. Validación estricta de estructura básica del payload
+        if not isinstance(workflow, dict) or not isinstance(account, dict):
+            log_jumio_error(
+                "callback",
+                request_data=args,
+                extra_info="Payload de callback inválido: workflowExecution y account deben ser objetos dict",
+            )
+            frappe.local.response["http_status_code"] = 400
+            return 1
 
-            if not isinstance(workflow, dict) or not isinstance(account, dict):
-                log_jumio_error(
-                    "callback",
-                    request_data=args,
-                    extra_info="Payload de callback inválido: faltan objetos workflowExecution o account",
-                )
-                frappe.local.response["http_status_code"] = 400
-                return 1
+        workflow_id = workflow.get("id")
+        account_id = account.get("id")
+        status_workflowExecution = workflow.get("status")
 
-        workflow_id = workflow.get("id") if isinstance(workflow, dict) else None
-        account_id = account.get("id") if isinstance(account, dict) else None
-        status_workflowExecution = workflow.get("status") if isinstance(workflow, dict) else None
-
-        if ENABLE_CALLBACK_SECURITY_CHECKS:
-            if not workflow_id or not account_id or status_workflowExecution not in VALID_CALLBACK_STATUSES:
-                log_jumio_error(
-                    "callback",
-                    request_data=args,
-                    extra_info=f"Datos inválidos en callback (status={status_workflowExecution})",
-                )
-                frappe.local.response["http_status_code"] = 400
-                return 1
+        if not workflow_id or not account_id or status_workflowExecution not in VALID_CALLBACK_STATUSES:
+            log_jumio_error(
+                "callback",
+                request_data=args,
+                extra_info=f"Datos inválidos en callback (status={status_workflowExecution})",
+            )
+            frappe.local.response["http_status_code"] = 400
+            return 1
 
         beneficiary_data = frappe.db.get_value(
             'qp_PO_Beneficiario',
@@ -652,8 +644,8 @@ def callback(**args):
         if not beneficiary_data:
             return 1
 
-        # Idempotencia: evitar replay si el beneficiario ya fue procesado
-        if ENABLE_CALLBACK_SECURITY_CHECKS and beneficiary_data.jumio_status == "PROCESSED":
+        # 2. Idempotencia siempre activa: evitar replay si el beneficiario ya fue procesado
+        if beneficiary_data.jumio_status == "PROCESSED":
             return 0
 
         json_workflow_format = json.dumps(args, default=json_handler)
@@ -674,12 +666,26 @@ def callback(**args):
             frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 1)
             frappe.db.commit()
         else:
+            # 3. Verificación autenticada server-to-server contra API de Jumio antes de actualizar el estado
+            retrieval_ok = get_jumio_retrieval(
+                beneficiary_data.name,
+                status_workflowExecution,
+                json_workflow_format,
+            )
+            if not retrieval_ok:
+                log_jumio_error(
+                    "callback",
+                    request_data=args,
+                    extra_info=(
+                        f"Verificación server-to-server fallida en get_jumio_retrieval; "
+                        f"no se actualiza jumio_status ni enable | Beneficiario: {beneficiary_data.name}"
+                    ),
+                )
+                return 1
+
             frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "jumio_status", status_workflowExecution)
             frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, "enable", 1)
             frappe.db.commit()
-
-            # Retrieval Jumio
-            get_jumio_retrieval(beneficiary_data.name, status_workflowExecution, json_workflow_format)
 
         return 0
     except Exception as e:

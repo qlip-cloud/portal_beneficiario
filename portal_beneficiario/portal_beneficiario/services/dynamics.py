@@ -13,6 +13,10 @@ from urllib.parse import quote_plus
 
 
 DYNAMICS_ERROR_PREFIX = "[Dynamics Error]"
+DYNAMICS_REQUEST_TIMEOUT = 30
+GUID_REGEX = re.compile(
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+)
 SENSITIVE_KEYS = {
     "client_id",
     "client_secret",
@@ -22,6 +26,11 @@ SENSITIVE_KEYS = {
     "secret",
     "token",
 }
+
+
+def is_valid_guid(value):
+    """Valida que un identificador cumpla el formato estándar GUID/UUID antes de guardarlo o interpolarlo en URLs."""
+    return bool(isinstance(value, string_types) and GUID_REGEX.match(value.strip()))
 
 
 def sanitize_sensitive_data(data, secrets=None):
@@ -245,7 +254,7 @@ def get_dynamic_accesstoken(dynamic_cnf):
     response = None
     try:
         # Usar requests.post directamente evita el Error Log duplicado interno de make_post_request
-        response = requests.post(endpoint, data=data, headers=headers)
+        response = requests.post(endpoint, data=data, headers=headers, timeout=DYNAMICS_REQUEST_TIMEOUT)
         if not response.ok:
             log_dynamics_error(
                 "get_dynamic_accesstoken",
@@ -300,24 +309,31 @@ def call_dynamic(beneficiary_id=None, name=None, id_dynamics=None):
     endpoint = None
     all_data = None
     response = None
-    user = beneficiary_id or name
+    user_target = beneficiary_id or name
+
+    # Control de acceso para invocaciones HTTP directas (botón del DocType / API)
+    if frappe.request and not frappe.flags.get("in_jumio_callback"):
+        if not user_target or not frappe.db.exists("qp_PO_Beneficiario", user_target):
+            frappe.throw(_("Beneficiario no encontrado."), frappe.PermissionError)
+        if not frappe.has_permission("qp_PO_Beneficiario", ptype="write", doc=user_target):
+            frappe.throw(_("No tiene permisos para actualizar este beneficiario en Dynamics."), frappe.PermissionError)
 
     try:
         dynamic_cnf = get_dynamic_config()
 
-        if not user:
+        if not user_target:
             log_dynamics_error(
                 "call_dynamic",
-                extra_info=f"Error al obtener datos del beneficiario: beneficiary_id ({user}) no existe",
+                extra_info=f"Error al obtener datos del beneficiario: beneficiary_id ({user_target}) no existe",
             )
             return False
 
-        beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', user, '*', as_dict=1)
+        beneficiary_data = frappe.db.get_value('qp_PO_Beneficiario', user_target, '*', as_dict=1)
 
         if not beneficiary_data:
             log_dynamics_error(
                 "call_dynamic",
-                extra_info=f"No se encontró qp_PO_Beneficiario para {user}",
+                extra_info=f"No se encontró qp_PO_Beneficiario para {user_target}",
             )
             return False
 
@@ -328,18 +344,27 @@ def call_dynamic(beneficiary_id=None, name=None, id_dynamics=None):
             )
             return False
 
-        # Solo actualiza id_dynamics si se envió explícitamente (desde el DocType) y cambió
+        # Solo actualiza id_dynamics si se envió explícitamente (desde el DocType), es GUID válido y cambió
         if id_dynamics is not None and str(id_dynamics).strip() != "":
-            if id_dynamics != beneficiary_data.id_dynamics:
-                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, 'id_dynamics', id_dynamics)
-            beneficiary_data.id_dynamics = id_dynamics
+            clean_id_dynamics = str(id_dynamics).strip()
+            if not is_valid_guid(clean_id_dynamics):
+                log_dynamics_error(
+                    "call_dynamic",
+                    extra_info=f"Formato inválido de id_dynamics recibido para {beneficiary_data.name}",
+                )
+                return False
+            if clean_id_dynamics != beneficiary_data.id_dynamics:
+                frappe.db.set_value('qp_PO_Beneficiario', beneficiary_data.name, 'id_dynamics', clean_id_dynamics)
+            beneficiary_data.id_dynamics = clean_id_dynamics
 
-        if not beneficiary_data.id_dynamics:
+        if not beneficiary_data.id_dynamics or not is_valid_guid(beneficiary_data.id_dynamics):
             log_dynamics_error(
                 "call_dynamic",
-                extra_info=f"El beneficiario {beneficiary_data.name} no tiene id_dynamics asignado",
+                extra_info=f"El beneficiario {beneficiary_data.name} no tiene un id_dynamics con formato GUID válido",
             )
             return False
+
+        beneficiary_data.id_dynamics = beneficiary_data.id_dynamics.strip()
 
         contact_data = frappe.db.get_value("Contact", {'user': beneficiary_data.email}, '*', as_dict=1)
 
@@ -497,11 +522,11 @@ def call_dynamic(beneficiary_id=None, name=None, id_dynamics=None):
         all_data = json.dumps(data)
         address_payload = json.dumps(data_address)
 
-        response = requests.request("PATCH", endpoint, data=all_data, headers=headers)
+        response = requests.request("PATCH", endpoint, data=all_data, headers=headers, timeout=DYNAMICS_REQUEST_TIMEOUT)
 
         response_address = None
         try:
-            response_address = requests.request("PATCH", endpoint, data=address_payload, headers=headers)
+            response_address = requests.request("PATCH", endpoint, data=address_payload, headers=headers, timeout=DYNAMICS_REQUEST_TIMEOUT)
             if response_address is not None and not response_address.ok:
                 log_dynamics_error(
                     "call_dynamic",
@@ -548,23 +573,29 @@ def call_dynamic(beneficiary_id=None, name=None, id_dynamics=None):
             request_data=all_data,
             response=response,
             exception=e,
-            extra_info=f"Error general enviando beneficiario a Dynamics | Beneficiario: {user}",
+            extra_info=f"Error general enviando beneficiario a Dynamics | Beneficiario: {user_target}",
         )
         return False
 
 
 def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_last_numbers):
+    if not is_valid_guid(id_dynamics):
+        log_dynamics_error(
+            "get_bank_account",
+            extra_info=f"id_dynamics con formato GUID inválido | Beneficiario: {beneficiary.name}",
+        )
+        return False
 
     headers = {
         "Authorization": f"Bearer {token}"
     }
 
     endpoint = dynamics_conf.dynamic_account_url
-    endpoint = endpoint.format(id_dynamics, account_last_numbers)
+    endpoint = endpoint.format(id_dynamics.strip(), account_last_numbers)
 
     response = None
     try:
-        response = requests.get(endpoint, headers=headers)
+        response = requests.get(endpoint, headers=headers, timeout=DYNAMICS_REQUEST_TIMEOUT)
         if response:
             data = response.json()
 
@@ -601,8 +632,15 @@ def get_bank_account(beneficiary, dynamics_conf, token, id_dynamics, account_las
 
 
 def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
+    if not is_valid_guid(id_account):
+        log_dynamics_error(
+            "update_banking_dato",
+            extra_info=f"id_account con formato GUID inválido | Beneficiario: {beneficiary.name}",
+        )
+        return False
+
     endpoint = dynamics_conf.dynamic_update_account_url
-    endpoint = endpoint.format(id_account)
+    endpoint = endpoint.format(id_account.strip())
 
     headers = {
         "Authorization": f"Bearer {token}",
@@ -618,7 +656,7 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
 
     response = None
     try:
-        response = requests.request("PATCH", endpoint, data=parse_data, headers=headers)
+        response = requests.request("PATCH", endpoint, data=parse_data, headers=headers, timeout=DYNAMICS_REQUEST_TIMEOUT)
         if response is not None:
             if not response.ok:
                 log_dynamics_error(
@@ -646,6 +684,12 @@ def update_banking_dato(beneficiary, dynamics_conf, token, id_account):
 
 
 def sendDocumentDynamics(beneficiary, dynamics_conf, token):
+    if not is_valid_guid(beneficiary.id_dynamics):
+        log_dynamics_error(
+            "sendDocumentDynamics",
+            extra_info=f"id_dynamics con formato GUID inválido | Beneficiario: {beneficiary.name}",
+        )
+        return False
 
     doc_attach = None
     files = frappe.db.get_all(
@@ -680,14 +724,14 @@ def sendDocumentDynamics(beneficiary, dynamics_conf, token):
             "filename": doc_attach.file_name,
             "documentbody": doc_content.decode("utf-8"),
             "mimetype": doc_extension,
-            "objectid_account@odata.bind": f'/accounts({beneficiary.id_dynamics})'
+            "objectid_account@odata.bind": f'/accounts({beneficiary.id_dynamics.strip()})'
         }
 
         all_data = json.dumps(data)
 
         response = None
         try:
-            response = requests.request("POST", endpoint, data=all_data, headers=headers)
+            response = requests.request("POST", endpoint, data=all_data, headers=headers, timeout=DYNAMICS_REQUEST_TIMEOUT)
             if response is not None:
                 if not response.ok:
                     log_dynamics_error(
