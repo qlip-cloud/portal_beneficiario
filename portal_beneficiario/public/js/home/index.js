@@ -1,32 +1,32 @@
-$( document ).ready(function() {
+$(document).ready(function() {
 
     getDataCountries('#country', '#department', '#city', '#country_hidden');
     getDataCountries('#country_birth', '#department_birth', '#city_birth', '#country_birth_hidden');
-   
+
     $("form#pb_form").validate({
         debug: false,
-        rules:{
-            phone: {required: true,number: true, maxlength: 20},
-            nationality:'required',
-            country_birth:  {required:true, maxlength: 12},
+        rules: {
+            phone: {required: true, number: true, maxlength: 20},
+            nationality: 'required',
+            country_birth: {required: true, maxlength: 12},
             department_birth: 'required',
             city_birth: 'required',
-            address:'required',
-            country:  {required:true, maxlength: 12},
-            city:'required',
+            address: 'required',
+            country: {required: true, maxlength: 12},
+            city: 'required',
             department: 'required',
-            business:'required',
-            business_type:'required',
+            business: 'required',
+            business_type: 'required',
             fileToUpload: 'required',
-            pep_position: {required:true, maxlength: 200},
+            pep_position: {required: true, maxlength: 200},
             link_date: 'required',
-            in:{required: true,number: true},
-            out:{required: true,number: true},
-            assets:{required: true,number: true},
-            passive:{required: true,number: true},
-            source_fund:'required',
-            pep:'required',
-            fpep:'required',
+            in: {required: true, number: true},
+            out: {required: true, number: true},
+            assets: {required: true, number: true},
+            passive: {required: true, number: true},
+            source_fund: 'required',
+            pep: 'required',
+            fpep: 'required',
             fpep_name: 'required',
             parent_type: 'required',
             type_account: 'required'
@@ -44,23 +44,23 @@ $( document ).ready(function() {
             $(element).addClass(validClass);
         },
         showErrors: function(errorMap, errorList) {
-            if(errorList.length > 0)
-                $("#messageBox").html("Contiene un total de " + this.numberOfInvalids() + " campos requeridos y obligatorios sin completar.");
+            if (errorList.length > 0)
+                $("#messageBox").text("Contiene un total de " + this.numberOfInvalids() + " campos requeridos y obligatorios sin completar.");
 
             var i, elements, error;
 
-            for (i = 0; this.errorList[ i ]; i++ ) {
-                error = this.errorList[ i ];
-                if ( this.settings.highlight ) {
-                    this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
+            for (i = 0; this.errorList[i]; i++) {
+                error = this.errorList[i];
+                if (this.settings.highlight) {
+                    this.settings.highlight.call(this, error.element, this.settings.errorClass, this.settings.validClass);
                 }
             }
 
-			if ( this.settings.unhighlight ) {
-				for ( i = 0, elements = this.validElements(); elements[ i ]; i++ ) {
-					this.settings.unhighlight.call( this, elements[ i ], this.settings.errorClass, this.settings.validClass );
-				}
-			}
+            if (this.settings.unhighlight) {
+                for (i = 0, elements = this.validElements(); elements[i]; i++) {
+                    this.settings.unhighlight.call(this, elements[i], this.settings.errorClass, this.settings.validClass);
+                }
+            }
         }
     });
 
@@ -72,82 +72,38 @@ $( document ).ready(function() {
     setDefaultCol('#country_birth', '#country_birth_hidden');
 
     // Set COL id:nationality by Default
-    if ($("#nationality").val() == ''){  
+    if ($("#nationality").val() == '') {
         $('#nationality').removeAttr('disabled');
         $('#nationality').val('colombiano');
     }
-    
-    // Set COL id:country by Default
-    if ($("#country").val() != ''){
-        let code = $("#country_hidden").val();
-        
-        if($('#department').val() == '' || $('#department').val() == null){
-            $('#department').removeAttr('disabled');
 
-            $.ajax({
-                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
-                data: {"code":code},
-                dataType: 'json',
-                async: false
-            }).done(function(r) {
-                if(r.message){          
-                    data = r.message;
-                    
-                    $("#department").empty();
-                    $("#department").append("<option></option>");
-                    
-                    for (var key in data){
-                        $("#department").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
-                    }
-        
-                } else {
-                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
-                } 
-            });
+    // Set COL id:country by Default
+    if ($("#country").val() != '') {
+        let code = $("#country_hidden").val();
+
+        if ($('#department').val() == '' || $('#department').val() == null) {
+            $('#department').removeAttr('disabled');
+            loadDepartments(code, '#department');
         }
     }
 
-    //End Set COL by Default
-
-    $("#country").change(function (e) {
+    $("#country").change(function(e) {
         let code = $("#country_hidden").val();
 
-        if(code) {
+        if (code) {
             $('#department').removeAttr('disabled');
             $('#city').val('');
             $('#city').attr('disabled', true);
-
-            $.ajax({
-                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
-                data: {"code": code},
-                dataType: 'json',
-                async: false
-            }).done(function(r) {
-                if(r.message){          
-                    data = r.message;
-                    
-                    $("#department").empty();
-                    $("#department").append("<option></option>");
-                    
-                    for (var key in data){
-                        $("#department").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
-                    }
-        
-                } else {
-                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
-                } 
-            });
-
+            loadDepartments(code, '#department');
         } else {
             cleanFields('#country', '#department', '#city');
         }
     });
 
-    $("#department").change(function (e) {
-        if(this.value) {
+    $("#department").change(function(e) {
+        if (this.value) {
             $('#city').removeAttr('disabled');
             getCities(this.value, $('#city'), 0);
-
         } else {
             $('#city').val('');
             $('#city').attr('disabled', true);
@@ -155,91 +111,49 @@ $( document ).ready(function() {
     });
 
     // Set COL id:country_birth by Default
-    if ($("#country_birth").val() != ''){
+    if ($("#country_birth").val() != '') {
         let code = $("#country_birth_hidden").val();
-        
-        if($('#department_birth').val() == '' || $('#department_birth').val() == null){
+
+        if ($('#department_birth').val() == '' || $('#department_birth').val() == null) {
             $('#department_birth').removeAttr('disabled');
             $('#city_birth').val('');
             $('#city_birth').attr('disabled', true);
-
-            $.ajax({
-                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
-                data: {"code":code},
-                dataType: 'json',
-                async: false
-            }).done(function(r) {
-                if(r.message){          
-                    data = r.message;
-                    
-                    $("#department_birth").empty();
-                    $("#department_birth").append("<option></option>");
-                    
-                    for (var key in data){
-                        $("#department_birth").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
-                    }
-        
-                } else {
-                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
-                } 
-            });
+            loadDepartments(code, '#department_birth');
         }
     }
 
-    $("#country_birth").change(function (e) {
+    $("#country_birth").change(function(e) {
         let code = $("#country_birth_hidden").val();
         $('#city_birth').val('');
         $('#city_birth').attr('disabled', true);
 
-        if(code) {
+        if (code) {
             $('#department_birth').removeAttr('disabled');
-
-            $.ajax({
-                url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
-                data: {"code": code},
-                dataType: 'json',
-                async: false
-            }).done(function(r) {
-                if(r.message){          
-                    data = r.message;
-                    
-                    $("#department_birth").empty();
-                    $("#department_birth").append("<option></option>");
-                    
-                    for (var key in data){
-                        $("#department_birth").append(`<option value='${data[key].tu_code}'>${data[key].tu_name.toUpperCase()}</option>`);
-                    }
-        
-                } else {
-                    alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
-                } 
-            });
-
+            loadDepartments(code, '#department_birth');
         } else {
             cleanFields('#country_birth', '#department_birth', '#city_birth', "#country_birth_hidden");
         }
     });
 
-    $("#department_birth").change(function (e) {
-        if(this.value != '') {
+    $("#department_birth").change(function(e) {
+        if (this.value != '') {
             $('#city_birth').removeAttr('disabled');
             getCities(this.value, $('#city_birth'), 0);
-
         } else {
             $('#city_birth').val('');
             $('#city_birth').attr('disabled', true);
         }
     });
 
-    $("#modal-buttom").click(function (e) {
+    $("#modal-buttom").click(function(e) {
         var me = this;
         me.logged_out = true;
 
         return frappe.call({
             method: "logout",
-            callback: function(r){
-                if(r.exc){
-                     return;
+            callback: function(r) {
+                if (r.exc) {
+                    return;
                 }
                 window.location.replace("https://www.stonexcolombia.com/");
             }
@@ -252,334 +166,376 @@ $( document ).ready(function() {
     validatePositiveNumbers($('#assets'));
     validatePositiveNumbers($('#passive'));
 
-    if($('#link_date')){
+    if ($('#link_date')) {
         $('#link_date').datepicker({ dateFormat: 'dd-mm-yy' });
     }
 
-    if($('#link_undate')){
+    if ($('#link_undate')) {
         $('#link_undate').datepicker({ dateFormat: 'dd-mm-yy' });
     }
 
     $('input[type=radio][name=pep]').change(function() {
-        if(this.value == '1') {
+        if (this.value == '1') {
             $('.pep_fields').removeAttr('hidden');
-        }else{
+        } else {
             $('.pep_fields').attr('hidden', true);
         }
     });
 
-
     $('input[type=radio][name=fpep]').change(function() {
-        if(this.value == '1') {
+        if (this.value == '1') {
             $('.fpep_fields').removeAttr('hidden');
-        }else{
+        } else {
             $('.fpep_fields').attr('hidden', true);
         }
     });
 
-
-    if($("#business_type").val() != ''){
+    if ($("#business_type").val() != '') {
         let value = $("#business_type").val();
-        // value = value.trim()
 
-        if(['913610001','913610003','913610004'].includes(value)) {
-            if(['913610003','913610004'].includes(value)){
-                $('.activity_fields').removeAttr('hidden');
-                $('.business_field').attr('hidden', true);
-            } else {
-                $('.business_field').removeAttr('hidden');
-                $('.activity_fields').removeAttr('hidden');
-            }   
-        }else{
-            $('.activity_fields').attr('hidden', true);
-        }
-    };
-
-    $("#business_type").change(function() {
-        if(['913610001','913610003','913610004'].includes(this.value)) {
-            
-            if(['913610003','913610004'].includes(this.value)){
+        if (['913610001', '913610003', '913610004'].includes(value)) {
+            if (['913610003', '913610004'].includes(value)) {
                 $('.activity_fields').removeAttr('hidden');
                 $('.business_field').attr('hidden', true);
             } else {
                 $('.business_field').removeAttr('hidden');
                 $('.activity_fields').removeAttr('hidden');
             }
-                
-        }else{
+        } else {
+            $('.activity_fields').attr('hidden', true);
+        }
+    }
+
+    $("#business_type").change(function() {
+        if (['913610001', '913610003', '913610004'].includes(this.value)) {
+            if (['913610003', '913610004'].includes(this.value)) {
+                $('.activity_fields').removeAttr('hidden');
+                $('.business_field').attr('hidden', true);
+            } else {
+                $('.business_field').removeAttr('hidden');
+                $('.activity_fields').removeAttr('hidden');
+            }
+        } else {
             $('.activity_fields').attr('hidden', true);
         }
     });
 
-    $("#term_conditions").change(function (e) {
-        if(this.checked) {
+    $("#term_conditions").change(function(e) {
+        if (this.checked) {
             $('#acept_term').removeAttr('disabled');
-        }else{
+        } else {
             $('#acept_term').attr('disabled', true);
         }
     });
 
-
-    $("#acept_term").click(function (e) {
+    $("#acept_term").click(function(e) {
         $('#term_and_codition_btn').attr('hidden', true);
     });
 
-    $("form #step2").change(function (e) {
-        if($('#pb_form').valid()){
+    $("form #step2").change(function(e) {
+        if ($('#pb_form').valid()) {
             $("form #step2").find('button').removeAttr('disabled');
-            $('#messageBox').addClass('hidden')
-        }else{
-            $('#messageBox').removeClass('hidden')
+            $('#messageBox').addClass('hidden');
+        } else {
+            $('#messageBox').removeClass('hidden');
         }
     });
 
-    $("form #step1").ready(function (e) {
+    $("form #step1").ready(function(e) {
         $("#term_conditions").change();
     });
 
-    $("form #step2").ready(function (e) {
-        if($("#pb_form").valid()){
+    $("form #step2").ready(function(e) {
+        if ($("#pb_form").valid()) {
             $("form #step2").find('button').removeAttr('disabled');
             $("#step3").removeAttr('hidden');
         }
     });
 
-    $("form #step3").ready(function (e) {
-        if($("#jumio_iframe").attr("src") != ""){
-            checkStatus()
+    $("form #step3").ready(function(e) {
+        if ($("#jumio_iframe").attr("src") != "") {
+            checkStatus();
         }
     });
 
-    $(".next-step").click(function (e) {
-        if($('#pb_form').valid()){
+    $(".next-step").click(function(e) {
+        // #save_beneficiary controla el avance manualmente solo tras guardar sin errores
+        if (this.id === 'save_beneficiary') {
+            return;
+        }
+        if ($('#pb_form').valid()) {
             var active = $('.wizard .nav-tabs li.active');
             nextTab(active);
-        }      
+        }
     });
 
-    $(".prev-step").click(function (e) {
+    $(".prev-step").click(function(e) {
         var active = $('.wizard .nav-tabs li.active');
         prevTab(active);
     });
 
-    $("#save_beneficiary").click(function (e) {
+    $("#save_beneficiary").click(function(e) {
 
-        if($('#pb_form').valid()){
-            
-            var unindexed_array = $('#pb_form').serializeArray()
+        if ($('#pb_form').valid()) {
+
+            var $btn = $(this);
+            $btn.attr('disabled', true);
+
+            var unindexed_array = $('#pb_form').serializeArray();
             var indexed_array = {};
-    
-            $.map(unindexed_array, function(n, i){
+
+            $.map(unindexed_array, function(n, i) {
                 indexed_array[n['name']] = n['value'];
             });
-    
-            fileToUpload = $('#fileToUpload').prop('files');
-    
-            if (fileToUpload.length != 0){
-                indexed_array.document_send = true
+
+            var fileToUpload = $('#fileToUpload').prop('files');
+
+            if (fileToUpload.length != 0) {
+                indexed_array.document_send = true;
             }
 
+            // Usar POST + CSRF para evitar exponer datos personales/financieros en query string (GET)
             $.ajax({
+                type: "POST",
                 url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.save_beneficiary",
-                data:indexed_array,
-                dataType: 'json',
-                contentType: 'application/json;charset=UTF-8',
-                async: false
-              }).done(function(r) {
-                    
-                    let response = r.message;
-    
-                    // Upload File        
-                    if (fileToUpload.length != 0){
-                        
-                        var formData = new FormData();
-    
-                        url_file = "/api/method/upload_file";
-    
-                        formData.append("file", fileToUpload[0], fileToUpload[0].name);
-                        formData.append("is_private", 0);
-                        formData.append("doctype", "qp_PO_Beneficiario");
-                        formData.append("docname", response.name);
-                        formData.append("fieldname", "document_file");
-    
-                        call_back = (data) => {
-    
-                            if(data) {
-                                if (data.file_url) {
-                                    $.ajax({
-                                        url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.set_document_file",
-                                        data: {"name": response.name, "file_url": data.file_url},
-                                        dataType: 'json',
-                                        async: false
-                                    });
-                                }
-                                if(r.message.jumio_status != "PROCESSED"){
-                                    callJumio(r.message)
-                                }
-                            }
+                headers: {
+                    "X-Frappe-CSRF-Token": frappe.csrf_token
+                },
+                data: indexed_array,
+                dataType: 'json'
+            }).done(function(r) {
+
+                // Si el backend reportó una excepción o no devolvió el beneficiario guardado, no continuar a Jumio
+                if (!r || r.exc || !r.message || !r.message.name) {
+                    $btn.removeAttr('disabled');
+                    alert("Error en el sistema, por favor contactar al Administrador. Error 10004");
+                    return;
+                }
+
+                let response = r.message;
+
+                // Upload File como privado (is_private = 1) para proteger soportes financieros/identidad
+                if (fileToUpload.length != 0) {
+
+                    var formData = new FormData();
+                    var url_file = "/api/method/upload_file";
+
+                    formData.append("file", fileToUpload[0], fileToUpload[0].name);
+                    formData.append("is_private", 1);
+                    formData.append("doctype", "qp_PO_Beneficiario");
+                    formData.append("docname", response.name);
+
+                    var call_back = (data) => {
+                        if (!data) {
+                            // Si falla la carga del archivo, mantener al usuario en Datos Básicos y bloquear paso a Jumio
+                            $btn.removeAttr('disabled');
+                            return;
                         }
-    
-                        send_petition_upload("", "", formData, call_back, url_file);
-                    
-                    } else {
-                        if(r.message.jumio_status != "PROCESSED"){
-                            callJumio(r.message)
+                        if (response.jumio_status != "PROCESSED") {
+                            callJumio();
                         }
+                    };
+
+                    send_petition_upload("", "", formData, call_back, url_file).catch(function() {
+                        $btn.removeAttr('disabled');
+                    });
+
+                } else {
+                    if (response.jumio_status != "PROCESSED") {
+                        callJumio();
                     }
-    
-    
-              })
-              .fail(function(e){
-                alert("Error en el sistema, por favor contactar al Administrador. Error 10004");
-              });  
+                }
+
+            }).fail(function(xhr) {
+                $btn.removeAttr('disabled');
+                var errorMsg = extractServerErrorMessage(xhr);
+                alert(errorMsg || "Error en el sistema, por favor contactar al Administrador. Error 10004");
+            });
         }
     });
 
     $("input.number").on('blur', function() {
         const value = this.value.replace(/,/g, '');
 
-        if(!isNaN(parseFloat(this.value))){
+        if (!isNaN(parseFloat(this.value))) {
             this.value = parseFloat(value).toLocaleString('en-US', {
                 style: 'decimal',
                 maximumFractionDigits: 2,
                 minimumFractionDigits: 2
             });
-        }else{
+        } else {
             this.value = 0;
         }
-        
-      });
+    });
 });
+
+function extractServerErrorMessage(xhr) {
+    try {
+        var resp = xhr && xhr.responseJSON ? xhr.responseJSON : JSON.parse(xhr.responseText);
+        if (resp && resp._server_messages) {
+            var messages = JSON.parse(resp._server_messages);
+            if (Array.isArray(messages) && messages.length > 0) {
+                var parsed = JSON.parse(messages[0]);
+                if (parsed && parsed.message) {
+                    return $('<div>').html(parsed.message).text();
+                }
+            }
+        }
+    } catch (err) {
+        return null;
+    }
+    return null;
+}
+
+function loadDepartments(code, selector) {
+    $.ajax({
+        url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_deparments",
+        data: {"code": code},
+        dataType: 'json'
+    }).done(function(r) {
+        if (r.message) {
+            var data = r.message;
+            var $select = $(selector);
+
+            $select.empty();
+            $select.append($('<option>'));
+
+            for (var key in data) {
+                // Construcción segura de nodos DOM para prevenir XSS
+                $select.append(
+                    $('<option>')
+                        .val(data[key].tu_code)
+                        .text(String(data[key].tu_name || '').toUpperCase())
+                );
+            }
+        } else {
+            alert("Error en el sistema, por favor contactar al Administrador. Error 10005");
+        }
+    });
+}
+
+function isValidJumioUrl(url) {
+    try {
+        var parsed = new URL(url);
+        var host = parsed.hostname.toLowerCase();
+        return parsed.protocol === 'https:' && (host === 'jumio.ai' || host.endsWith('.jumio.ai') || host.endsWith('.jumio.com'));
+    } catch (err) {
+        return false;
+    }
+}
 
 function nextTab(elem) {
     $(elem).next().find('a[data-toggle="tab"]').click();
 }
+
 function prevTab(elem) {
     $(elem).prev().find('a[data-toggle="tab"]').click();
 }
 
-function send_petition_upload(module_root, method, formData, callback, url = null){
+function send_petition_upload(module_root, method, formData, callback, url = null) {
 
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == XMLHttpRequest.DONE) {
-                response = JSON.parse(xhr.responseText);
+                let response = {};
+                try {
+                    response = JSON.parse(xhr.responseText);
+                } catch (err) {
+                    response = {message: {msg: "Error procesando respuesta del servidor"}};
+                }
 
-                if (xhr.status === 200) {                  
+                if (xhr.status === 200 && !response.exc) {
                     callback(response.message);
+                    resolve(response.message);
                 } else {
-                    callback(response.message);   
-                    frappe.msgprint(__(`Error: ${response.message.msg}`));
+                    callback(null);
+                    var serverMsg = extractServerErrorMessage({ responseJSON: response });
+                    frappe.msgprint(__(`Error: ${serverMsg || (response.message && response.message.msg) || 'No se pudo cargar el archivo'}`));
+                    reject(response);
                 }
             }
-        }
+        };
 
-        endpoint = url ? url : setup_api_method(API_ROOT, module_root, method, true);
-        
-        xhr.open('POST',endpoint , true);
+        var endpoint = url ? url : setup_api_method(API_ROOT, module_root, method, true);
+
+        xhr.open('POST', endpoint, true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.setRequestHeader('X-Frappe-CSRF-Token', frappe.csrf_token);
         xhr.send(formData);
-    })
-}
-
-function setup_api_method(api_root, module_root, method, has_base_root = false){
-
-    base_root = has_base_root ? "/api/method/" : "";
-    result = `${ base_root }${api_root}.${module_root}.${metohd}`;
-    return result;
-
-}
-
-function callJumio(beneficiary) {
-
-    $.ajax({
-        url: "/api/method/portal_beneficiario.portal_beneficiario.services.jumio.get_jumio_iframe",
-        dataType: 'json',
-        contentType: 'application/json;charset=UTF-8',
-      }).done(function(r) {
-
-            if(r.message){
-                $('#jumio_iframe').attr('src', r.message.web.href);
-                $('#basic_btn').addClass('hidden');
-                $("#messageBox").html("Estamos verificando tu identidad. Este proceso es rápido y seguro. Por favor, sigue las instrucciones en pantalla.");
-                $('#messageBox').removeClass('hidden')
-                checkStatus()
-            }else{
-                alert("Error en el sistema, por favor contactar al Administrador. Error 10000");
-            }
-           
-      }).fail(function(e){
-        alert("Error en el sistema, por favor contactar al Administrador. Error 10006");
-        console.log("Error en el sistema, por favor contactar al Administrador. Error 10006", e);
-      });
-}
-
-function checkStatus(){
-
-    var min = 0;
-
-    var refreshIntervalId = setInterval(()=>{
-        
-        min+=1;
-
-        $.ajax({
-            url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_status",
-            dataType: 'json',
-            contentType: 'application/json;charset=UTF-8',
-          }).done(function(r) {
-
-                if(r.message['status'] == "PROCESSED")
-                {
-                    clearInterval(refreshIntervalId);
-                    $('#finish').removeAttr('disabled');
-                    $('#basic_btn').removeClass('hidden');
-                    $('#back').removeAttr('disabled');
-                    $('#messageBox').addClass('hidden')
-                    
-                    // Asynchronous process will be handled
-                    // getRetrieval()
-
-                } else if(min >= 30){
-                    clearInterval(refreshIntervalId);
-                    $('#basic_btn').removeClass('hidden');
-                    $('#back').removeAttr('disabled');
-                    $('#messageBox').addClass('hidden')
-                }
-          }).fail(function(ex){
-            alert("Error en el sistema, por favor contactar al Administrador. Error 10007");
-            console.log(ex);
-          })
-
-    }, 20000);
-}
-
-function getRetrieval(beneficiary_id){
-    
-    $.ajax({
-        url: "/api/method/portal_beneficiario.portal_beneficiario.services.jumio.get_jumio_retrieval",
-        dataType: 'json',
-        contentType: 'application/json;charset=UTF-8',
-    }).done(function(r) {
-        sendDynamics(beneficiary_id);
-    }).fail(function(ex){
-        alert("Error en el sistema, por favor contactar al Administrador. Error 10001");
-        console.log(ex);
     });
 }
 
-function sendDynamics(beneficiary_id){
+function setup_api_method(api_root, module_root, method, has_base_root = false) {
+    var base_root = has_base_root ? "/api/method/" : "";
+    return `${base_root}${api_root}.${module_root}.${method}`;
+}
+
+function callJumio() {
+
     $.ajax({
-        url: "/api/method/portal_beneficiario.portal_beneficiario.services.dynamics.call_dynamic",
-        dataType: 'json',
-        contentType: 'application/json;charset=UTF-8',
+        type: "POST",
+        url: "/api/method/portal_beneficiario.portal_beneficiario.services.jumio.get_jumio_iframe",
+        headers: {
+            "X-Frappe-CSRF-Token": frappe.csrf_token
+        },
+        dataType: 'json'
     }).done(function(r) {
-        console.log(r);
-    }).fail(function(ex){
-        alert("Error en el sistema, por favor contactar al Administrador. Error 10002");
-        console.log(ex);
-    }); 
+
+        var href = r.message && r.message.web && r.message.web.href;
+        if (href && isValidJumioUrl(href)) {
+            // Avanzar al paso de Verificación (Jumio) únicamente cuando los datos y la sesión de Jumio estén listos
+            var active = $('.wizard .nav-tabs li.active');
+            $('#step3').removeAttr('hidden');
+            nextTab(active);
+
+            $('#jumio_iframe').attr('src', href);
+            $('#basic_btn').addClass('hidden');
+            $("#messageBox").text("Estamos verificando tu identidad. Este proceso es rápido y seguro. Por favor, sigue las instrucciones en pantalla.");
+            $('#messageBox').removeClass('hidden');
+            checkStatus();
+        } else {
+            $('#save_beneficiary').removeAttr('disabled');
+            alert("Error en el sistema, por favor contactar al Administrador. Error 10000");
+        }
+
+    }).fail(function(e) {
+        $('#save_beneficiary').removeAttr('disabled');
+        alert("Error en el sistema, por favor contactar al Administrador. Error 10006");
+    });
+}
+
+function checkStatus() {
+
+    var min = 0;
+
+    var refreshIntervalId = setInterval(() => {
+
+        min += 1;
+
+        $.ajax({
+            url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_status",
+            dataType: 'json'
+        }).done(function(r) {
+
+            if (r.message && r.message['status'] == "PROCESSED") {
+                clearInterval(refreshIntervalId);
+                $('#finish').removeAttr('disabled');
+                $('#basic_btn').removeClass('hidden');
+                $('#back').removeAttr('disabled');
+                $('#messageBox').addClass('hidden');
+            } else if (min >= 30) {
+                clearInterval(refreshIntervalId);
+                $('#basic_btn').removeClass('hidden');
+                $('#back').removeAttr('disabled');
+                $('#messageBox').addClass('hidden');
+            }
+        }).fail(function(ex) {
+            clearInterval(refreshIntervalId);
+            alert("Error en el sistema, por favor contactar al Administrador. Error 10007");
+        });
+
+    }, 20000);
 }
 
 $('.nav-tabs').on('click', 'li', function() {
@@ -591,50 +547,52 @@ $('.nav-tabs').on('click', 'li', function() {
     $(this).addClass('active');
     $(this).removeClass('disabled');
     $(this).find('a[data-toggle="tab"]').attr('hidden', false);
-    var this_div = $(this).find('a[data-toggle="tab"]').attr('aria-controls')
+    var this_div = $(this).find('a[data-toggle="tab"]').attr('aria-controls');
     $(`#${this_div}`).addClass('active');
 
     li_active.removeClass('active');
 });
 
-function validatePositiveNumbers(element){
-    element.on('keyup', function(){
+function validatePositiveNumbers(element) {
+    element.on('keyup', function() {
         var val = this.value;
-        this.value = val.replace(/\D|\-/,'');
+        this.value = val.replace(/\D|\-/, '');
     });
 }
 
 function getCities(value, field, isCity) {
-    
+
     $.ajax({
         url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_cities",
         data: {"code": value, "is_only_city": isCity},
-        dataType: 'json',
-        async: false
+        dataType: 'json'
     }).done(function(r) {
-        if(r.message){          
-            data = r.message;
-            
-            field.empty();
-            field.append("<option></option>");
-            
-            for (var key in data){
-                field.append(`<option value='${data[key].ci_code}'>${data[key].ci_name.toUpperCase()}</option>`);
-            }
+        if (r.message) {
+            var data = r.message;
 
+            field.empty();
+            field.append($('<option>'));
+
+            for (var key in data) {
+                field.append(
+                    $('<option>')
+                        .val(data[key].ci_code)
+                        .text(String(data[key].ci_name || '').toUpperCase())
+                );
+            }
         } else {
             alert("Error en el sistema, por favor contactar al Administrador. Error 10003");
-        } 
+        }
     });
 }
 
 function setMaxOption() {
     var options = document.getElementsByTagName("option");
     var limite = 30;
-    
-    for(var i = 0; i < options.length; i++){
-      options[i].setAttribute('title', options[i].innerText);
-      options[i].innerText = options[i].innerText.slice(0, limite);
+
+    for (var i = 0; i < options.length; i++) {
+        options[i].setAttribute('title', options[i].innerText);
+        options[i].innerText = options[i].innerText.slice(0, limite);
     }
 }
 
@@ -649,31 +607,29 @@ $(window).on('resize', function() {
     }
 }).trigger('resize');
 
-function getDataCountries(fieldCountry, fieldDepartment, fieldCity, fieldHidden = null) {   
+function getDataCountries(fieldCountry, fieldDepartment, fieldCity, fieldHidden = null) {
 
     $(fieldCountry).autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/api/method/portal_beneficiario.portal_beneficiario.services.beneficiary.get_countries",
                 data: {"term": request.term},
-                dataType: 'json',
-                async: false
-            }).done(function(r) {     
-                if(r.message && r.message.length > 0){  
+                dataType: 'json'
+            }).done(function(r) {
+                if (r.message && r.message.length > 0) {
                     response($.map(r.message, function(item) {
-                            return {
-                                label: item.co_name,
-                                value: item.co_code
-                            };
-                        }
-                    ));
+                        return {
+                            label: item.co_name,
+                            value: item.co_code
+                        };
+                    }));
                 } else {
                     cleanFields(fieldCountry, fieldDepartment, fieldCity, fieldHidden);
-                }    
+                }
             });
         },
         search: function(event, ui) {
-           // getBeforeAfter
+            // getBeforeAfter
         },
         focus: function(event, ui) {
             $(fieldCountry).val(ui.item.label);
@@ -684,7 +640,7 @@ function getDataCountries(fieldCountry, fieldDepartment, fieldCity, fieldHidden 
             return false;
         },
         change: function(event, ui) {
-            if(!ui.item){   
+            if (!ui.item) {
                 cleanFields(fieldCountry, fieldDepartment, fieldCity, fieldHidden);
             }
         },
@@ -693,7 +649,7 @@ function getDataCountries(fieldCountry, fieldDepartment, fieldCity, fieldHidden 
 }
 
 function cleanFields(fieldCountry, fieldDepartment, fieldCity, fieldHidden = null) {
-    if(fieldHidden){
+    if (fieldHidden) {
         $(fieldHidden).val(null);
     }
 
